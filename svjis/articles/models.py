@@ -12,7 +12,7 @@ from .permissions import svjis_answer_survey, svjis_fault_reporter, svjis_fault_
 
 
 COMMENT_IS_EDITABLE_MINUTES = getattr(settings, "SVJIS_COMMENT_IS_EDITABLE_MINUTES", 10)
-MEDIA_ADVERT_ASSETS_DIR = 'adverts'
+MEDIA_ADVERT_ASSETS_DIR = 'inzerce'  # not "adverts"/"ads" - that gets blocked by ad blockers
 MEDIA_ARTICLE_ASSETS_DIR = 'articles'
 MEDIA_COMPANY_ASSETS_DIR = 'company'
 MEDIA_FAULT_ASSETS_DIR = 'faults'
@@ -29,7 +29,7 @@ def article_cover_directory_path(instance, filename):
 
 
 class Article(models.Model):
-    header = models.CharField(_("Header"), max_length=50)
+    header = models.CharField(_("Header"), max_length=255)
     slug = models.CharField(max_length=50, unique=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created_date = models.DateTimeField(auto_now_add=True)
@@ -564,10 +564,17 @@ class AdvertType(models.Model):
         return self.description
 
 
+def advert_cover_directory_path(instance, filename):
+    # Keyed by the author, not the advert pk, since the pk doesn't exist yet
+    # when a cover image is uploaded together with a brand new advert.
+    return f'{MEDIA_ADVERT_ASSETS_DIR}/covers/{instance.created_by_user_id}/{filename}'
+
+
 class Advert(models.Model):
     type = models.ForeignKey(AdvertType, on_delete=models.CASCADE, verbose_name=_("Type"))
     header = models.CharField(_("Header"), max_length=50)
     body = models.TextField(_("Body"))
+    cover_image = models.FileField(_("Cover image"), upload_to=advert_cover_directory_path, null=True, blank=True)
     created_by_user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone = models.CharField(_("Phone"), max_length=30, blank=True)
     email = models.CharField(_("E-Mail"), max_length=50, blank=True)
@@ -580,6 +587,21 @@ class Advert(models.Model):
     @property
     def assets(self):
         return self.advertasset_set.all()
+
+    @property
+    def image_assets(self):
+        return [a for a in self.assets if a.is_image]
+
+    @property
+    def other_assets(self):
+        return [a for a in self.assets if not a.is_image]
+
+    def delete(self, *args, **kwargs):
+        if self.cover_image and os.path.isfile(self.cover_image.path):
+            os.remove(self.cover_image.path)
+        for asset in self.assets:
+            asset.delete()
+        super().delete(*args, **kwargs)
 
     class Meta:
         ordering = ['-id']
@@ -610,6 +632,10 @@ class AdvertAsset(models.Model):
     @property
     def icon(self):
         return get_asset_icon(self.basename)
+
+    @property
+    def is_image(self):
+        return self.icon == 'image'
 
     def delete(self, *args, **kwargs):
         if os.path.isfile(self.file.path):

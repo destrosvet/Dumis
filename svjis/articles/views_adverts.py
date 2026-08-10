@@ -118,24 +118,53 @@ def adverts_edit_view(request, pk):
 def adverts_save_view(request):
     pk = int(request.POST['pk'])
     if not pk:
-        form = forms.AdvertForm(request.POST)
+        form = forms.AdvertForm(request.POST, request.FILES)
     else:
         instance = get_object_or_404(models.Advert, pk=pk)
         if instance.created_by_user != request.user:
             raise Http404
-        form = forms.AdvertForm(request.POST, instance=instance)
+        form = forms.AdvertForm(request.POST, request.FILES, instance=instance)
 
     if form.is_valid():
         obj = form.save(commit=False)
         if not pk:
             obj.created_by_user = request.user
         obj.save()
+        for f in request.FILES.getlist('gallery'):
+            models.AdvertAsset.objects.create(advert=obj, file=f, created_by_user=request.user)
         messages.info(request, _('Saved'))
+        return redirect(adverts_edit_view, pk=obj.pk)
     else:
         for error in form.errors:
             messages.error(request, error)
+        return redirect(adverts_edit_view, pk=pk)
 
-    return redirect(adverts_edit_view, pk=obj.pk)
+
+@permission_required(svjis_add_advert)
+@require_GET
+def adverts_delete_view(request, pk):
+    advert = get_object_or_404(models.Advert, pk=pk)
+    if advert.created_by_user != request.user:
+        raise Http404
+    advert.delete()
+    messages.info(request, _('Deleted'))
+    return redirect(adverts_list_view)
+
+
+@permission_required(svjis_view_adverts_menu)
+@require_GET
+def adverts_detail_view(request, pk):
+    advert = get_object_or_404(models.Advert, pk=pk)
+    if not advert.published and advert.created_by_user != request.user:
+        raise Http404
+
+    ctx = utils.get_context()
+    ctx['aside_menu_name'] = _("Adverts")
+    ctx['aside_menu_items'] = get_side_menu(None, request.user)
+    ctx['tray_menu_items'] = utils.get_tray_menu('adverts', request.user)
+    ctx['obj'] = advert
+    ctx['web_title'] = advert.header
+    return render(request, "advert_detail.html", ctx)
 
 
 # Adverts - AdvertAsset
@@ -182,3 +211,15 @@ def get_advert_asset(request, advert_id, filename):
     # Get file
     asset = get_object_or_404(models.AdvertAsset, advert_id=advert_id, file__endswith=f"/{safe_name}")
     return FileResponse(asset.file.open("rb"), as_attachment=False, filename=safe_name)
+
+
+@permission_required(svjis_view_adverts_menu)
+@require_GET
+def get_advert_cover_image(request, user_id, filename):
+    # Block path traversal attempts like ../../secret.txt
+    safe_name = PurePosixPath(filename).name
+    if safe_name != filename:
+        raise Http404()
+
+    advert = get_object_or_404(models.Advert, created_by_user_id=user_id, cover_image__endswith=f"/{safe_name}")
+    return FileResponse(advert.cover_image.open("rb"), as_attachment=False, filename=safe_name)

@@ -5,7 +5,7 @@
 {% block content %}
 
 <h1 class="page-title">{% translate 'Adverts' %}</h1>
-<form action="{% url 'adverts_save' %}" method="post">
+<form action="{% url 'adverts_save' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="hidden" name="pk" value="{{ pk }}">
 
@@ -18,8 +18,36 @@
         {{ form.header }}
     </p>
     <p>
+        <label class="label" for="{{ form.cover_image.auto_id }}">{{ form.cover_image.label }}</label><br>
+        {% if form.instance.cover_image %}
+        <span class="article-thumb article-thumb--form">
+            <img src="/media/{{ form.instance.cover_image }}" alt="">
+        </span>
+        {% endif %}
+        {{ form.cover_image }}
+    </p>
+    <p>
         <label class="label" for="{{ form.body.auto_id }}">{{ form.body.label }}</label><br>
         {{ form.body }}
+    </p>
+
+    {% if pk and form.instance.image_assets %}
+    <p>
+        <label class="label">{% translate 'Gallery' %}</label><br>
+        <div class="advert-gallery">
+            {% for a in form.instance.image_assets %}
+            <div class="advert-gallery__item">
+                <a class="js-lightbox" href="/media/{{ a.file }}"><img src="/media/{{ a.file }}" alt="{{ a.description }}"></a>
+                <a class="advert-gallery__delete icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ a.description }} ?')) return false;" href="{% url 'adverts_asset_delete' pk=a.id %}">{% icon 'delete' %}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </p>
+    {% endif %}
+    <p>
+        <label class="label" for="id_gallery">{% translate 'Add photos' %}</label><br>
+        <input class="common-input" type="file" name="gallery" id="id_gallery" accept="image/*" multiple>
+        <span class="form-hint">{% translate 'You can select multiple photos at once - they are added when you save.' %}</span>
     </p>
 
     <fieldset>
@@ -43,14 +71,20 @@
 </form>
 
 {% if pk %}
+    <p>
+        <a class="secondary-button" href="{% url 'adverts_detail' pk=pk %}">{% translate 'View advert' %}</a>
+        <a class="btn--danger" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ form.instance.header }} ?')) return false;" href="{% url 'adverts_delete' pk=pk %}">{% translate 'Delete advert' %}</a>
+    </p>
+
     <h2 id="assets">{% translate 'Assets' %}</h2>
     <form action="{% url 'adverts_asset_save' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input type="hidden" name="advert_pk" value="{{ form.instance.pk }}">
         <fieldset>
             <legend>{% translate 'Assets' %}</legend>
+            <p class="form-hint">{% translate 'Documents and other non-photo files for this advert.' %}</p>
             <p>
-                {% if form.instance.assets %}
+                {% if form.instance.other_assets %}
                 <table class="list" aria-describedby="assets">
                     <tr>
                         <th class="icon">&nbsp;</th>
@@ -58,7 +92,7 @@
                         <th>{% translate 'File' %}</th>
                         <th class="icon">&nbsp;</th>
                     </tr>
-                    {% for a in form.instance.assets %}
+                    {% for a in form.instance.other_assets %}
                     <tr>
                         <td class="icon"><span class="icon-static">{% icon a.icon %}</span></td>
                         <td id="asset_name_{{ a.pk }}">{{ a.description }}</td>

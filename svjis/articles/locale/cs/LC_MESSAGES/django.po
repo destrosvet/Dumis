@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SVJIS2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-31 14:11+0200\n"
+"POT-Creation-Date: 2026-08-10 21:53+0200\n"
 "PO-Revision-Date: 2026-01-31 16:29+0000\n"
 "Last-Translator: berk76 <berk76@noreply.codeberg.org>\n"
 "Language-Team: Czech <https://translate.codeberg.org/projects/svjis/svjis2/"
@@ -19,1383 +19,1494 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 5.15.2\n"
 
-#: articles/forms.py:339 articles/models.py:388 articles/models.py:419
-#: articles/templates/admin_building_unit.html:36
-#: articles/templates/admin_building_unit.html:60
-#: articles/templates/admin_entrance_edit.html:13
-#: articles/templates/fault.html:49 articles/templates/faults_list.html:19
+#: svjis/articles/forms.py:366 svjis/articles/models.py:396
+#: svjis/articles/models.py:427
+#: svjis/articles/templates/admin_building_unit.html:36
+#: svjis/articles/templates/admin_building_unit.html:60
+#: svjis/articles/templates/admin_entrance_edit.html:13
+#: svjis/articles/templates/faults_list.html:19
 msgid "Entrance"
 msgstr "Vchod"
 
-#: articles/forms.py:348 articles/templates/fault.html:41
-#: articles/templates/fault_log.html:15 articles/templates/faults_list.html:21
+#: svjis/articles/forms.py:375 svjis/articles/templates/fault.html:15
+#: svjis/articles/templates/fault_log.html:15
+#: svjis/articles/templates/faults_list.html:21
 msgid "Resolver"
 msgstr "Řešitel"
 
-#: articles/forms.py:354
+#: svjis/articles/forms.py:381
 msgid "On Behalf Of"
 msgstr "Za uživatele"
 
-#: articles/models.py:26 articles/models.py:165 articles/models.py:551
-#: articles/templates/redaction_useful_link.html:14
+#: svjis/articles/models.py:32 svjis/articles/models.py:173
+#: svjis/articles/models.py:575
+#: svjis/articles/templates/redaction_useful_link.html:13
 msgid "Header"
 msgstr "Nadpis"
 
-#: articles/models.py:30 articles/models.py:153 articles/models.py:168
-#: articles/models.py:183 articles/models.py:557
-#: articles/templates/redaction_article.html:19
-#: articles/templates/redaction_news.html:16
-#: articles/templates/redaction_survey.html:20
-#: articles/templates/redaction_useful_link.html:17
-msgid "Published"
-msgstr "Zveřejnit"
-
-#: articles/models.py:36
+#: svjis/articles/models.py:36
 msgid "Publish date"
 msgstr "Datum publikování"
 
-#: articles/templates/redaction_article_edit.html:65
-msgid "Controls where the article sorts in the list - set an earlier date for archived content."
-msgstr "Určuje řazení článku v seznamu - u archivního obsahu nastavte starší datum."
+#: svjis/articles/models.py:37 svjis/articles/models.py:161
+#: svjis/articles/models.py:176 svjis/articles/models.py:191
+#: svjis/articles/models.py:582
+#: svjis/articles/templates/redaction_article.html:18
+#: svjis/articles/templates/redaction_news.html:16
+#: svjis/articles/templates/redaction_survey.html:20
+#: svjis/articles/templates/redaction_useful_link.html:15
+msgid "Published"
+msgstr "Zveřejnit"
 
-#: articles/models.py:31
+#: svjis/articles/models.py:38
 msgid "Perex"
 msgstr "Perex"
 
-#: articles/models.py:32 articles/models.py:115 articles/models.py:154
-#: articles/models.py:283 articles/models.py:490 articles/models.py:552
-#: articles/templates/redaction_news.html:17
+#: svjis/articles/models.py:39 svjis/articles/models.py:123
+#: svjis/articles/models.py:162 svjis/articles/models.py:291
+#: svjis/articles/models.py:508 svjis/articles/models.py:576
+#: svjis/articles/templates/redaction_news.html:17
 msgid "Body"
 msgstr "Tělo"
 
-#: articles/models.py:34
+#: svjis/articles/models.py:40 svjis/articles/models.py:577
+msgid "Cover image"
+msgstr "Titulní obrázek"
+
+#: svjis/articles/models.py:42
 msgid "Allow comments"
 msgstr "Povolit komentáře"
 
-#: articles/models.py:36
+#: svjis/articles/models.py:44
 msgid "Visible for all"
 msgstr "Viditelný pro všechny"
 
-#: articles/models.py:53
+#: svjis/articles/models.py:61
 msgid "Can view Redaction menu"
 msgstr "Vidí menu Redakce"
 
-#: articles/models.py:54
+#: svjis/articles/models.py:62
 msgid "Can edit Article"
 msgstr "Může editovat články"
 
-#: articles/models.py:70
+#: svjis/articles/models.py:78
 msgid "UserAgent"
 msgstr "UserAgent"
 
-#: articles/models.py:86 articles/models.py:134 articles/models.py:180
-#: articles/models.py:214 articles/models.py:360 articles/models.py:371
-#: articles/models.py:391 articles/models.py:410 articles/models.py:460
-#: articles/models.py:540 articles/models.py:579
-#: articles/templates/admin_building_unit.html:62
-#: articles/templates/admin_entrance.html:15
-#: articles/templates/admin_user_ownes_edit.html:15
-#: articles/templates/advert_edit.html:57 articles/templates/fault.html:64
-#: articles/templates/personal_my_units.html:14
-#: articles/templates/redaction_article_edit.html:70
-#: articles/templates/redaction_survey.html:16
-#: articles/templates/redaction_survey_results.html:16
+#: svjis/articles/models.py:94 svjis/articles/models.py:142
+#: svjis/articles/models.py:188 svjis/articles/models.py:222
+#: svjis/articles/models.py:368 svjis/articles/models.py:379
+#: svjis/articles/models.py:399 svjis/articles/models.py:418
+#: svjis/articles/models.py:478 svjis/articles/models.py:558
+#: svjis/articles/models.py:619
+#: svjis/articles/templates/admin_building_unit.html:62
+#: svjis/articles/templates/admin_entrance.html:14
+#: svjis/articles/templates/admin_user_ownes_edit.html:15
+#: svjis/articles/templates/advert_edit.html:91
+#: svjis/articles/templates/personal_my_units.html:14
+#: svjis/articles/templates/redaction_survey.html:16
+#: svjis/articles/templates/redaction_survey_results.html:16
 msgid "Description"
 msgstr "Popis"
 
-#: articles/models.py:87 articles/models.py:461 articles/models.py:580
-#: articles/templates/advert_edit.html:58 articles/templates/article.html:21
+#: svjis/articles/models.py:95 svjis/articles/models.py:479
+#: svjis/articles/models.py:620 svjis/articles/templates/advert_detail.html:52
+#: svjis/articles/templates/advert_edit.html:92
+#: svjis/articles/templates/article.html:34
+#: svjis/articles/templates/fault.html:55
 msgid "File"
 msgstr "Soubor"
 
-#: articles/models.py:88 articles/models.py:112
-#: articles/templates/redaction_article.html:15
-#: articles/templates/redaction_article_edit.html:9
-#: articles/tests_playwright/test_desktop.py:103
-#: articles/views_redaction.py:173
+#: svjis/articles/models.py:96 svjis/articles/models.py:120
+#: svjis/articles/templates/redaction_article.html:14
+#: svjis/articles/templates/redaction_article_edit.html:9
+#: svjis/articles/tests_playwright/test_desktop.py:103
+#: svjis/articles/views_redaction.py:175
 msgid "Article"
 msgstr "Článek"
 
-#: articles/models.py:130
+#: svjis/articles/models.py:138
 msgid "Can add Article comment"
 msgstr "Může komentovat pod článkem"
 
-#: articles/models.py:135 articles/templates/redaction_menu.html:17
+#: svjis/articles/models.py:143 svjis/articles/templates/redaction_menu.html:16
 msgid "Hide"
 msgstr "Skrýt"
 
-#: articles/models.py:147
+#: svjis/articles/models.py:155
 msgid "Can edit Menu"
 msgstr "Může editovat menu"
 
-#: articles/models.py:161
+#: svjis/articles/models.py:169
 msgid "Can edit News"
 msgstr "Může editovat aktuality"
 
-#: articles/models.py:166 articles/templates/redaction_useful_link.html:15
+#: svjis/articles/models.py:174
 msgid "Link"
 msgstr "Odkaz"
 
-#: articles/models.py:167 articles/models.py:345
-#: articles/templates/redaction_useful_link.html:16
+#: svjis/articles/models.py:175 svjis/articles/models.py:353
+#: svjis/articles/templates/redaction_useful_link.html:14
 msgid "Order"
 msgstr "Pořadí"
 
-#: articles/models.py:175
+#: svjis/articles/models.py:183
 msgid "Can edit Useful Links"
 msgstr "Může editovat užitečné odkazy"
 
-#: articles/models.py:181
+#: svjis/articles/models.py:189
 msgid "Starting day"
 msgstr "Počáteční datum"
 
-#: articles/models.py:182
+#: svjis/articles/models.py:190
 msgid "Ending day"
 msgstr "Koncové datum"
 
-#: articles/models.py:207
+#: svjis/articles/models.py:215
 msgid "Can answer Survey"
 msgstr "Může hlasovat v anketách"
 
-#: articles/models.py:208
+#: svjis/articles/models.py:216
 msgid "Can edit Survey"
 msgstr "Může editovat ankety"
 
-#: articles/models.py:258 articles/templates/admin_user_detail.html:12
+#: svjis/articles/models.py:266
+#: svjis/articles/templates/admin_user_detail.html:15
 msgid "Salutation"
 msgstr "Oslovení"
 
-#: articles/models.py:259 articles/models.py:309 articles/models.py:331
-#: articles/models.py:361 articles/templates/admin_entrance.html:16
-#: articles/templates/admin_user_detail.html:33
-#: articles/templates/contact_company.html:12
+#: svjis/articles/models.py:267 svjis/articles/models.py:317
+#: svjis/articles/models.py:339 svjis/articles/models.py:369
+#: svjis/articles/templates/admin_entrance.html:15
+#: svjis/articles/templates/admin_user_detail.html:40
+#: svjis/articles/templates/contact_company.html:14
 msgid "Address"
 msgstr "Adresa"
 
-#: articles/models.py:260 articles/models.py:310 articles/models.py:332
-#: articles/templates/admin_user_detail.html:37
-#: articles/templates/contact_company.html:18
+#: svjis/articles/models.py:268 svjis/articles/models.py:318
+#: svjis/articles/models.py:340
+#: svjis/articles/templates/admin_user_detail.html:44
+#: svjis/articles/templates/contact_company.html:20
 msgid "City"
 msgstr "Město"
 
-#: articles/models.py:261 articles/models.py:311 articles/models.py:333
-#: articles/templates/admin_user_detail.html:41
-#: articles/templates/contact_company.html:24
+#: svjis/articles/models.py:269 svjis/articles/models.py:319
+#: svjis/articles/models.py:341
+#: svjis/articles/templates/admin_user_detail.html:48
+#: svjis/articles/templates/contact_company.html:26
 msgid "Post code"
 msgstr "PSČ"
 
-#: articles/models.py:262 articles/templates/admin_user_detail.html:45
+#: svjis/articles/models.py:270
+#: svjis/articles/templates/admin_user_detail.html:52
 msgid "Country"
 msgstr "Země"
 
-#: articles/models.py:263 articles/models.py:312 articles/models.py:554
-#: articles/templates/admin_user_detail.html:49
-#: articles/templates/adverts_list.html:39
-#: articles/templates/contact_company.html:30
-#: articles/templates/contact_phonelist.html:13
+#: svjis/articles/models.py:271 svjis/articles/models.py:320
+#: svjis/articles/models.py:579
+#: svjis/articles/templates/admin_user_detail.html:56
+#: svjis/articles/templates/advert_detail.html:30
+#: svjis/articles/templates/contact_company.html:32
+#: svjis/articles/templates/contact_phonelist.html:13
 msgid "Phone"
 msgstr "Telefon"
 
-#: articles/models.py:264
+#: svjis/articles/models.py:272
 msgid "Show in phonelist"
 msgstr "Ukázat v seznamu kontaktů"
 
-#: articles/models.py:265 articles/templates/admin_user_detail.html:24
+#: svjis/articles/models.py:273
+#: svjis/articles/templates/admin_user_detail.html:27
 msgid "Internal note"
 msgstr "Interní poznámka"
 
-#: articles/models.py:272
+#: svjis/articles/models.py:280
 msgid "Can view Administration menu"
 msgstr "Vidí menu Administrace"
 
-#: articles/models.py:273
+#: svjis/articles/models.py:281
 msgid "Can edit Users"
 msgstr "Může editovat uživatele"
 
-#: articles/models.py:274
+#: svjis/articles/models.py:282
 msgid "Can edit Groups"
 msgstr "Může editovat skupiny"
 
-#: articles/models.py:275
+#: svjis/articles/models.py:283
 msgid "Can view Personal settings menu"
 msgstr "Vidí menu Osobní nastavení"
 
-#: articles/models.py:276
+#: svjis/articles/models.py:284
 msgid "Can view Phonelist"
 msgstr "Vidí seznam kontaktů"
 
-#: articles/models.py:281 articles/models.py:313 articles/models.py:555
-#: articles/templates/admin_user.html:53
-#: articles/templates/admin_user_detail.html:53
-#: articles/templates/adverts_list.html:40
-#: articles/templates/contact_company.html:36
-#: articles/templates/contact_phonelist.html:14
-#: articles/templates/redaction_article_notifications.html:19
+#: svjis/articles/models.py:289 svjis/articles/models.py:321
+#: svjis/articles/models.py:580 svjis/articles/templates/admin_user.html:52
+#: svjis/articles/templates/admin_user_detail.html:60
+#: svjis/articles/templates/advert_detail.html:32
+#: svjis/articles/templates/contact_company.html:38
+#: svjis/articles/templates/contact_phonelist.html:14
+#: svjis/articles/templates/redaction_article_notifications.html:19
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: articles/models.py:282 articles/models.py:408
-#: articles/templates/admin_messages.html:13
-#: articles/templates/faults_list.html:18
+#: svjis/articles/models.py:290 svjis/articles/models.py:416
+#: svjis/articles/templates/admin_messages.html:13
+#: svjis/articles/templates/faults_list.html:18
 msgid "Subject"
 msgstr "Předmět"
 
-#: articles/models.py:293 articles/templates/admin_preferences.html:15
+#: svjis/articles/models.py:301
+#: svjis/articles/templates/admin_preferences.html:14
 msgid "Key"
 msgstr "Klíč"
 
-#: articles/models.py:294 articles/templates/admin_preferences.html:16
+#: svjis/articles/models.py:302
+#: svjis/articles/templates/admin_preferences.html:15
 msgid "Value"
 msgstr "Hodnota"
 
-#: articles/models.py:300
+#: svjis/articles/models.py:308
 msgid "Can edit Preferences"
 msgstr "Může editovat nastavení aplikace"
 
-#: articles/models.py:308 articles/templates/admin_group.html:16
-#: articles/templates/contact_phonelist.html:12
-#: articles/templates/redaction_article_edit.html:69
-#: articles/templates/redaction_menu.html:14
+#: svjis/articles/models.py:316 svjis/articles/templates/admin_group.html:16
+#: svjis/articles/templates/contact_phonelist.html:12
+#: svjis/articles/templates/redaction_menu.html:13
 msgid "Name"
 msgstr "Název"
 
-#: articles/models.py:314 articles/templates/contact_company.html:42
+#: svjis/articles/models.py:322
+#: svjis/articles/templates/contact_company.html:44
 msgid "Registration No."
 msgstr "IČ"
 
-#: articles/models.py:315 articles/templates/contact_company.html:48
+#: svjis/articles/models.py:323
+#: svjis/articles/templates/contact_company.html:50
 msgid "VAT Registration No."
 msgstr "DIČ"
 
-#: articles/models.py:316 articles/templates/contact_company.html:54
+#: svjis/articles/models.py:324
+#: svjis/articles/templates/contact_company.html:56
 msgid "Internet domain"
 msgstr "Internetová adresa"
 
-#: articles/models.py:317
+#: svjis/articles/models.py:325
 msgid "Header picture"
 msgstr "Obrázek domu v záhlaví"
 
-#: articles/models.py:327
+#: svjis/articles/models.py:335
 msgid "Can edit Company"
 msgstr "Může editovat informace o společenství"
 
-#: articles/models.py:334
+#: svjis/articles/models.py:342
 msgid "Land Registration No."
 msgstr "Id v katastru nemovitostí"
 
-#: articles/models.py:340
+#: svjis/articles/models.py:348
 msgid "Can edit Building"
 msgstr "Může editovat informace o budově"
 
-#: articles/models.py:344 articles/templates/admin_company_edit.html:7
-#: articles/templates/admin_company_edit.html:11
-#: articles/tests_playwright/commands.py:86 articles/views_admin.py:30
+#: svjis/articles/models.py:352
+#: svjis/articles/templates/admin_company_edit.html:7
+#: svjis/articles/templates/admin_company_edit.html:11
+#: svjis/articles/tests_playwright/commands.py:86
+#: svjis/articles/views_admin.py:30
 msgid "Company"
 msgstr "Společenství"
 
-#: articles/models.py:347 articles/templates/admin_board.html:16
+#: svjis/articles/models.py:355 svjis/articles/templates/admin_board.html:15
 msgid "Position"
 msgstr "Funkce"
 
-#: articles/models.py:358 articles/models.py:382
-#: articles/templates/admin_building_edit.html:7
-#: articles/templates/admin_building_edit.html:11
-#: articles/tests_playwright/commands.py:104 articles/views_admin.py:42
+#: svjis/articles/models.py:366 svjis/articles/models.py:390
+#: svjis/articles/templates/admin_building_edit.html:7
+#: svjis/articles/templates/admin_building_edit.html:11
+#: svjis/articles/tests_playwright/commands.py:104
+#: svjis/articles/views_admin.py:42
 msgid "Building"
 msgstr "Budova"
 
-#: articles/models.py:385 articles/models.py:526 articles/models.py:550
-#: articles/templates/admin_building_unit.html:19
-#: articles/templates/admin_building_unit.html:59
-#: articles/templates/admin_user_ownes_edit.html:13
-#: articles/templates/personal_my_units.html:12
+#: svjis/articles/models.py:393 svjis/articles/models.py:544
+#: svjis/articles/models.py:574
+#: svjis/articles/templates/admin_building_unit.html:19
+#: svjis/articles/templates/admin_building_unit.html:59
+#: svjis/articles/templates/admin_user_ownes_edit.html:13
+#: svjis/articles/templates/advert_detail.html:21
+#: svjis/articles/templates/adverts_list.html:24
+#: svjis/articles/templates/personal_my_units.html:12
 msgid "Type"
 msgstr "Typ"
 
-#: articles/models.py:390 articles/templates/admin_building_unit.html:61
-#: articles/templates/admin_user_ownes_edit.html:14
-#: articles/templates/personal_my_units.html:13
+#: svjis/articles/models.py:398
+#: svjis/articles/templates/admin_building_unit.html:61
+#: svjis/articles/templates/admin_user_ownes_edit.html:14
+#: svjis/articles/templates/personal_my_units.html:13
 msgid "Registration Id"
 msgstr "ID v katastru"
 
-#: articles/models.py:392 articles/templates/admin_building_unit.html:63
+#: svjis/articles/models.py:400
+#: svjis/articles/templates/admin_building_unit.html:63
 msgid "Numerator"
 msgstr "Čitatel"
 
-#: articles/models.py:393 articles/templates/admin_building_unit.html:64
+#: svjis/articles/models.py:401
+#: svjis/articles/templates/admin_building_unit.html:64
 msgid "Denominator"
 msgstr "Jmenovatel"
 
-#: articles/models.py:417 articles/models.py:518
-#: articles/templates/fault.html:45
+#: svjis/articles/models.py:425 svjis/articles/models.py:536
+#: svjis/articles/templates/fault.html:18
 msgid "Closed"
 msgstr "Uzavřen"
 
-#: articles/models.py:436
+#: svjis/articles/models.py:444
 msgid "Can view Faults menu"
 msgstr "Vidí menu Náměty a požadavky"
 
-#: articles/models.py:437
+#: svjis/articles/models.py:445
 msgid "Can report fault"
 msgstr "Může nahlásit poždavek"
 
-#: articles/models.py:438
+#: svjis/articles/models.py:446
 msgid "Can resolve fault"
 msgstr "Může vyřešit požadavek"
 
-#: articles/models.py:462 articles/models.py:487
-#: articles/templates/faults_create.html:7
+#: svjis/articles/models.py:480 svjis/articles/models.py:505
+#: svjis/articles/templates/faults_create.html:7
 msgid "Fault report"
 msgstr "Náměty a požadavky"
 
-#: articles/models.py:505
+#: svjis/articles/models.py:523
 msgid "Can add Fault comment"
 msgstr "Může komentovat v tiketu požadavku"
 
-#: articles/models.py:516
+#: svjis/articles/models.py:534
 msgid "Modified"
 msgstr "Upraven"
 
-#: articles/models.py:517
+#: svjis/articles/models.py:535
 msgid "Assigned"
 msgstr "Přiřazen"
 
-#: articles/models.py:519
+#: svjis/articles/models.py:537
 msgid "Reopened"
 msgstr "Znovuotevřen"
 
-#: articles/models.py:520
+#: svjis/articles/models.py:538
 msgid "Created"
 msgstr "Vytvořen"
 
-#: articles/models.py:569
+#: svjis/articles/models.py:609
 msgid "Can view Adverts menu"
 msgstr "Vidí menu Inzeráty"
 
-#: articles/models.py:570
+#: svjis/articles/models.py:610
 msgid "Can add Advert"
 msgstr "Může vytvářet inzeráty"
 
-#: articles/models.py:581
+#: svjis/articles/models.py:621
 msgid "Advert"
 msgstr "Inzerát"
 
-#: articles/templates/admin_about.html:7
-#: articles/tests_playwright/commands.py:375 articles/views_admin.py:84
+#: svjis/articles/templates/admin_about.html:7
+#: svjis/articles/tests_playwright/commands.py:375
+#: svjis/articles/views_admin.py:84
 msgid "About application"
 msgstr "O aplikaci"
 
-#: articles/templates/admin_about.html:24
+#: svjis/articles/templates/admin_about.html:24
 msgid "Project URLs"
 msgstr "Stránky projektu"
 
-#: articles/templates/admin_about.html:28
+#: svjis/articles/templates/admin_about.html:28
 msgid "Homepage"
 msgstr "Domovská stránka"
 
-#: articles/templates/admin_about.html:32
+#: svjis/articles/templates/admin_about.html:32
 msgid "Source code"
 msgstr "Zdrojový kód"
 
-#: articles/templates/admin_about.html:36
+#: svjis/articles/templates/admin_about.html:36
 msgid "Issues"
 msgstr "Hlášení chyb"
 
-#: articles/templates/admin_about.html:40
+#: svjis/articles/templates/admin_about.html:40
 msgid "Translations"
 msgstr "Překlady"
 
-#: articles/templates/admin_board.html:7
-#: articles/templates/admin_board_edit.html:7
-#: articles/templates/admin_board_edit.html:13
-#: articles/templates/contact_company.html:63
-#: articles/tests_playwright/commands.py:338 articles/views_admin.py:36
+#: svjis/articles/templates/admin_board.html:7
+#: svjis/articles/templates/admin_board_edit.html:7
+#: svjis/articles/templates/admin_board_edit.html:13
+#: svjis/articles/templates/contact_company.html:65
+#: svjis/articles/tests_playwright/commands.py:338
+#: svjis/articles/views_admin.py:36
 msgid "Board"
 msgstr "Výbor"
 
-#: articles/templates/admin_board.html:8
-#: articles/tests_playwright/commands.py:341
+#: svjis/articles/templates/admin_board.html:8
+#: svjis/articles/tests_playwright/commands.py:341
 msgid "Add new member"
 msgstr "Přidat nového člena"
 
-#: articles/templates/admin_board.html:15
+#: svjis/articles/templates/admin_board.html:14
 msgid "Member"
 msgstr "Člen"
 
-#: articles/templates/admin_board.html:23
-#: articles/templates/admin_building_unit.html:71
-#: articles/templates/admin_entrance.html:23
-#: articles/templates/admin_group.html:23
-#: articles/templates/admin_preferences.html:23
-#: articles/templates/adverts_list.html:23 articles/templates/fault.html:10
-#: articles/templates/redaction_article.html:26
-#: articles/templates/redaction_menu.html:24
-#: articles/templates/redaction_news.html:23
-#: articles/templates/redaction_survey.html:27
-#: articles/templates/redaction_useful_link.html:23
-msgid "Edit"
-msgstr "Editovat"
-
-#: articles/templates/admin_board.html:24
-#: articles/templates/admin_building_unit.html:73
-#: articles/templates/admin_building_unit_owners_edit.html:23
-#: articles/templates/admin_entrance.html:24
-#: articles/templates/admin_group.html:25
-#: articles/templates/admin_preferences.html:24
-#: articles/templates/admin_user_ownes_edit.html:27
-#: articles/templates/advert_edit.html:66 articles/templates/fault.html:76
-#: articles/templates/redaction_article_edit.html:74
-#: articles/templates/redaction_menu.html:27
-msgid "Do you want to delete"
-msgstr "Chcete smazat"
-
-#: articles/templates/admin_board.html:24
-#: articles/templates/admin_building_unit.html:73
-#: articles/templates/admin_building_unit_owners_edit.html:23
-#: articles/templates/admin_entrance.html:24
-#: articles/templates/admin_group.html:25
-#: articles/templates/admin_preferences.html:24
-#: articles/templates/admin_user_ownes_edit.html:27
-#: articles/templates/advert_edit.html:66 articles/templates/fault.html:76
-#: articles/templates/redaction_article_edit.html:74
-#: articles/templates/redaction_menu.html:27
-#: articles/templates/redaction_news.html:24
-#: articles/templates/redaction_survey.html:30
-#: articles/templates/redaction_survey_edit.html:28
-#: articles/templates/redaction_useful_link.html:24
+#: svjis/articles/templates/admin_board.html:23
+#: svjis/articles/templates/admin_building_unit.html:73
+#: svjis/articles/templates/admin_building_unit_owners_edit.html:23
+#: svjis/articles/templates/admin_entrance.html:23
+#: svjis/articles/templates/admin_group.html:25
+#: svjis/articles/templates/admin_preferences.html:23
+#: svjis/articles/templates/admin_user_ownes_edit.html:27
+#: svjis/articles/templates/advert_edit.html:41
+#: svjis/articles/templates/advert_edit.html:100
+#: svjis/articles/templates/redaction_article_edit.html:107
+#: svjis/articles/templates/redaction_menu.html:26
+#: svjis/articles/templates/redaction_news.html:24
+#: svjis/articles/templates/redaction_survey.html:30
+#: svjis/articles/templates/redaction_survey_edit.html:28
+#: svjis/articles/templates/redaction_useful_link.html:22
 msgid "Delete"
 msgstr "Smazat"
 
-#: articles/templates/admin_board_edit.html:28
-#: articles/templates/admin_building_edit.html:30
-#: articles/templates/admin_building_unit_edit.html:41
-#: articles/templates/admin_company_edit.html:57
-#: articles/templates/admin_entrance_edit.html:25
-#: articles/templates/admin_group_edit.html:39
-#: articles/templates/admin_preferences_edit.html:27
-#: articles/templates/admin_user_edit.html:94
-#: articles/templates/advert_edit.html:41
-#: articles/templates/article_comment_edit.html:14
-#: articles/templates/fault_comment_edit.html:14
-#: articles/templates/faults_create.html:37
-#: articles/templates/faults_edit.html:35
-#: articles/templates/personal_settings_edit.html:58
-#: articles/templates/personal_settings_password.html:26
-#: articles/templates/redaction_article_edit.html:56
-#: articles/templates/redaction_menu_edit.html:28
-#: articles/templates/redaction_news_edit.html:23
-#: articles/templates/redaction_survey_edit.html:70
-#: articles/templates/redaction_useful_link_edit.html:31
+#: svjis/articles/templates/admin_board.html:23
+#: svjis/articles/templates/admin_building_unit.html:73
+#: svjis/articles/templates/admin_building_unit_owners_edit.html:23
+#: svjis/articles/templates/admin_entrance.html:23
+#: svjis/articles/templates/admin_group.html:25
+#: svjis/articles/templates/admin_preferences.html:23
+#: svjis/articles/templates/admin_user_ownes_edit.html:27
+#: svjis/articles/templates/advert_detail.html:66
+#: svjis/articles/templates/advert_edit.html:41
+#: svjis/articles/templates/advert_edit.html:76
+#: svjis/articles/templates/advert_edit.html:100
+#: svjis/articles/templates/redaction_article_edit.html:107
+#: svjis/articles/templates/redaction_menu.html:26
+msgid "Do you want to delete"
+msgstr "Chcete smazat"
+
+#: svjis/articles/templates/admin_board.html:26
+#: svjis/articles/templates/admin_building_unit.html:80
+#: svjis/articles/templates/admin_entrance.html:26
+#: svjis/articles/templates/admin_group.html:27
+#: svjis/articles/templates/admin_preferences.html:26
+#: svjis/articles/templates/advert_detail.html:65
+#: svjis/articles/templates/adverts_list.html:32
+#: svjis/articles/templates/fault.html:26
+#: svjis/articles/templates/faults_list.html:34
+#: svjis/articles/templates/redaction_article.html:31
+#: svjis/articles/templates/redaction_menu.html:34
+#: svjis/articles/templates/redaction_news.html:29
+#: svjis/articles/templates/redaction_survey.html:36
+#: svjis/articles/templates/redaction_useful_link.html:26
+msgid "Edit"
+msgstr "Editovat"
+
+#: svjis/articles/templates/admin_board_edit.html:28
+#: svjis/articles/templates/admin_building_edit.html:30
+#: svjis/articles/templates/admin_building_unit_edit.html:41
+#: svjis/articles/templates/admin_company_edit.html:57
+#: svjis/articles/templates/admin_entrance_edit.html:25
+#: svjis/articles/templates/admin_group_edit.html:39
+#: svjis/articles/templates/admin_preferences_edit.html:27
+#: svjis/articles/templates/admin_user_edit.html:94
+#: svjis/articles/templates/advert_edit.html:69
+#: svjis/articles/templates/article_comment_edit.html:14
+#: svjis/articles/templates/fault_comment_edit.html:14
+#: svjis/articles/templates/faults_create.html:37
+#: svjis/articles/templates/faults_edit.html:37
+#: svjis/articles/templates/personal_settings_edit.html:58
+#: svjis/articles/templates/personal_settings_password.html:26
+#: svjis/articles/templates/redaction_menu_edit.html:28
+#: svjis/articles/templates/redaction_news_edit.html:23
+#: svjis/articles/templates/redaction_survey_edit.html:70
+#: svjis/articles/templates/redaction_useful_link_edit.html:31
 msgid "Save"
 msgstr "Uložit"
 
-#: articles/templates/admin_building_unit.html:7
-#: articles/templates/admin_user_detail.html:82
-#: articles/tests_playwright/commands.py:180 articles/views_admin.py:54
+#: svjis/articles/templates/admin_building_unit.html:7
+#: svjis/articles/templates/admin_user_detail.html:98
+#: svjis/articles/tests_playwright/commands.py:180
+#: svjis/articles/views_admin.py:54
 msgid "Building units"
 msgstr "Jednotky"
 
-#: articles/templates/admin_building_unit.html:13
-#: articles/tests_playwright/commands.py:183
+#: svjis/articles/templates/admin_building_unit.html:13
+#: svjis/articles/tests_playwright/commands.py:183
 msgid "Add new unit"
 msgstr "Přidat jednotku"
 
-#: articles/templates/admin_building_unit.html:14
-#: articles/templates/admin_user.html:14
+#: svjis/articles/templates/admin_building_unit.html:14
+#: svjis/articles/templates/admin_user.html:14
 msgid "Export to Excel"
 msgstr "Export do Excelu"
 
-#: articles/templates/admin_building_unit.html:72
-#: articles/templates/admin_building_unit_owners_edit.html:13
-#: articles/templates/admin_user_ownes_edit.html:23
+#: svjis/articles/templates/admin_building_unit.html:72
+#: svjis/articles/templates/admin_building_unit_owners_edit.html:13
+#: svjis/articles/templates/admin_user_ownes_edit.html:23
 msgid "Owners"
 msgstr "Vlastníci"
 
-#: articles/templates/admin_building_unit_edit.html:7
-#: articles/templates/admin_building_unit_edit.html:13
+#: svjis/articles/templates/admin_building_unit_edit.html:7
+#: svjis/articles/templates/admin_building_unit_edit.html:13
 msgid "Building unit"
 msgstr "Jednotka"
 
-#: articles/templates/admin_building_unit_owners_edit.html:21
-#: articles/templates/admin_user_detail.html:87
+#: svjis/articles/templates/admin_building_unit_owners_edit.html:21
+#: svjis/articles/templates/admin_user_detail.html:105
 msgid "Units"
 msgstr "Jednotky"
 
-#: articles/templates/admin_building_unit_owners_edit.html:39
-#: articles/templates/admin_user_ownes_edit.html:43
+#: svjis/articles/templates/admin_building_unit_owners_edit.html:39
+#: svjis/articles/templates/admin_user_ownes_edit.html:43
 msgid "Add"
 msgstr "Přidat"
 
-#: articles/templates/admin_company_edit.html:53
+#: svjis/articles/templates/admin_company_edit.html:53
 msgid "Company header"
 msgstr "Hlavička společenství"
 
-#: articles/templates/admin_company_edit.html:58
+#: svjis/articles/templates/admin_company_edit.html:58
 msgid "Do you want to delete logo?"
 msgstr "Chcete smazat logo?"
 
-#: articles/templates/admin_company_edit.html:58
+#: svjis/articles/templates/admin_company_edit.html:58
 msgid "Delete logo"
 msgstr "Smazat logo"
 
-#: articles/templates/admin_entrance.html:7
-#: articles/templates/admin_entrance_edit.html:7
-#: articles/tests_playwright/commands.py:117 articles/views_admin.py:48
+#: svjis/articles/templates/admin_entrance.html:7
+#: svjis/articles/templates/admin_entrance_edit.html:7
+#: svjis/articles/tests_playwright/commands.py:117
+#: svjis/articles/views_admin.py:48
 msgid "Entrances"
 msgstr "Seznam vchodů"
 
-#: articles/templates/admin_entrance.html:8
-#: articles/tests_playwright/commands.py:120
+#: svjis/articles/templates/admin_entrance.html:8
+#: svjis/articles/tests_playwright/commands.py:120
 msgid "Add new entrance"
 msgstr "Přidat vchod"
 
-#: articles/templates/admin_group.html:7
-#: articles/templates/admin_group_edit.html:7
-#: articles/templates/admin_group_edit.html:13
-#: articles/templates/admin_user.html:30
+#: svjis/articles/templates/admin_group.html:7
+#: svjis/articles/templates/admin_group_edit.html:7
+#: svjis/articles/templates/admin_group_edit.html:13
+#: svjis/articles/templates/admin_user.html:30
 msgid "Group"
 msgstr "Skupina"
 
-#: articles/templates/admin_group.html:8
+#: svjis/articles/templates/admin_group.html:8
 msgid "Create new group"
 msgstr "Vytvořit novou skupinu"
 
-#: articles/templates/admin_group.html:24
+#: svjis/articles/templates/admin_group.html:24
 msgid "List of users"
 msgstr "Seznam uživatelů"
 
-#: articles/templates/admin_group_edit.html:21
-#: articles/templates/article.html:32
+#: svjis/articles/templates/admin_group_edit.html:21
+#: svjis/articles/templates/article.html:45
 msgid "Permissions"
 msgstr "Oprávnění"
 
-#: articles/templates/admin_messages.html:7 articles/views_admin.py:78
+#: svjis/articles/templates/admin_messages.html:7
+#: svjis/articles/views_admin.py:78
 msgid "Waiting messages"
 msgstr "Čekající zprávy"
 
-#: articles/templates/admin_messages.html:12
+#: svjis/articles/templates/admin_messages.html:12
 msgid "Recipient"
 msgstr "Příjemce"
 
-#: articles/templates/admin_messages.html:14
+#: svjis/articles/templates/admin_messages.html:14
 msgid "Creation time"
 msgstr "Čas vytvoření"
 
-#: articles/templates/admin_preferences.html:7
-#: articles/templates/admin_preferences_edit.html:7
-#: articles/templates/admin_preferences_edit.html:14 articles/views_admin.py:72
+#: svjis/articles/templates/admin_preferences.html:7
+#: svjis/articles/templates/admin_preferences_edit.html:7
+#: svjis/articles/templates/admin_preferences_edit.html:14
+#: svjis/articles/views_admin.py:72
 msgid "Preferences"
 msgstr "Nastavení"
 
-#: articles/templates/admin_preferences.html:8
+#: svjis/articles/templates/admin_preferences.html:8
 msgid "Create new entry"
 msgstr "Vytvořit novou položku"
 
-#: articles/templates/admin_user.html:7
-#: articles/templates/admin_user_edit.html:7 articles/templates/fault.html:65
-#: articles/templates/fault_log.html:13 articles/templates/login.html:5
-#: articles/templates/redaction_survey_results.html:39
+#: svjis/articles/templates/admin_user.html:7
+#: svjis/articles/templates/admin_user_edit.html:7
+#: svjis/articles/templates/fault_log.html:13
+#: svjis/articles/templates/login.html:5
+#: svjis/articles/templates/redaction_survey_results.html:39
 msgid "User"
 msgstr "Uživatel"
 
-#: articles/templates/admin_user.html:13
-#: articles/tests_playwright/commands.py:304
+#: svjis/articles/templates/admin_user.html:13
+#: svjis/articles/tests_playwright/commands.py:304
 msgid "Create new user"
 msgstr "Nový uživatel"
 
-#: articles/templates/admin_user.html:19
+#: svjis/articles/templates/admin_user.html:19
 msgid "Deactivated users"
 msgstr "Deaktivovaní uživatelé"
 
-#: articles/templates/admin_user.html:50
-#: articles/templates/admin_user_detail.html:20
-#: articles/templates/redaction_article_notifications.html:17
+#: svjis/articles/templates/admin_user.html:50
+#: svjis/articles/templates/admin_user_detail.html:23
+#: svjis/articles/templates/redaction_article_notifications.html:17
 msgid "Last name"
 msgstr "Příjmení"
 
-#: articles/templates/admin_user.html:51
-#: articles/templates/admin_user_detail.html:16
-#: articles/templates/redaction_article_notifications.html:18
+#: svjis/articles/templates/admin_user.html:51
+#: svjis/articles/templates/admin_user_detail.html:19
+#: svjis/articles/templates/redaction_article_notifications.html:18
 msgid "First name"
 msgstr "Křestní jméno"
 
-#: articles/templates/admin_user.html:52
-#: articles/templates/admin_user_detail.html:66
-msgid "Active"
-msgstr "Aktivní"
-
-#: articles/templates/admin_user.html:54
+#: svjis/articles/templates/admin_user.html:53
+#: svjis/articles/templates/admin_user_detail.html:81
 msgid "Last login"
 msgstr "Poslední přihlášení"
 
-#: articles/templates/admin_user.html:61
-msgid "Detail"
-msgstr "Detail"
-
-#: articles/templates/admin_user_detail.html:8
+#: svjis/articles/templates/admin_user_detail.html:8
 msgid "Modify user"
 msgstr "Upravit uživatele"
 
-#: articles/templates/admin_user_detail.html:29
-#: articles/templates/admin_user_edit.html:32
-#: articles/templates/personal_settings_edit.html:27
-msgid "Contact information"
-msgstr "Kontaktní informace"
-
-#: articles/templates/admin_user_detail.html:58
-#: articles/templates/admin_user_edit.html:63
-msgid "Login information"
-msgstr "Přihlašovací informace"
-
-#: articles/templates/admin_user_detail.html:62
-#: articles/templates/login.html:22 articles/templates/login_page.html:20
-msgid "Username"
-msgstr "Uživatel"
-
-#: articles/templates/admin_user_detail.html:70
-#: articles/templates/admin_user_edit.html:83
-msgid "Member of"
-msgstr "Je členem"
-
-#: articles/templates/admin_user_detail.html:83
-#: articles/tests_playwright/commands.py:365
-msgid "Modify units"
-msgstr "Upravit jednotky"
-
-#: articles/templates/admin_user_detail.html:100
-#: articles/tests_playwright/commands.py:328
-msgid "Back to list"
-msgstr "Zpět na seznam"
-
-#: articles/templates/admin_user_edit.html:13
-#: articles/templates/personal_settings_edit.html:12
+#: svjis/articles/templates/admin_user_detail.html:11
+#: svjis/articles/templates/admin_user_edit.html:13
+#: svjis/articles/templates/personal_settings_edit.html:12
 msgid "Person"
 msgstr "Osoba"
 
-#: articles/templates/admin_user_edit.html:69 articles/templates/login.html:26
-#: articles/templates/login_page.html:24
+#: svjis/articles/templates/admin_user_detail.html:34
+#: svjis/articles/templates/admin_user_edit.html:32
+#: svjis/articles/templates/personal_settings_edit.html:27
+msgid "Contact information"
+msgstr "Kontaktní informace"
+
+#: svjis/articles/templates/admin_user_detail.html:67
+#: svjis/articles/templates/admin_user_edit.html:63
+msgid "Login information"
+msgstr "Přihlašovací informace"
+
+#: svjis/articles/templates/admin_user_detail.html:73
+#: svjis/articles/templates/login.html:18
+#: svjis/articles/templates/login_page.html:22
+msgid "Username"
+msgstr "Uživatel"
+
+#: svjis/articles/templates/admin_user_detail.html:77
+msgid "Active"
+msgstr "Aktivní"
+
+#: svjis/articles/templates/admin_user_detail.html:85
+#: svjis/articles/templates/admin_user_edit.html:83
+msgid "Member of"
+msgstr "Je členem"
+
+#: svjis/articles/templates/admin_user_detail.html:99
+#: svjis/articles/tests_playwright/commands.py:365
+msgid "Modify units"
+msgstr "Upravit jednotky"
+
+#: svjis/articles/templates/admin_user_detail.html:119
+#: svjis/articles/tests_playwright/commands.py:328
+msgid "Back to list"
+msgstr "Zpět na seznam"
+
+#: svjis/articles/templates/admin_user_edit.html:69
+#: svjis/articles/templates/login.html:22
+#: svjis/articles/templates/login_page.html:26
 msgid "Password"
 msgstr "Heslo"
 
-#: articles/templates/admin_user_edit.html:73
+#: svjis/articles/templates/admin_user_edit.html:73
 msgid "Send Credentials By E-Mail"
 msgstr "Odeslat přihlašovací údaje e-mailem"
 
-#: articles/templates/admin_user_ownes_edit.html:55
+#: svjis/articles/templates/admin_user_ownes_edit.html:55
 msgid "Back to user"
 msgstr "Zpět na uživatele"
 
-#: articles/templates/advert_edit.html:7 articles/templates/adverts_list.html:7
-#: articles/tests_playwright/commands.py:787
-#: articles/tests_playwright/commands.py:799 articles/utils.py:79
-#: articles/views_adverts.py:84 articles/views_adverts.py:107
+#: svjis/articles/templates/advert_detail.html:8
+#: svjis/articles/templates/article.html:9
+msgid "Breadcrumb"
+msgstr ""
+
+#: svjis/articles/templates/advert_detail.html:9
+#: svjis/articles/templates/advert_edit.html:7
+#: svjis/articles/tests_playwright/commands.py:800
+#: svjis/articles/tests_playwright/commands.py:812 svjis/articles/utils.py:79
+#: svjis/articles/views_adverts.py:84 svjis/articles/views_adverts.py:107
+#: svjis/articles/views_adverts.py:162
 msgid "Adverts"
 msgstr "Inzeráty"
 
-#: articles/templates/advert_edit.html:26
-#: articles/templates/redaction_article_edit.html:26
-#: articles/templates/redaction_news_edit.html:16
-#: articles/templates/redaction_survey_edit.html:55
-msgid "Properties"
-msgstr "Vlastnosti"
-
-#: articles/templates/advert_edit.html:46
-#: articles/templates/advert_edit.html:51 articles/templates/article.html:17
-#: articles/templates/fault.html:59
-msgid "Assets"
-msgstr "Přílohy"
-
-#: articles/templates/redaction_article_edit.html:62
-#: articles/templates/redaction_article_edit.html:99
-msgid "Attachments"
-msgstr "Přílohy ke stažení"
-
-#: articles/templates/redaction_article_edit.html:65
-msgid "Upload files (documents, spreadsheets, PDFs...) for readers to download from the article."
-msgstr "Nahrajte soubory (dokumenty, tabulky, PDF...), které si čtenáři budou moci u článku stáhnout."
-
-#: articles/templates/redaction_article_edit.html:104
-msgid "Save the article first to be able to attach downloadable files."
-msgstr "Nejprve článek uložte, poté budete moci přidávat přílohy ke stažení."
-
-#: articles/templates/advert_edit.html:82 articles/templates/fault.html:101
-#: articles/templates/redaction_article_edit.html:99
-msgid "Upload"
-msgstr "Nahrát soubor"
-
-#: articles/templates/adverts_list.html:10
-#: articles/tests_playwright/commands.py:789
-msgid "Create new advert"
-msgstr "Vytvořit nový inzerát"
-
-#: articles/templates/adverts_list.html:21 articles/templates/article.html:10
-#: articles/templates/faults_list.html:20 articles/templates/main.html:21
-#: articles/templates/redaction_article.html:17
-#: articles/templates/redaction_news.html:15
-#: articles/templates/redaction_survey.html:19
+#: svjis/articles/templates/advert_detail.html:22
+#: svjis/articles/templates/adverts_list.html:25
+#: svjis/articles/templates/article.html:21
+#: svjis/articles/templates/fault.html:13
+#: svjis/articles/templates/faults_list.html:20
+#: svjis/articles/templates/main.html:39
+#: svjis/articles/templates/redaction_article.html:16
+#: svjis/articles/templates/redaction_news.html:15
+#: svjis/articles/templates/redaction_survey.html:19
 msgid "Author"
 msgstr "Autor"
 
-#: articles/templates/article.html:36 articles/templates/fault.html:107
+#: svjis/articles/templates/advert_detail.html:37
+#: svjis/articles/templates/advert_edit.html:36
+msgid "Gallery"
+msgstr "Galerie"
+
+#: svjis/articles/templates/advert_detail.html:48
+#: svjis/articles/templates/advert_edit.html:79
+#: svjis/articles/templates/advert_edit.html:84
+#: svjis/articles/templates/article.html:30
+#: svjis/articles/templates/fault.html:50
+msgid "Assets"
+msgstr "Přílohy"
+
+#: svjis/articles/templates/advert_detail.html:66
+#: svjis/articles/templates/advert_edit.html:76
+msgid "Delete advert"
+msgstr "Smazat inzerát"
+
+#: svjis/articles/templates/advert_edit.html:48
+msgid "Add photos"
+msgstr "Přidat fotky"
+
+#: svjis/articles/templates/advert_edit.html:50
+msgid "You can select multiple photos at once - they are added when you save."
+msgstr "Můžeš vybrat víc fotek najednou - přidají se při uložení."
+
+#: svjis/articles/templates/advert_edit.html:54
+#: svjis/articles/templates/redaction_article_edit.html:48
+#: svjis/articles/templates/redaction_news_edit.html:16
+#: svjis/articles/templates/redaction_survey_edit.html:55
+msgid "Properties"
+msgstr "Vlastnosti"
+
+#: svjis/articles/templates/advert_edit.html:75
+msgid "View advert"
+msgstr "Zobrazit inzerát"
+
+#: svjis/articles/templates/advert_edit.html:85
+msgid "Documents and other non-photo files for this advert."
+msgstr "Dokumenty a jiné soubory (ne fotky) k tomuto inzerátu."
+
+#: svjis/articles/templates/advert_edit.html:116
+#: svjis/articles/templates/redaction_article_edit.html:125
+msgid "Upload"
+msgstr "Nahrát soubor"
+
+#: svjis/articles/templates/adverts_list.html:10
+#: svjis/articles/tests_playwright/commands.py:802
+msgid "Create new advert"
+msgstr "Vytvořit nový inzerát"
+
+#: svjis/articles/templates/adverts_list.html:30
+msgid "Read more"
+msgstr "Číst více"
+
+#: svjis/articles/templates/article.html:49
+#: svjis/articles/templates/fault.html:68
 msgid "Comments"
 msgstr "Komentáře"
 
-#: articles/templates/article.html:40 articles/templates/fault.html:111
+#: svjis/articles/templates/article.html:53
+#: svjis/articles/templates/fault.html:73
 msgid "Modify"
 msgstr "Upravit"
 
-#: articles/templates/article.html:51
+#: svjis/articles/templates/article.html:64
+#: svjis/articles/tests_playwright/commands.py:469
 msgid "Stop watching discussion"
 msgstr "Přestat sledovat diskuzi"
 
-#: articles/templates/article.html:53
+#: svjis/articles/templates/article.html:66
 msgid "Start watching discussion"
 msgstr "Začít sledovat diskuzi"
 
-#: articles/templates/article.html:63 articles/templates/fault.html:125
+#: svjis/articles/templates/article.html:76
+#: svjis/articles/templates/fault.html:89
 msgid "Insert comment"
 msgstr "Vložit komentář"
 
-#: articles/templates/article.html:69
-msgid "Back to article list"
-msgstr "Zpět na seznam článků"
+#: svjis/articles/templates/article.html:83
+msgid "Most read articles"
+msgstr "Nejčtenější články"
 
-#: articles/templates/article_comment_edit.html:7
-#: articles/templates/fault_comment_edit.html:7
+#: svjis/articles/templates/article_comment_edit.html:7
+#: svjis/articles/templates/fault_comment_edit.html:7
 msgid "Modify comment"
 msgstr "Upravit komentář"
 
-#: articles/templates/box-news.html:7
-#: articles/templates/redaction_news_edit.html:7
-#: articles/tests_playwright/commands.py:497 articles/views_redaction.py:40
-#: articles/views_redaction.py:340
+#: svjis/articles/templates/box-news.html:7
+#: svjis/articles/templates/redaction_news_edit.html:7
+#: svjis/articles/tests_playwright/commands.py:509
+#: svjis/articles/views_redaction.py:42 svjis/articles/views_redaction.py:369
 msgid "News"
 msgstr "Aktuálně"
 
-#: articles/templates/box-survey.html:8
-#: articles/templates/redaction_survey_edit.html:7
-#: articles/views_redaction.py:590
+#: svjis/articles/templates/box-survey.html:8
+#: svjis/articles/templates/redaction_survey_edit.html:7
+#: svjis/articles/views_redaction.py:619
 msgid "Survey"
 msgstr "Anketa"
 
-#: articles/templates/box-survey.html:25
+#: svjis/articles/templates/box-survey.html:29
 msgid "Vote"
 msgstr "Hlasovat"
 
-#: articles/templates/box-survey.html:36
+#: svjis/articles/templates/box-survey.html:42
 msgid "Number of votes"
 msgstr "Počet hlasování"
 
-#: articles/templates/box-top-articles.html:7
+#: svjis/articles/templates/box-top-articles.html:7
 msgid "Top articles"
 msgstr "Nejčtenější články"
 
-#: articles/templates/box-useful-links.html:7
-#: articles/tests_playwright/commands.py:559 articles/views_redaction.py:46
-#: articles/views_redaction.py:416
+#: svjis/articles/templates/box-useful-links.html:7
+#: svjis/articles/tests_playwright/commands.py:571
+#: svjis/articles/views_redaction.py:48 svjis/articles/views_redaction.py:445
 msgid "Useful Links"
 msgstr "Užitečné odkazy"
 
-#: articles/templates/box-useful-links.html:14
-msgid "Paper clip"
-msgstr "Kancelářská sponka"
-
-#: articles/templates/contact_phonelist.html:7
-#: articles/tests_playwright/commands.py:665 articles/views_contact.py:22
+#: svjis/articles/templates/contact_phonelist.html:7
+#: svjis/articles/tests_playwright/commands.py:677
+#: svjis/articles/views_contact.py:22
 msgid "Phonelist"
 msgstr "Seznam kontaktů"
 
-#: articles/templates/error_404.html:8
-#: articles/tests_playwright/test_desktop.py:93
+#: svjis/articles/templates/error_404.html:12
+#: svjis/articles/tests_playwright/test_desktop.py:93
 msgid "Page not found"
 msgstr "Stránka nenalezena"
 
-#: articles/templates/error_404.html:10
-msgid "Page doesn't exist or you have no access."
-msgstr "Požadovaná stránka buď neexistuje nebo k ní nemáte přístup."
+#: svjis/articles/templates/error_404.html:13
+msgid "The page you are looking for does not exist."
+msgstr ""
 
-#: articles/templates/error_404.html:12
-msgid "Continue"
-msgstr "Pokračujte"
-
-#: articles/templates/error_404.html:12
-msgid "here"
-msgstr "zde"
-
-#: articles/templates/fault.html:14 articles/tests_playwright/commands.py:745
-msgid "Take ticket"
-msgstr "Vzít si tiket k řešení"
-
-#: articles/templates/fault.html:18 articles/tests_playwright/commands.py:747
-#: articles/tests_playwright/commands.py:754
-#: articles/tests_playwright/commands.py:756
-msgid "Close ticket"
-msgstr "Uzavřít tiket"
-
-#: articles/templates/fault.html:22 articles/tests_playwright/commands.py:763
-msgid "View log"
-msgstr "Zobrazit log"
-
-#: articles/templates/fault.html:26
-msgid "Stop watching ticket"
-msgstr "Přestat sledovat tiket"
-
-#: articles/templates/fault.html:28
-msgid "Start watching ticket"
-msgstr "Začít sledovat tiket"
-
-#: articles/templates/fault.html:33 articles/templates/faults_list.html:17
-#: articles/templates/redaction_article.html:18
-#: articles/templates/redaction_news.html:14
-msgid "Date"
-msgstr "Datum"
-
-#: articles/templates/fault.html:37
-msgid "Creator"
-msgstr "Zadavatel"
-
-#: articles/templates/fault.html:66 articles/templates/fault_log.html:16
-#: articles/templates/redaction_survey_results.html:38
-msgid "Time"
-msgstr "Čas"
-
-#: articles/templates/fault.html:90
-msgid "Add asset"
-msgstr "Přidat přílohu"
-
-#: articles/templates/fault.html:131
-msgid "Back to fault list"
-msgstr "Zpět na seznam závad"
-
-#: articles/templates/fault_log.html:10
-msgid "Log"
-msgstr "Protokol"
-
-#: articles/templates/fault_log.html:14
-msgid "Event"
-msgstr "Událost"
-
-#: articles/templates/fault_log.html:30
-msgid "Back to ticket"
-msgstr "Zpět do tiketu"
-
-#: articles/templates/faults_list.html:10
-#: articles/tests_playwright/commands.py:713
-msgid "Report fault or request"
-msgstr "Nahlásit závadu nebo požadavek"
-
-#: articles/templates/faults_list.html:16
-msgid "Ticket No."
-msgstr "Číslo tiketu"
-
-#: articles/templates/faults_list.html:27
-#: articles/templates/redaction_article.html:25
-msgid "View"
-msgstr "Zobrazit"
-
-#: articles/templates/header.html:7
+#: svjis/articles/templates/error_404.html:14
 msgid "Go to homepage"
 msgstr "Přejít na domovskou stránku"
 
-#: articles/templates/login.html:11
-msgid "Logout"
-msgstr "Odhlásit"
-
-#: articles/templates/login.html:16 articles/templates/tray-menu.html:14
-msgid "Login"
-msgstr "Přihlásit"
-
-#: articles/templates/login.html:30 articles/templates/login_page.html:28
-msgid "Sign in"
-msgstr "Přihlásit"
-
-#: articles/templates/login.html:33 articles/templates/login_page.html:31
-#: articles/templates/send_lost_password.html:8
-msgid "Lost password"
-msgstr "Zapomenuté heslo"
-
-#: articles/templates/login_page.html:8
-#: articles/tests_playwright/commands.py:648
-msgid "Sign in to your account"
-msgstr "Přihlaste se ke svému účtu"
-
-#: articles/templates/login_page.html:12
-msgid "Please sign-in"
-msgstr "Prosím, přihlaste se"
-
-#: articles/templates/paginator.html:8
-msgid "Previous"
-msgstr "Předchozí"
-
-#: articles/templates/paginator.html:35
-msgid "Next"
-msgstr "Následující"
-
-#: articles/templates/personal_settings_language.html:12
-msgid "Language"
-msgstr "Jazyk"
-
-#: articles/templates/personal_settings_language.html:14
-msgid "Preferred language"
-msgstr "Preferovaný jazyk"
-
-#: articles/templates/personal_settings_password.html:11
-#: articles/tests_playwright/commands.py:688
-#: articles/views_personal_settings.py:39
-msgid "Password change"
-msgstr "Změna hesla"
-
-#: articles/templates/personal_settings_password.html:13
-msgid "Current password"
-msgstr "Současné heslo"
-
-#: articles/templates/personal_settings_password.html:17
-msgid "New password"
-msgstr "Nové heslo"
-
-#: articles/templates/personal_settings_password.html:21
-msgid "New password once again"
-msgstr "Nové heslo ještě jednou"
-
-#: articles/templates/redaction_analytics.html:11
-msgid "Show all users"
-msgstr "Ukázat všechny uživatele"
-
-#: articles/templates/redaction_analytics.html:11
-msgid "Show logged users only"
-msgstr "Ukázat jen přihlášené uživatele"
-
-#: articles/templates/redaction_analytics.html:38
-msgid "Platform"
-msgstr "Platforma"
-
-#: articles/templates/redaction_analytics.html:51
-msgid "Browser"
-msgstr "Prohlížeč"
-
-#: articles/templates/redaction_analytics.html:64
-msgid "Operating System"
-msgstr "Operační systém"
-
-#: articles/templates/redaction_analytics.html:76
-#: articles/templates/redaction_analytics.html:83
-msgid "Bots"
-msgstr "Boti"
-
-#: articles/templates/redaction_analytics.html:86
-#: articles/templates/redaction_analytics.html:102
-msgid "Count"
-msgstr "Počet"
-
-#: articles/templates/redaction_analytics.html:87
-#: articles/views_redaction.py:695
-msgid "Bot"
-msgstr "Bot"
-
-#: articles/templates/redaction_analytics.html:99
-msgid "Humans"
-msgstr "Lidé"
-
-#: articles/templates/redaction_analytics.html:103
-#: articles/views_redaction.py:687
-msgid "Human"
-msgstr "Člověk"
-
-#: articles/templates/redaction_article.html:8
-#: articles/tests_playwright/commands.py:435
-msgid "Create new article"
-msgstr "Vytvořit nový článek"
-
-#: articles/templates/redaction_article.html:16
-#: articles/templates/redaction_menu.html:7
-#: articles/templates/redaction_menu_edit.html:7 articles/views_redaction.py:58
-msgid "Menu"
-msgstr "Menu"
-
-#: articles/templates/redaction_article.html:27
-#: articles/templates/redaction_article_notifications.html:7
-#: articles/templates/redaction_article_notifications_sent.html:7
-msgid "Send notifications"
-msgstr "Odeslat upozornění"
-
-#: articles/templates/redaction_article_edit.html:41
-msgid "Visible for"
-msgstr "Viditelný pro"
-
-#: articles/templates/redaction_article_notifications.html:34
-#: articles/templates/send_lost_password.html:19
-msgid "Submit"
-msgstr "Odeslat"
-
-#: articles/templates/redaction_article_notifications_sent.html:9
-msgid "notifications has been send"
-msgstr "upozornění bylo odesláno"
-
-#: articles/templates/redaction_article_notifications_sent.html:10
-msgid "Continue here"
-msgstr "Pokračujte zde"
-
-#: articles/templates/redaction_menu.html:8
-msgid "Create new menu entry"
-msgstr "Vytvořit novou položku menu"
-
-#: articles/templates/redaction_menu.html:15
-msgid "Parent"
-msgstr "Rodič"
-
-#: articles/templates/redaction_menu.html:16
-msgid "Level"
-msgstr "Úroveň"
-
-#: articles/templates/redaction_menu.html:18
-#: articles/tests_playwright/commands.py:433
-#: articles/tests_playwright/commands.py:475
-#: articles/tests_playwright/commands.py:584
-#: articles/tests_playwright/commands.py:603
-#: articles/tests_playwright/commands.py:629 articles/utils.py:49
-#: articles/views.py:150 articles/views.py:223 articles/views.py:260
-#: articles/views_redaction.py:34
-msgid "Articles"
-msgstr "Články"
-
-#: articles/templates/redaction_menu_edit.html:13
-msgid "Menu entry"
-msgstr "Položka menu"
-
-#: articles/templates/redaction_news.html:8
-#: articles/tests_playwright/commands.py:499
-msgid "Create new news"
-msgstr "Vytvořit novinku"
-
-#: articles/templates/redaction_news.html:24
-msgid "Do you want to delete this news"
-msgstr "Chcete smazat tuto novinku"
-
-#: articles/templates/redaction_survey.html:8
-#: articles/tests_playwright/commands.py:520
-msgid "Create new survey"
-msgstr "Vytvořit novou anketu"
-
-#: articles/templates/redaction_survey.html:17
-msgid "Starting date"
-msgstr "Počáteční datum"
-
-#: articles/templates/redaction_survey.html:18
-msgid "Ending date"
-msgstr "Koncové datum"
-
-#: articles/templates/redaction_survey.html:28
-msgid "Results"
-msgstr "Výsledky"
-
-#: articles/templates/redaction_survey.html:29
-msgid "Export results to Excel"
-msgstr "Export výsledků do Excelu"
-
-#: articles/templates/redaction_survey.html:30
-msgid "Do you want to delete this survey"
-msgstr "Chcete smazat tuto anketu"
-
-#: articles/templates/redaction_survey_edit.html:16
-msgid "Options"
-msgstr "Volby"
-
-#: articles/templates/redaction_survey_edit.html:23
-#: articles/templates/redaction_survey_edit.html:33
-#: articles/templates/redaction_survey_results.html:40
-msgid "Option"
-msgstr "Volba"
-
-#: articles/templates/redaction_survey_edit.html:28
-msgid "Do you want to delete this option"
-msgstr "Chcete smazat tuto volbu"
-
-#: articles/templates/redaction_survey_edit.html:45
-msgid "Add option"
-msgstr "Přidat volbu"
-
-#: articles/templates/redaction_survey_edit.html:48
-msgid "Remove option"
-msgstr "Odstranit volbu"
-
-#: articles/templates/redaction_survey_results.html:11
-msgid "Result"
-msgstr "Výsledky"
-
-#: articles/templates/redaction_survey_results.html:17
-#: articles/templates/redaction_survey_results.html:18
-msgid "Votes"
-msgstr "Hlasování"
-
-#: articles/templates/redaction_survey_results.html:33
-msgid "Voting log"
-msgstr "Záznam hlasování"
-
-#: articles/templates/redaction_useful_link.html:8
-#: articles/tests_playwright/commands.py:561
-msgid "Create new useful link"
-msgstr "Nový užitečný odkaz"
-
-#: articles/templates/redaction_useful_link.html:24
-msgid "Do you want to delete this useful link"
-msgstr "Chcete smazat tento užitečný odkaz"
-
-#: articles/templates/redaction_useful_link_edit.html:7
-#: articles/templates/redaction_useful_link_edit.html:12
-msgid "Useful link"
-msgstr "Užitečný odkaz"
-
-#: articles/templates/search.html:5 articles/templates/search.html:9
-msgid "Search"
-msgstr "Vyhledat"
-
-#: articles/templates/send_lost_password.html:13
-msgid "Send credentials by E-Mail"
-msgstr "Odeslat přihlašovací údaje e-mailem"
-
-#: articles/templates/send_lost_password.html:15
-msgid "Your E-Mail"
-msgstr "Váš E-Mail"
-
-#: articles/tests_playwright/commands.py:86
-#: articles/tests_playwright/commands.py:104
-#: articles/tests_playwright/commands.py:117
-#: articles/tests_playwright/commands.py:180
-#: articles/tests_playwright/commands.py:301
-#: articles/tests_playwright/commands.py:338
-#: articles/tests_playwright/commands.py:363
-#: articles/tests_playwright/commands.py:375 articles/utils.py:85
-#: articles/views_admin.py:99 articles/views_admin.py:138
-#: articles/views_admin.py:155 articles/views_admin.py:198
-#: articles/views_admin.py:225 articles/views_admin.py:242
-#: articles/views_admin.py:296 articles/views_admin.py:317
-#: articles/views_admin.py:362 articles/views_admin.py:447
-#: articles/views_admin.py:465 articles/views_admin.py:496
-#: articles/views_admin.py:561 articles/views_admin.py:658
-#: articles/views_admin.py:725 articles/views_admin.py:778
-#: articles/views_admin.py:795 articles/views_admin.py:835
-#: articles/views_admin.py:847
-msgid "Administration"
-msgstr "Administrace"
-
-#: articles/tests_playwright/commands.py:100
-#: articles/tests_playwright/commands.py:112
-#: articles/tests_playwright/commands.py:126
-#: articles/tests_playwright/commands.py:193
-#: articles/tests_playwright/commands.py:327
-#: articles/tests_playwright/commands.py:348
-#: articles/tests_playwright/commands.py:458
-#: articles/tests_playwright/commands.py:506
-#: articles/tests_playwright/commands.py:534
-#: articles/tests_playwright/commands.py:570
-#: articles/tests_playwright/commands.py:679
-#: articles/tests_playwright/commands.py:721
-#: articles/tests_playwright/commands.py:798 articles/views_admin.py:113
-#: articles/views_admin.py:126 articles/views_admin.py:176
-#: articles/views_admin.py:212 articles/views_admin.py:263
-#: articles/views_admin.py:338 articles/views_admin.py:549
-#: articles/views_admin.py:756 articles/views_admin.py:814
-#: articles/views_adverts.py:133 articles/views_adverts.py:155
-#: articles/views_faults.py:201 articles/views_faults.py:253
-#: articles/views_personal_settings.py:72 articles/views_redaction.py:136
-#: articles/views_redaction.py:255 articles/views_redaction.py:396
-#: articles/views_redaction.py:469 articles/views_redaction.py:563
-msgid "Saved"
-msgstr "Uloženo"
-
-#: articles/tests_playwright/commands.py:301
-#: articles/tests_playwright/commands.py:363 articles/views_admin.py:60
-msgid "Users"
-msgstr "Uživatelé"
-
-#: articles/tests_playwright/commands.py:433
-#: articles/tests_playwright/commands.py:475
-#: articles/tests_playwright/commands.py:497
-#: articles/tests_playwright/commands.py:518
-#: articles/tests_playwright/commands.py:559
-#: articles/tests_playwright/commands.py:639 articles/utils.py:67
-#: articles/views_redaction.py:99 articles/views_redaction.py:116
-#: articles/views_redaction.py:187 articles/views_redaction.py:215
-#: articles/views_redaction.py:283 articles/views_redaction.py:303
-#: articles/views_redaction.py:353 articles/views_redaction.py:373
-#: articles/views_redaction.py:429 articles/views_redaction.py:449
-#: articles/views_redaction.py:502 articles/views_redaction.py:524
-#: articles/views_redaction.py:593 articles/views_redaction.py:707
-msgid "Redaction"
-msgstr "Redakce"
-
-#: articles/tests_playwright/commands.py:518
-#: articles/tests_playwright/commands.py:639 articles/views_redaction.py:52
-#: articles/views_redaction.py:489
-msgid "Surveys"
-msgstr "Ankety"
-
-#: articles/tests_playwright/commands.py:584
-#: articles/tests_playwright/commands.py:603
-#: articles/tests_playwright/commands.py:629
-#: articles/tests_playwright/test_desktop.py:106 articles/views.py:27
-#: articles/views.py:29 articles/views.py:102
-msgid "All articles"
-msgstr "Všechny články"
-
-#: articles/tests_playwright/commands.py:663
-#: articles/tests_playwright/commands.py:665 articles/utils.py:55
-#: articles/views_contact.py:16 articles/views_contact.py:35
-#: articles/views_contact.py:52
-msgid "Contact"
-msgstr "Kontakt"
-
-#: articles/tests_playwright/commands.py:673
-#: articles/tests_playwright/commands.py:683
-#: articles/tests_playwright/commands.py:688 articles/utils.py:61
-msgid "Personal settings"
-msgstr "Osobní nastavení"
-
-#: articles/tests_playwright/commands.py:683
-#: articles/views_personal_settings.py:33
-msgid "My units"
-msgstr "Moje jednotky"
-
-#: articles/tests_playwright/commands.py:711
-#: articles/tests_playwright/commands.py:732
-#: articles/tests_playwright/commands.py:742
-#: articles/tests_playwright/commands.py:751
-#: articles/tests_playwright/commands.py:760 articles/utils.py:73
-#: articles/views_faults.py:78 articles/views_faults.py:92
-#: articles/views_faults.py:111 articles/views_faults.py:131
-#: articles/views_faults.py:144 articles/views_faults.py:311
-#: articles/views_faults.py:399
-msgid "Fault reporting"
-msgstr "Náměty a požadavky"
-
-#: articles/tests_playwright/commands.py:711
-#: articles/tests_playwright/commands.py:732
-#: articles/tests_playwright/commands.py:742
-#: articles/tests_playwright/commands.py:751 articles/views_faults.py:22
+#: svjis/articles/templates/fault.html:20
+#: svjis/articles/tests_playwright/commands.py:723
+#: svjis/articles/tests_playwright/commands.py:745
+#: svjis/articles/tests_playwright/commands.py:755
+#: svjis/articles/tests_playwright/commands.py:764
+#: svjis/articles/views_faults.py:22
 msgid "Open"
 msgstr "Nevyřešené"
 
-#: articles/tests_playwright/commands.py:787
-#: articles/tests_playwright/commands.py:799 articles/views_adverts.py:21
-#: articles/views_adverts.py:63
+#: svjis/articles/templates/fault.html:29
+#: svjis/articles/tests_playwright/commands.py:758
+msgid "Take ticket"
+msgstr "Vzít si tiket k řešení"
+
+#: svjis/articles/templates/fault.html:32
+#: svjis/articles/tests_playwright/commands.py:760
+#: svjis/articles/tests_playwright/commands.py:767
+#: svjis/articles/tests_playwright/commands.py:769
+msgid "Close ticket"
+msgstr "Uzavřít tiket"
+
+#: svjis/articles/templates/fault.html:35
+#, fuzzy
+#| msgid "Close ticket"
+msgid "Reopen ticket"
+msgstr "Uzavřít tiket"
+
+#: svjis/articles/templates/fault.html:37
+#: svjis/articles/tests_playwright/commands.py:776
+msgid "View log"
+msgstr "Zobrazit log"
+
+#: svjis/articles/templates/fault.html:39
+#: svjis/articles/tests_playwright/commands.py:735
+msgid "Stop watching ticket"
+msgstr "Přestat sledovat tiket"
+
+#: svjis/articles/templates/fault.html:41
+msgid "Start watching ticket"
+msgstr "Začít sledovat tiket"
+
+#: svjis/articles/templates/fault.html:81
+#, fuzzy
+#| msgid "Allow comments"
+msgid "Add comment"
+msgstr "Povolit komentáře"
+
+#: svjis/articles/templates/fault.html:95
+msgid "Back to fault list"
+msgstr "Zpět na seznam závad"
+
+#: svjis/articles/templates/fault_log.html:10
+msgid "Log"
+msgstr "Protokol"
+
+#: svjis/articles/templates/fault_log.html:14
+msgid "Event"
+msgstr "Událost"
+
+#: svjis/articles/templates/fault_log.html:16
+#: svjis/articles/templates/redaction_survey_results.html:38
+msgid "Time"
+msgstr "Čas"
+
+#: svjis/articles/templates/fault_log.html:30
+msgid "Back to ticket"
+msgstr "Zpět do tiketu"
+
+#: svjis/articles/templates/faults_list.html:10
+#: svjis/articles/tests_playwright/commands.py:725
+msgid "Report fault or request"
+msgstr "Nahlásit závadu nebo požadavek"
+
+#: svjis/articles/templates/faults_list.html:16
+msgid "Ticket No."
+msgstr "Číslo tiketu"
+
+#: svjis/articles/templates/faults_list.html:17
+#: svjis/articles/templates/redaction_article.html:17
+#: svjis/articles/templates/redaction_news.html:14
+msgid "Date"
+msgstr "Datum"
+
+#: svjis/articles/templates/login.html:10
+#: svjis/articles/templates/tray-menu.html:33
+msgid "Logout"
+msgstr "Odhlásit"
+
+#: svjis/articles/templates/login.html:14
+#: svjis/articles/templates/tray-menu.html:38
+msgid "Login"
+msgstr "Přihlásit"
+
+#: svjis/articles/templates/login.html:25
+#: svjis/articles/templates/login_page.html:30
+msgid "Sign in"
+msgstr "Přihlásit"
+
+#: svjis/articles/templates/login.html:26
+#: svjis/articles/templates/login_page.html:35
+#: svjis/articles/templates/send_lost_password.html:8
+msgid "Lost password"
+msgstr "Zapomenuté heslo"
+
+#: svjis/articles/templates/login_page.html:12
+#: svjis/articles/tests_playwright/commands.py:660
+msgid "Sign in to your account"
+msgstr "Přihlaste se ke svému účtu"
+
+#: svjis/articles/templates/paginator.html:8
+msgid "Previous"
+msgstr "Předchozí"
+
+#: svjis/articles/templates/paginator.html:35
+msgid "Next"
+msgstr "Následující"
+
+#: svjis/articles/templates/personal_settings_language.html:12
+msgid "Language"
+msgstr "Jazyk"
+
+#: svjis/articles/templates/personal_settings_language.html:14
+msgid "Preferred language"
+msgstr "Preferovaný jazyk"
+
+#: svjis/articles/templates/personal_settings_password.html:11
+#: svjis/articles/tests_playwright/commands.py:700
+#: svjis/articles/views_personal_settings.py:39
+msgid "Password change"
+msgstr "Změna hesla"
+
+#: svjis/articles/templates/personal_settings_password.html:13
+msgid "Current password"
+msgstr "Současné heslo"
+
+#: svjis/articles/templates/personal_settings_password.html:17
+msgid "New password"
+msgstr "Nové heslo"
+
+#: svjis/articles/templates/personal_settings_password.html:21
+msgid "New password once again"
+msgstr "Nové heslo ještě jednou"
+
+#: svjis/articles/templates/redaction_analytics.html:11
+msgid "Show all users"
+msgstr "Ukázat všechny uživatele"
+
+#: svjis/articles/templates/redaction_analytics.html:11
+msgid "Show logged users only"
+msgstr "Ukázat jen přihlášené uživatele"
+
+#: svjis/articles/templates/redaction_analytics.html:38
+msgid "Platform"
+msgstr "Platforma"
+
+#: svjis/articles/templates/redaction_analytics.html:51
+msgid "Browser"
+msgstr "Prohlížeč"
+
+#: svjis/articles/templates/redaction_analytics.html:64
+msgid "Operating System"
+msgstr "Operační systém"
+
+#: svjis/articles/templates/redaction_analytics.html:76
+#: svjis/articles/templates/redaction_analytics.html:83
+msgid "Bots"
+msgstr "Boti"
+
+#: svjis/articles/templates/redaction_analytics.html:86
+#: svjis/articles/templates/redaction_analytics.html:102
+msgid "Count"
+msgstr "Počet"
+
+#: svjis/articles/templates/redaction_analytics.html:87
+#: svjis/articles/views_redaction.py:724
+msgid "Bot"
+msgstr "Bot"
+
+#: svjis/articles/templates/redaction_analytics.html:99
+msgid "Humans"
+msgstr "Lidé"
+
+#: svjis/articles/templates/redaction_analytics.html:103
+#: svjis/articles/views_redaction.py:716
+msgid "Human"
+msgstr "Člověk"
+
+#: svjis/articles/templates/redaction_article.html:8
+#: svjis/articles/tests_playwright/commands.py:435
+msgid "Create new article"
+msgstr "Vytvořit nový článek"
+
+#: svjis/articles/templates/redaction_article.html:15
+#: svjis/articles/templates/redaction_menu.html:7
+#: svjis/articles/templates/redaction_menu_edit.html:7
+#: svjis/articles/views_redaction.py:60
+msgid "Menu"
+msgstr "Menu"
+
+#: svjis/articles/templates/redaction_article.html:25
+#: svjis/articles/templates/redaction_article_notifications.html:7
+#: svjis/articles/templates/redaction_article_notifications_sent.html:7
+msgid "Send notifications"
+msgstr "Odeslat upozornění"
+
+#: svjis/articles/templates/redaction_article_edit.html:43
+#, fuzzy
+#| msgid "Published"
+msgid "Publish"
+msgstr "Zveřejnit"
+
+#: svjis/articles/templates/redaction_article_edit.html:65
+msgid ""
+"Controls where the article sorts in the list - set an earlier date for "
+"archived content."
+msgstr ""
+"Určuje řazení článku v seznamu - u archivního obsahu nastavte starší datum."
+
+#: svjis/articles/templates/redaction_article_edit.html:71
+msgid "Visible for"
+msgstr "Viditelný pro"
+
+#: svjis/articles/templates/redaction_article_edit.html:79
+#: svjis/articles/views_admin.py:66
+msgid "Groups"
+msgstr "Skupiny"
+
+#: svjis/articles/templates/redaction_article_edit.html:81
+#: svjis/articles/templates/redaction_article_edit.html:182
+msgid "Select groups"
+msgstr ""
+
+#: svjis/articles/templates/redaction_article_edit.html:98
+#: svjis/articles/templates/redaction_article_edit.html:132
+msgid "Attachments"
+msgstr "Přílohy ke stažení"
+
+#: svjis/articles/templates/redaction_article_edit.html:100
+msgid ""
+"Upload files (documents, spreadsheets, PDFs...) for readers to download from "
+"the article."
+msgstr ""
+"Nahrajte soubory (dokumenty, tabulky, PDF...), které si čtenáři budou moci u "
+"článku stáhnout."
+
+#: svjis/articles/templates/redaction_article_edit.html:134
+msgid "Save the article first to be able to attach downloadable files."
+msgstr "Nejprve článek uložte, poté budete moci přidávat přílohy ke stažení."
+
+#: svjis/articles/templates/redaction_article_edit.html:151
+msgid "Save the article first to be able to insert images."
+msgstr "Nejprve článek uložte, poté budete moci vkládat obrázky."
+
+#: svjis/articles/templates/redaction_article_edit.html:166
+#: svjis/articles/templates/redaction_article_edit.html:170
+msgid "Image upload failed."
+msgstr "Nahrání obrázku se nezdařilo."
+
+#: svjis/articles/templates/redaction_article_notifications.html:34
+#: svjis/articles/templates/send_lost_password.html:19
+msgid "Submit"
+msgstr "Odeslat"
+
+#: svjis/articles/templates/redaction_article_notifications_sent.html:9
+msgid "notifications has been send"
+msgstr "upozornění bylo odesláno"
+
+#: svjis/articles/templates/redaction_article_notifications_sent.html:10
+msgid "Continue here"
+msgstr "Pokračujte zde"
+
+#: svjis/articles/templates/redaction_menu.html:8
+msgid "Create new menu entry"
+msgstr "Vytvořit novou položku menu"
+
+#: svjis/articles/templates/redaction_menu.html:14
+msgid "Parent"
+msgstr "Rodič"
+
+#: svjis/articles/templates/redaction_menu.html:15
+msgid "Level"
+msgstr "Úroveň"
+
+#: svjis/articles/templates/redaction_menu.html:17
+#: svjis/articles/tests_playwright/commands.py:433
+#: svjis/articles/tests_playwright/commands.py:467
+#: svjis/articles/tests_playwright/commands.py:480
+#: svjis/articles/tests_playwright/commands.py:596
+#: svjis/articles/tests_playwright/commands.py:615
+#: svjis/articles/tests_playwright/commands.py:641 svjis/articles/utils.py:49
+#: svjis/articles/views.py:153 svjis/articles/views.py:241
+#: svjis/articles/views.py:280 svjis/articles/views_redaction.py:36
+msgid "Articles"
+msgstr "Články"
+
+#: svjis/articles/templates/redaction_menu_edit.html:13
+msgid "Menu entry"
+msgstr "Položka menu"
+
+#: svjis/articles/templates/redaction_news.html:8
+#: svjis/articles/tests_playwright/commands.py:511
+msgid "Create new news"
+msgstr "Vytvořit novinku"
+
+#: svjis/articles/templates/redaction_news.html:24
+msgid "Do you want to delete this news"
+msgstr "Chcete smazat tuto novinku"
+
+#: svjis/articles/templates/redaction_survey.html:8
+#: svjis/articles/tests_playwright/commands.py:532
+msgid "Create new survey"
+msgstr "Vytvořit novou anketu"
+
+#: svjis/articles/templates/redaction_survey.html:17
+msgid "Starting date"
+msgstr "Počáteční datum"
+
+#: svjis/articles/templates/redaction_survey.html:18
+msgid "Ending date"
+msgstr "Koncové datum"
+
+#: svjis/articles/templates/redaction_survey.html:28
+msgid "Results"
+msgstr "Výsledky"
+
+#: svjis/articles/templates/redaction_survey.html:29
+msgid "Export results to Excel"
+msgstr "Export výsledků do Excelu"
+
+#: svjis/articles/templates/redaction_survey.html:30
+msgid "Do you want to delete this survey"
+msgstr "Chcete smazat tuto anketu"
+
+#: svjis/articles/templates/redaction_survey_edit.html:16
+msgid "Options"
+msgstr "Volby"
+
+#: svjis/articles/templates/redaction_survey_edit.html:23
+#: svjis/articles/templates/redaction_survey_edit.html:33
+#: svjis/articles/templates/redaction_survey_results.html:40
+msgid "Option"
+msgstr "Volba"
+
+#: svjis/articles/templates/redaction_survey_edit.html:28
+msgid "Do you want to delete this option"
+msgstr "Chcete smazat tuto volbu"
+
+#: svjis/articles/templates/redaction_survey_edit.html:45
+msgid "Add option"
+msgstr "Přidat volbu"
+
+#: svjis/articles/templates/redaction_survey_edit.html:48
+msgid "Remove option"
+msgstr "Odstranit volbu"
+
+#: svjis/articles/templates/redaction_survey_results.html:11
+msgid "Result"
+msgstr "Výsledky"
+
+#: svjis/articles/templates/redaction_survey_results.html:17
+#: svjis/articles/templates/redaction_survey_results.html:18
+msgid "Votes"
+msgstr "Hlasování"
+
+#: svjis/articles/templates/redaction_survey_results.html:33
+msgid "Voting log"
+msgstr "Záznam hlasování"
+
+#: svjis/articles/templates/redaction_useful_link.html:8
+#: svjis/articles/tests_playwright/commands.py:573
+msgid "Create new useful link"
+msgstr "Nový užitečný odkaz"
+
+#: svjis/articles/templates/redaction_useful_link.html:22
+msgid "Do you want to delete this useful link"
+msgstr "Chcete smazat tento užitečný odkaz"
+
+#: svjis/articles/templates/redaction_useful_link_edit.html:7
+#: svjis/articles/templates/redaction_useful_link_edit.html:12
+msgid "Useful link"
+msgstr "Užitečný odkaz"
+
+#: svjis/articles/templates/send_lost_password.html:13
+msgid "Send credentials by E-Mail"
+msgstr "Odeslat přihlašovací údaje e-mailem"
+
+#: svjis/articles/templates/send_lost_password.html:15
+msgid "Your E-Mail"
+msgstr "Váš E-Mail"
+
+#: svjis/articles/templates/tray-menu.html:15
+#: svjis/articles/templates/tray-menu.html:16
+msgid "Search"
+msgstr "Vyhledat"
+
+#: svjis/articles/templates/tray-menu.html:29
+#: svjis/articles/tests_playwright/commands.py:86
+#: svjis/articles/tests_playwright/commands.py:104
+#: svjis/articles/tests_playwright/commands.py:117
+#: svjis/articles/tests_playwright/commands.py:180
+#: svjis/articles/tests_playwright/commands.py:301
+#: svjis/articles/tests_playwright/commands.py:338
+#: svjis/articles/tests_playwright/commands.py:363
+#: svjis/articles/tests_playwright/commands.py:375 svjis/articles/utils.py:85
+#: svjis/articles/views_admin.py:99 svjis/articles/views_admin.py:138
+#: svjis/articles/views_admin.py:155 svjis/articles/views_admin.py:198
+#: svjis/articles/views_admin.py:225 svjis/articles/views_admin.py:242
+#: svjis/articles/views_admin.py:296 svjis/articles/views_admin.py:317
+#: svjis/articles/views_admin.py:362 svjis/articles/views_admin.py:447
+#: svjis/articles/views_admin.py:465 svjis/articles/views_admin.py:496
+#: svjis/articles/views_admin.py:561 svjis/articles/views_admin.py:658
+#: svjis/articles/views_admin.py:725 svjis/articles/views_admin.py:778
+#: svjis/articles/views_admin.py:795 svjis/articles/views_admin.py:835
+#: svjis/articles/views_admin.py:847
+msgid "Administration"
+msgstr "Administrace"
+
+#: svjis/articles/tests_playwright/commands.py:100
+#: svjis/articles/tests_playwright/commands.py:112
+#: svjis/articles/tests_playwright/commands.py:126
+#: svjis/articles/tests_playwright/commands.py:193
+#: svjis/articles/tests_playwright/commands.py:327
+#: svjis/articles/tests_playwright/commands.py:348
+#: svjis/articles/tests_playwright/commands.py:458
+#: svjis/articles/tests_playwright/commands.py:518
+#: svjis/articles/tests_playwright/commands.py:546
+#: svjis/articles/tests_playwright/commands.py:582
+#: svjis/articles/tests_playwright/commands.py:691
+#: svjis/articles/tests_playwright/commands.py:733
+#: svjis/articles/tests_playwright/commands.py:811
+#: svjis/articles/views_admin.py:113 svjis/articles/views_admin.py:126
+#: svjis/articles/views_admin.py:176 svjis/articles/views_admin.py:212
+#: svjis/articles/views_admin.py:263 svjis/articles/views_admin.py:338
+#: svjis/articles/views_admin.py:549 svjis/articles/views_admin.py:756
+#: svjis/articles/views_admin.py:814 svjis/articles/views_adverts.py:135
+#: svjis/articles/views_adverts.py:184 svjis/articles/views_faults.py:206
+#: svjis/articles/views_faults.py:273
+#: svjis/articles/views_personal_settings.py:72
+#: svjis/articles/views_redaction.py:138 svjis/articles/views_redaction.py:256
+#: svjis/articles/views_redaction.py:425 svjis/articles/views_redaction.py:498
+#: svjis/articles/views_redaction.py:592
+msgid "Saved"
+msgstr "Uloženo"
+
+#: svjis/articles/tests_playwright/commands.py:301
+#: svjis/articles/tests_playwright/commands.py:363
+#: svjis/articles/views_admin.py:60
+msgid "Users"
+msgstr "Uživatelé"
+
+#: svjis/articles/tests_playwright/commands.py:433
+#: svjis/articles/tests_playwright/commands.py:467
+#: svjis/articles/tests_playwright/commands.py:480
+#: svjis/articles/tests_playwright/commands.py:509
+#: svjis/articles/tests_playwright/commands.py:530
+#: svjis/articles/tests_playwright/commands.py:571
+#: svjis/articles/tests_playwright/commands.py:651 svjis/articles/utils.py:67
+#: svjis/articles/views_redaction.py:101 svjis/articles/views_redaction.py:118
+#: svjis/articles/views_redaction.py:189 svjis/articles/views_redaction.py:217
+#: svjis/articles/views_redaction.py:284 svjis/articles/views_redaction.py:304
+#: svjis/articles/views_redaction.py:382 svjis/articles/views_redaction.py:402
+#: svjis/articles/views_redaction.py:458 svjis/articles/views_redaction.py:478
+#: svjis/articles/views_redaction.py:531 svjis/articles/views_redaction.py:553
+#: svjis/articles/views_redaction.py:622 svjis/articles/views_redaction.py:736
+msgid "Redaction"
+msgstr "Redakce"
+
+#: svjis/articles/tests_playwright/commands.py:530
+#: svjis/articles/tests_playwright/commands.py:651
+#: svjis/articles/views_redaction.py:54 svjis/articles/views_redaction.py:518
+msgid "Surveys"
+msgstr "Ankety"
+
+#: svjis/articles/tests_playwright/commands.py:596
+#: svjis/articles/tests_playwright/commands.py:615
+#: svjis/articles/tests_playwright/commands.py:641
+#: svjis/articles/tests_playwright/test_desktop.py:106
+#: svjis/articles/views.py:27 svjis/articles/views.py:29
+#: svjis/articles/views.py:105 svjis/articles/views.py:235
+msgid "All articles"
+msgstr "Všechny články"
+
+#: svjis/articles/tests_playwright/commands.py:675
+#: svjis/articles/tests_playwright/commands.py:677 svjis/articles/utils.py:55
+#: svjis/articles/views_contact.py:16 svjis/articles/views_contact.py:35
+#: svjis/articles/views_contact.py:52
+msgid "Contact"
+msgstr "Kontakt"
+
+#: svjis/articles/tests_playwright/commands.py:685
+#: svjis/articles/tests_playwright/commands.py:695
+#: svjis/articles/tests_playwright/commands.py:700 svjis/articles/utils.py:61
+msgid "Personal settings"
+msgstr "Osobní nastavení"
+
+#: svjis/articles/tests_playwright/commands.py:695
+#: svjis/articles/views_personal_settings.py:33
+msgid "My units"
+msgstr "Moje jednotky"
+
+#: svjis/articles/tests_playwright/commands.py:723
+#: svjis/articles/tests_playwright/commands.py:745
+#: svjis/articles/tests_playwright/commands.py:755
+#: svjis/articles/tests_playwright/commands.py:764
+#: svjis/articles/tests_playwright/commands.py:773 svjis/articles/utils.py:73
+#: svjis/articles/views_faults.py:81 svjis/articles/views_faults.py:95
+#: svjis/articles/views_faults.py:114 svjis/articles/views_faults.py:135
+#: svjis/articles/views_faults.py:149 svjis/articles/views_faults.py:331
+#: svjis/articles/views_faults.py:453
+msgid "Fault reporting"
+msgstr "Náměty a požadavky"
+
+#: svjis/articles/tests_playwright/commands.py:800
+#: svjis/articles/tests_playwright/commands.py:812
+#: svjis/articles/views_adverts.py:21 svjis/articles/views_adverts.py:63
 msgid "All"
 msgstr "Vše"
 
-#: articles/views.py:111 articles/views_faults.py:68
-#: articles/views_redaction.py:161
+#: svjis/articles/views.py:114 svjis/articles/views_faults.py:68
+#: svjis/articles/views_redaction.py:163
 msgid "Search: Keyword '{}' is too short. Type at least 3 characters."
 msgstr ""
 "Vyhledat: Klíčové slovo '{}' je příliš krátké. Zadejte alespoň 3 znaky."
 
-#: articles/views.py:114 articles/views_faults.py:71
-#: articles/views_redaction.py:164
+#: svjis/articles/views.py:117 svjis/articles/views_faults.py:71
+#: svjis/articles/views_redaction.py:166
 msgid "Search: Keyword is too long. Type maximum of 100 characters."
 msgstr "Vyhledat: Klíčové slovo je příliš dlouhé. Zadejte maximálně 100 znaků."
 
-#: articles/views.py:119 articles/views_faults.py:75
-#: articles/views_redaction.py:170
+#: svjis/articles/views.py:122 svjis/articles/views_faults.py:78
+#: svjis/articles/views_redaction.py:172
 msgid "Search results"
 msgstr "Výsledky hledání"
 
-#: articles/views.py:174
+#: svjis/articles/views.py:178
 msgid "Please choose an option."
 msgstr "Prosím zvolte jednu možnost."
 
-#: articles/views.py:266 articles/views.py:283 articles/views_faults.py:317
-#: articles/views_faults.py:334
+#: svjis/articles/views.py:286 svjis/articles/views.py:303
+#: svjis/articles/views_faults.py:337 svjis/articles/views_faults.py:354
 msgid "Comment cannot be modified anymore"
 msgstr "Komentář už nelze upravovat"
 
-#: articles/views.py:365
+#: svjis/articles/views.py:406
 msgid "Wrong username or password"
 msgstr "Nesprávné uživatelské jméno nebo heslo"
 
-#: articles/views.py:366
+#: svjis/articles/views.py:407
 msgid "In case you lost your password use Lost Password link"
 msgstr ""
 "V případě, že jste zapomněli Vaše přihlašovací údaje, použijte volbu "
 "'Zapomenuté heslo'"
 
-#: articles/views_admin.py:66
-msgid "Groups"
-msgstr "Skupiny"
+#: svjis/articles/views_admin.py:116 svjis/articles/views_admin.py:179
+#: svjis/articles/views_admin.py:215 svjis/articles/views_admin.py:266
+#: svjis/articles/views_admin.py:341 svjis/articles/views_admin.py:544
+#: svjis/articles/views_admin.py:546 svjis/articles/views_admin.py:759
+#: svjis/articles/views_admin.py:817
+#: svjis/articles/views_personal_settings.py:75
+#: svjis/articles/views_personal_settings.py:77
+#: svjis/articles/views_redaction.py:141 svjis/articles/views_redaction.py:259
+msgid "Form validation error"
+msgstr ""
 
-#: articles/views_admin.py:531
+#: svjis/articles/views_admin.py:531
 msgid "Credentials has been sent by e-mail"
 msgstr "Přihlašovací údaje byly odeslány e-mailem"
 
-#: articles/views_adverts.py:45 articles/views_adverts.py:67
-#: articles/views_faults.py:28
+#: svjis/articles/views_adverts.py:45 svjis/articles/views_adverts.py:67
+#: svjis/articles/views_faults.py:28
 msgid "Mine"
 msgstr "Moje"
 
-#: articles/views_faults.py:35
+#: svjis/articles/views_adverts.py:150
+msgid "Deleted"
+msgstr "Smazáno"
+
+#: svjis/articles/views_faults.py:35
 msgid "Assigned to me"
 msgstr "Přiřazené mě"
 
-#: articles/views_faults.py:42
+#: svjis/articles/views_faults.py:42
 msgid "Resolved"
 msgstr "Vyřešené"
 
-#: articles/views_personal_settings.py:27
+#: svjis/articles/views_personal_settings.py:27
 msgid "Language settings"
 msgstr "Nastavení jazyka"
 
-#: articles/views_personal_settings.py:125
+#: svjis/articles/views_personal_settings.py:125
 msgid "Wrong password"
 msgstr "Nesprávné heslo"
 
-#: articles/views_personal_settings.py:129
+#: svjis/articles/views_personal_settings.py:129
 msgid "Password cannot be enpty"
 msgstr "Heslo nemůže být prázdné"
 
-#: articles/views_personal_settings.py:133
+#: svjis/articles/views_personal_settings.py:133
 msgid "New passwords don't match"
 msgstr "Nová hesla se neshodují"
 
-#: articles/views_personal_settings.py:138
+#: svjis/articles/views_personal_settings.py:138
 msgid "Password has been changed"
 msgstr "Heslo bylo změněno"
 
-#: articles/views_personal_settings.py:153
+#: svjis/articles/views_personal_settings.py:153
 msgid "E-Mail is not valid"
 msgstr "Neplatný e-mail"
 
-#: articles/views_personal_settings.py:160
+#: svjis/articles/views_personal_settings.py:160
 msgid "Credentials have been sent to your e-mail"
 msgstr "Přihlašovací údaje byly odeslány na Váš e-mail"
 
-#: articles/views_redaction.py:64 articles/views_redaction.py:660
+#: svjis/articles/views_redaction.py:66 svjis/articles/views_redaction.py:689
 msgid "Analytics"
 msgstr "Anaýzy"
 
-#: articles/views_redaction.py:662
+#: svjis/articles/views_redaction.py:691
 msgid "Data for last {} days."
 msgstr "Data za posledních {} dní."
-
-#: articles/templates/redaction_article_edit.html:152
-msgid "Save the article first to be able to insert images."
-msgstr "Nejprve článek uložte, poté budete moci vkládat obrázky."
-
-#: articles/templates/redaction_article_edit.html:166
-#: articles/templates/redaction_article_edit.html:171
-msgid "Image upload failed."
-msgstr "Nahrání obrázku se nezdařilo."
-
-#: articles/views_redaction.py:322 articles/views_redaction.py:325
-msgid "Article not found"
-msgstr "Článek nenalezen"
-
-#: articles/views_redaction.py:329
-msgid "No file was submitted"
-msgstr "Nebyl odeslán žádný soubor"
-
-#: articles/views_redaction.py:333
-msgid "Unsupported image type"
-msgstr "Nepodporovaný typ obrázku"
-
-#~ msgid "Owner"
-#~ msgstr "Vlastník"
-
-#~ msgid "Version"
-#~ msgstr "Verze"

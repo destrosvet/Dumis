@@ -149,8 +149,10 @@ urlpatterns = [
     path('fault_watch/', views_faults.fault_watch_view, name='fault_watch'),
     path('faults_fault_logs/<str:slug>/', views_faults.fault_logs_view, name='faults_fault_logs'),
     path('adverts_list/', views_adverts.adverts_list_view, name='adverts_list'),
+    path('adverts_detail/<int:pk>/', views_adverts.adverts_detail_view, name='adverts_detail'),
     path('adverts_edit/<int:pk>/', views_adverts.adverts_edit_view, name='adverts_edit'),
     path('adverts_save/', views_adverts.adverts_save_view, name='adverts_save'),
+    path('adverts_delete/<int:pk>/', views_adverts.adverts_delete_view, name='adverts_delete'),
     path('adverts_asset_save/', views_adverts.adverts_asset_save_view, name='adverts_asset_save'),
     path('adverts_asset_delete/<int:pk>/', views_adverts.adverts_asset_delete_view, name='adverts_asset_delete'),
     path('admin_company_edit/', views_admin.admin_company_edit_view, name='admin_company_edit'),
@@ -238,7 +240,12 @@ urlpatterns = [
     ),
     path("media/articles/<str:slug>/<str:filename>", views.get_article_asset, name="get_article_asset"),
     path("media/faults/<str:slug>/<str:filename>", views_faults.get_fault_asset, name="get_fault_asset"),
-    path("media/adverts/<int:advert_id>/<str:filename>", views_adverts.get_advert_asset, name="get_advert_asset"),
+    path("media/inzerce/<int:advert_id>/<str:filename>", views_adverts.get_advert_asset, name="get_advert_asset"),
+    path(
+        "media/inzerce/covers/<int:user_id>/<str:filename>",
+        views_adverts.get_advert_cover_image,
+        name="get_advert_cover_image",
+    ),
 ]
 
 if settings.DEBUG:

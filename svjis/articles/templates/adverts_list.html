@@ -13,35 +13,25 @@
 {% if object_list %}
 {% for obj in object_list %}
 <div class="advert_c{{ obj.type.pk|default:'1' }}">
+    {% if obj.cover_image %}
+    <a class="advert-thumb" href="{% url 'adverts_detail' pk=obj.pk %}">
+        <img src="/media/{{ obj.cover_image }}" alt="">
+    </a>
+    {% endif %}
     <div class="advert-desc">
-        <h2>{{ obj.header }}</h2>
+        <h2><a href="{% url 'adverts_detail' pk=obj.pk %}">{{ obj.header }}</a></h2>
         <p class="info">
             {% translate 'Type' %}: <strong>{{ obj.type.description }}</strong>,
             {% translate 'Author' %}: <strong>{{ obj.created_by_user.first_name }}&nbsp;{{ obj.created_by_user.last_name }}</strong>,
             {{ obj.created_date|date:"d.m.Y" }}
         </p>
-        <div class="body">{{ obj.body|safe }}</div>
-        {% if obj.phone or obj.email %}
-        <p class="contact">
-            {% if obj.phone %}{% translate 'Phone' %}: {{ obj.phone }}{% endif %}
-            {% if obj.phone and obj.email %}&nbsp;|&nbsp;{% endif %}
-            {% if obj.email %}{% translate 'E-Mail' %}: <a href="mailto:{{ obj.email }}">{{ obj.email }}</a>{% endif %}
-        </p>
-        {% endif %}
-        {% if obj.assets %}
+        <div class="body">{{ obj.body|truncatewords_html:30|safe }}</div>
         <p>
-        {% for a in obj.assets %}
-            <span class="icon-static">{% icon a.icon %}</span>
-            <a href="/media/{{ a.file }}">{% if a.description %}{{ a.description }}{% else %}{{ a.basename }}{% endif %}</a>
-            {% if not forloop.last %}&nbsp;|&nbsp;{% endif %}
-        {% endfor %}
-        </p>
-        {% endif %}
-        {% if perms.articles.svjis_add_advert and obj.created_by_user == request.user %}
-        <p>
+            <a class="secondary-button" href="{% url 'adverts_detail' pk=obj.pk %}">{% translate 'Read more' %}</a>
+            {% if perms.articles.svjis_add_advert and obj.created_by_user == request.user %}
             <a class="secondary-button" href="{% url 'adverts_edit' pk=obj.pk %}">{% translate 'Edit' %}</a>
+            {% endif %}
         </p>
-        {% endif %}
     </div>
 </div>
 {% endfor %}
