@@ -56,7 +56,7 @@ class ArticleForm(forms.ModelForm):
                 attrs={'class': 'common-textarea', 'rows': '20', 'cols': '30'},
                 mce_attrs={
                     'entity_encoding': 'raw',
-                    'height': '350px',
+                    'height': '700px',
                     'width': '100%',
                     'menubar': 'edit insert view format table help',
                     'toolbar': 'undo redo | formatselect | '
@@ -419,10 +419,11 @@ class FaultCommentForm(forms.ModelForm):
 class AdvertForm(forms.ModelForm):
     class Meta:
         model = models.Advert
-        fields = ("type", "header", "body", "phone", "email", "published")
+        fields = ("type", "header", "cover_image", "body", "phone", "email", "published")
         widgets = {
             'type': forms.widgets.Select(attrs={'class': 'common-input'}),
             'header': forms.widgets.TextInput(attrs={'class': 'common-input full-width', 'size': '80'}),
+            'cover_image': forms.widgets.FileInput(attrs={'class': 'common-input'}),
             'body': forms.widgets.Textarea(
                 attrs={'class': 'common-textarea', 'rows': '5', 'cols': '80', 'wrap': True}
             ),

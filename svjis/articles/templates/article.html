@@ -5,15 +5,25 @@
 {% block content %}
 
 <div class="article-detail">
+    {% if breadcrumbs %}
+    <nav class="breadcrumb" aria-label="{% translate 'Breadcrumb' %}">
+        {% for b in breadcrumbs %}
+        <a href="{{ b.url }}">{{ b.label }}</a><span class="breadcrumb-sep">/</span>
+        {% endfor %}
+        <span class="breadcrumb-current">{{ obj.header|highlight:search|safe }}</span>
+    </nav>
+    {% endif %}
     {% if obj.cover_image %}
     <img class="article-img" src="/media/{{ obj.cover_image }}" alt="">
     {% endif %}
     <h1 class="article-title">{{ obj.header|highlight:search|safe }}</h1>
     <p class="info">
-        <a href="{% url 'main_filtered' menu=obj.menu.id %}">{{ obj.menu.description }}</a>:  <strong>{{ obj.published_date|date:"d.m.Y" }}</strong>, {% translate 'Author' %}: <strong>{{ obj.author.first_name }}&nbsp;{{ obj.author.last_name }}</strong>
+        <strong>{{ obj.published_date|date:"d.m.Y" }}</strong>, {% translate 'Author' %}: <strong>{{ obj.author.first_name }}&nbsp;{{ obj.author.last_name }}</strong>
     </p>
-    {{ obj.perex|highlight:search|safe }}
-    {{ obj.body|inject_pictures:obj.assets|highlight:search|safe }}
+    <div class="article-body">
+        {{ obj.perex|highlight:search|safe }}
+        {{ obj.body|inject_pictures:obj.assets|highlight:search|safe }}
+    </div>
 
 
     {% if obj.assets %}
@@ -68,9 +78,24 @@
     </form>
     {% endif %}
 
-    <div class="back_to_list">
-        <a class="secondary-button" href="{% url 'main' %}">&lt;&lt;&nbsp{% translate 'Back to article list' %}</a>
+    {% if top_articles %}
+    <div class="related-articles">
+        <h2 class="comment-title">{% translate 'Most read articles' %}</h2>
+        <div class="article-grid">
+            {% for ta in top_articles %}
+            <a class="article-card" href="{% url 'article' slug=ta.article.slug %}">
+                {% if ta.article.cover_image %}
+                <span class="article-card-thumb"><img src="/media/{{ ta.article.cover_image }}" alt=""></span>
+                {% else %}
+                <span class="article-card-thumb article-card-thumb--empty"></span>
+                {% endif %}
+                <span class="article-card-title">{{ ta.article.header }}</span>
+                <span class="article-card-info">{{ ta.article.published_date|date:"d.m.Y" }}</span>
+            </a>
+            {% endfor %}
+        </div>
     </div>
+    {% endif %}
 
 </div>
 {% endblock content %}

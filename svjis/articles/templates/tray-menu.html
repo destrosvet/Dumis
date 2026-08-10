@@ -1,14 +1,14 @@
 {% load article_filters i18n %}
 
 <div class="tray-nav-wrapper">
-    <nav class="tray-nav">
-        {% if tray_menu_items %}
-        {% for obj in tray_menu_items %}
-        <a href="{{ obj.link }}" class="tray-nav__item{% if obj.active %} tray-nav__item--active{% endif %}">{{ obj.description }}</a>
-        {% endfor %}
-        {% endif %}
-
-        <div class="tray-nav__spacer"></div>
+    <div class="tray-nav-bar">
+        <nav class="tray-nav tray-collapsible">
+            {% if tray_menu_items %}
+            {% for obj in tray_menu_items %}
+            <a href="{{ obj.link }}" class="tray-nav__item{% if obj.active %} tray-nav__item--active{% endif %}">{{ obj.description }}</a>
+            {% endfor %}
+            {% endif %}
+        </nav>
 
         {% if search_endpoint %}
         <form class="tray-search" action="{{ search_endpoint }}" method="get">
@@ -16,5 +16,33 @@
             <button class="tray-search__btn" type="submit" aria-label="{% translate 'Search' %}">{% icon 'search' %}</button>
         </form>
         {% endif %}
-    </nav>
+
+        <div class="tray-nav__admin tray-collapsible">
+            {% if request.user.is_authenticated %}
+            <details class="user-menu">
+                <summary class="user-menu__trigger">
+                    <span class="user-badge__avatar">{{ request.user.first_name|first }}{{ request.user.last_name|first }}</span>
+                    <span>{{ request.user.first_name }}&nbsp;{{ request.user.last_name }}</span>
+                </summary>
+                <div class="user-menu__panel">
+                    {% if perms.articles.svjis_view_admin_menu %}
+                    <a class="user-menu__item" href="{% url 'admin_company_edit' %}">{% translate 'Administration' %}</a>
+                    {% endif %}
+                    <form action="{% url 'user_logout' %}" method="post">
+                        {% csrf_token %}
+                        <button class="user-menu__item user-menu__item--button" type="submit">{% translate 'Logout' %}</button>
+                    </form>
+                </div>
+            </details>
+            {% else %}
+            <a class="user-menu__login" href="{% url 'login_page' %}">{% translate 'Login' %}</a>
+            {% endif %}
+        </div>
+
+        <button class="menu-toggle" aria-label="Menu">
+            <span class="menu-toggle__bar"></span>
+            <span class="menu-toggle__bar"></span>
+            <span class="menu-toggle__bar"></span>
+        </button>
+    </div>
 </div>

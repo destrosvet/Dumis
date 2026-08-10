@@ -74,13 +74,7 @@ def main_view(request):
     return main_filtered_view(request, None)
 
 
-@require_GET
-def main_filtered_view(request, menu):
-    # Articles
-    q = get_article_filter(request.user)
-    article_list = models.Article.objects.select_related('author', 'menu').filter(q).distinct()
-
-    # Top 5 Articles
+def get_top_articles(visible_article_ids, limit):
     top_history_from = make_aware(
         datetime.now() - timedelta(days=getattr(settings, 'SVJIS_TOP_ARTICLES_HISTORY_IN_DAYS', 365))
     )
@@ -91,12 +85,21 @@ def main_filtered_view(request, menu):
         .annotate(total=Count('*'))
         .order_by('-total')
     )
-    users_articles = [a.id for a in article_list]
-    top_articles = [a for a in top if a['article_id'] in users_articles][
-        : getattr(settings, 'SVJIS_TOP_ARTICLES_LIST_SIZE', 10)
-    ]
+    top_articles = [a for a in top if a['article_id'] in visible_article_ids][:limit]
     for ta in top_articles:
         ta['article'] = get_object_or_404(models.Article, pk=ta['article_id'])
+    return top_articles
+
+
+@require_GET
+def main_filtered_view(request, menu):
+    # Articles
+    q = get_article_filter(request.user)
+    article_list = models.Article.objects.select_related('author', 'menu').filter(q).distinct()
+
+    # Top 5 Articles
+    users_articles = [a.id for a in article_list]
+    top_articles = get_top_articles(users_articles, getattr(settings, 'SVJIS_TOP_ARTICLES_LIST_SIZE', 10))
 
     # Menu
     header = _("All articles")
@@ -148,6 +151,7 @@ def main_filtered_view(request, menu):
 
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Articles")
+    ctx['is_homepage'] = menu is None and not search
     ctx['is_paginated'] = is_paginated
     ctx['page_obj'] = page_obj
     ctx['page_parameter'] = page_parameter
@@ -219,16 +223,32 @@ def article_view(request, slug):
     if article.visible_for_all:
         group_list.insert(0, gt("Visible for all"))
 
+    visible_article_ids = list(
+        models.Article.objects.filter(get_article_filter(request.user)).exclude(pk=article.pk).values_list('id', flat=True)
+    )
+
+    menu_chain = []
+    m = article.menu
+    while m is not None:
+        menu_chain.insert(0, m)
+        m = m.parent
+    breadcrumbs = [{'label': _("All articles"), 'url': reverse(main_view)}]
+    breadcrumbs += [
+        {'label': m.description, 'url': reverse('main_filtered', kwargs={'menu': m.id})} for m in menu_chain
+    ]
+
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Articles")
     ctx['search'] = request.GET.get('search', '')
     ctx['header'] = article.menu.description
+    ctx['breadcrumbs'] = breadcrumbs
     ctx['obj'] = article
     ctx['web_title'] = article.header
     ctx['aside_menu_items'] = get_side_menu(ctx)
     ctx['tray_menu_items'] = utils.get_tray_menu('articles', request.user)
     ctx['visible_for'] = ", ".join(group_list)
     ctx['comment_form'] = forms.ArticleCommentForm
+    ctx['top_articles'] = get_top_articles(visible_article_ids, 3)
     return render(request, "article.html", ctx)
 
 

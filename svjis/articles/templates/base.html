@@ -17,8 +17,8 @@
 
 <body>
     <div class="app-shell">
-        {% include 'header.html' %}
         {% include 'tray-menu.html' %}
+        {% block hero %}{% endblock hero %}
         <div class="messages-wrapper">
             {% include 'messages.html' %}
         </div>
@@ -28,10 +28,35 @@
         </div>
         {% include 'footer.html' %}
     </div>
+    <div id="lightbox" class="lightbox" hidden>
+        <img id="lightbox-img" src="" alt="">
+    </div>
     <script>
-        document.querySelector(".menu-toggle")?.addEventListener("click", function () {
+        var menuToggle = document.querySelector(".menu-toggle");
+        var trayNavWrapper = document.querySelector(".tray-nav-wrapper");
+        menuToggle?.addEventListener("click", function () {
             this.classList.toggle("active");
-            document.querySelector(".tray-nav-wrapper")?.classList.toggle("active");
+            trayNavWrapper?.classList.toggle("active");
+        });
+        document.addEventListener("click", function (e) {
+            if (trayNavWrapper?.classList.contains("active") && !trayNavWrapper.contains(e.target)) {
+                trayNavWrapper.classList.remove("active");
+                menuToggle?.classList.remove("active");
+            }
+        });
+
+        var lightbox = document.getElementById("lightbox");
+        var lightboxImg = document.getElementById("lightbox-img");
+        document.querySelectorAll(".js-lightbox").forEach(function (el) {
+            el.addEventListener("click", function (e) {
+                e.preventDefault();
+                lightboxImg.src = this.getAttribute("href");
+                lightbox.hidden = false;
+            });
+        });
+        lightbox?.addEventListener("click", function () {
+            lightbox.hidden = true;
+            lightboxImg.src = "";
         });
     </script>
 </body>

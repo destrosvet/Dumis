@@ -3,7 +3,7 @@
 <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
 {% if messages %}
 {% for msg in messages %}
-<div id="msg-{{ msg.tags }}" class="alert-{% if msg.tags == 'error' %}error{% elif msg.tags == 'info' %}info{% elif msg.tags == 'success' %}success{% elif msg.tags == 'warning' %}warning{% else %}info{% endif %}">
+<div id="msg-{{ msg.tags }}" class="alert alert-{% if msg.tags == 'error' %}error{% elif msg.tags == 'info' %}info{% elif msg.tags == 'success' %}success{% elif msg.tags == 'warning' %}warning{% else %}info{% endif %}">
     {{ msg }}
 </div>
 {% endfor %}
