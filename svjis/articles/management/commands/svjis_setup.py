@@ -165,26 +165,29 @@ def create_preferences():
     preferences = [
         {
             'key': 'mail.template.lost.password',
-            'value': '<html><body>Dobrý den,<br>Vaše přihlašovací údaje jsou:<br><br>{}<br>\
+            'value': '<html><body>Dobrý den,<br>Vaše přihlašovací údaje jsou:<br><br>{message}<br>\
             Heslo si můžete změnit v menu <b>Osobní nastavení - Změna hesla</b><br><br>Web SVJ</body></html>',
         },
         {
             'key': 'mail.template.article.notification',
             'value': 'Dobrý den,<br><br>rádi bychom Vás upozornili na následující článek na stránkách SVJ.<br>\
-            <br>{}<br><br>S pozdravem,<br>Výbor SVJ',
+            <br>{link}<br><br>S pozdravem,<br>Výbor SVJ',
         },
         {
             'key': 'mail.template.comment.notification',
-            'value': 'Uživatel {} přidal nový komentář k článku {}: <br><br><br>{}',
+            'value': 'Uživatel {author} přidal nový komentář k článku {link}: <br><br><br>{comment}',
         },
-        {'key': 'mail.template.fault.notification', 'value': 'Uživatel {} vložil novou závadu {}: <br><br><br>{}'},
+        {
+            'key': 'mail.template.fault.notification',
+            'value': 'Uživatel {author} vložil novou závadu {link}: <br><br><br>{description}',
+        },
         {
             'key': 'mail.template.fault.comment.notification',
-            'value': 'Uživatel {} přidal nový komentář k závadě {}: <br><br><br>{}',
+            'value': 'Uživatel {author} přidal nový komentář k závadě {link}: <br><br><br>{comment}',
         },
-        {'key': 'mail.template.fault.assigned', 'value': 'Uživatel {} vám přiřadil tiket {}: <br><br><br>{}'},
-        {'key': 'mail.template.fault.closed', 'value': 'Uživatel {} uzavřel tiket {}: <br><br><br>{}'},
-        {'key': 'mail.template.fault.reopened', 'value': 'Uživatel {} znovu otevřel tiket {}: <br><br><br>{}'},
+        {'key': 'mail.template.fault.assigned', 'value': 'Uživatel {assignor} vám přiřadil tiket {link}: <br><br><br>{description}'},
+        {'key': 'mail.template.fault.closed', 'value': 'Uživatel {user} uzavřel tiket {link}: <br><br><br>{description}'},
+        {'key': 'mail.template.fault.reopened', 'value': 'Uživatel {user} znovu otevřel tiket {link}: <br><br><br>{description}'},
     ]
     for p in preferences:
         Preferences.objects.create(key=p['key'], value=p['value'])

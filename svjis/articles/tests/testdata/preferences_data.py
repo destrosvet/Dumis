@@ -13,14 +13,14 @@ class PreferencesDataMixin:
         ]
 
         cls.p_fault_notif = PreferencesFactory(
-            key="mail.template.fault.notification", value="Uživatel {} vložil novou závadu {}: <br><br><br>{}"
+            key="mail.template.fault.notification", value="Uživatel {author} vložil novou závadu {link}: <br><br><br>{description}"
         )
         cls.p_fault_assigned = PreferencesFactory(
-            key="mail.template.fault.assigned", value="Uživatel {} vám přiřadil tiket {}: <br><br><br>{}"
+            key="mail.template.fault.assigned", value="Uživatel {assignor} vám přiřadil tiket {link}: <br><br><br>{description}"
         )
         cls.p_fault_closed = PreferencesFactory(
-            key="mail.template.fault.closed", value="Uživatel {} uzavřel tiket {}: <br><br><br>{}"
+            key="mail.template.fault.closed", value="Uživatel {user} uzavřel tiket {link}: <br><br><br>{description}"
         )
         cls.p_fault_reopened = PreferencesFactory(
-            key="mail.template.fault.reopened", value="Uživatel {} znovu otevřel tiket {}: <br><br><br>{}"
+            key="mail.template.fault.reopened", value="Uživatel {user} znovu otevřel tiket {link}: <br><br><br>{description}"
         )

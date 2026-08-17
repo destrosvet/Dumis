@@ -1,98 +1,156 @@
 {% extends "base-with-aside-menu-content.html" %}
 
-{% load i18n %}
+{% load article_filters i18n %}
 
 {% block content %}
 
 <h1 class="page-title">{% translate 'User' %}</h1>
-<form action="{% url 'admin_user_save' %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="pk" value="{{ pk }}">
 
-    <fieldset>
-        <legend>{% translate 'Person' %}</legend>
-        <p>
-            <label class="common-label" for="{{ pform.salutation.auto_id }}">{{ pform.salutation.label }}</label>
-            {{ pform.salutation }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ uform.first_name.auto_id }}">{{ uform.first_name.label }}</label>
-            {{ uform.first_name }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ uform.last_name.auto_id }}">{{ uform.last_name.label }}</label>
-            {{ uform.last_name }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ pform.internal_note.auto_id }}">{{ pform.internal_note.label }}</label>
-            {{ pform.internal_note }}
-        </p>
-    </fieldset>
-    <fieldset>
-        <legend>{% translate 'Contact information' %}</legend>
-        <p>
-            <label class="common-label" for="{{ pform.address.auto_id }}">{{ pform.address.label }}</label>
-            {{ pform.address }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ pform.city.auto_id }}">{{ pform.city.label }}</label>
-            {{ pform.city }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ pform.post_code.auto_id }}">{{ pform.post_code.label }}</label>
-            {{ pform.post_code }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ pform.country.auto_id }}">{{ pform.country.label }}</label>
-            {{ pform.country }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ pform.phone.auto_id }}">{{ pform.phone.label }}</label>
-            {{ pform.phone }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ uform.email.auto_id }}">{{ uform.email.label }}</label>
-            {{ uform.email }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ pform.show_in_phonelist.auto_id }}">{{ pform.show_in_phonelist.label }}</label>
-            {{ pform.show_in_phonelist }}
-        </p>
-    </fieldset>
-    <fieldset>
-        <legend>{% translate 'Login information' %}</legend>
-        <p>
-            <label class="common-label" for="{{ uform.username.auto_id }}">{{ uform.username.label }}</label>
-            {{ uform.username }}
-        </p>
-        <p>
-            <label class="common-label" id="lpass-label" for="lpass-input">{% translate 'Password' %}</label>
-            <input class="common-input" id="lpass-input" type="password" name="password" maxlength="20" size="50" value="" />
-        </p>
-        <p>
-            <label class="common-label" id="sendc-label" for="sendc-input">{% translate 'Send Credentials By E-Mail' %}</label>
-            <input class="common-input-chck" id="sendc-input" type="checkbox" name="send_credentials"  />
-        </p>
-        <p>
-            <label class="common-label" for="{{ uform.is_active.auto_id }}">{{ uform.is_active.label }}</label>
-            {{ uform.is_active }}
-        </p>
-    </fieldset>
+<div class="edit-layout">
 
-    <fieldset>
-        <legend>{% translate 'Member of' %}</legend>
-        {% if group_list %}
-        {% for obj in group_list %}
-        <p>
-            <label class="common-label" id="{{ obj.name }}-label" for="{{ obj.name }}-input">{{ obj.name }}</label>
-            <input class="common-input-chck" id="{{ obj.name }}-input" type="checkbox" name="{{ obj.name }}" {% if obj.checked %}checked{% endif %}/>
-        </p>
-        {% endfor %}
+    <form id="admin-user-form" action="{% url 'admin_user_save' %}" method="post" class="edit-main">
+        {% csrf_token %}
+        <input type="hidden" name="pk" value="{{ pk }}">
+        {% if unit %}
+        <input type="hidden" name="unit" value="{{ unit.pk }}">
+        <input type="hidden" name="unit_role" value="{{ unit_role }}">
         {% endif %}
-    </fieldset>
-    <p>
-        <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
-    </p>
-</form>
+
+        <fieldset>
+            <legend>{% translate 'Person' %}</legend>
+            <p>
+                <label class="common-label" for="{{ pform.salutation.auto_id }}">{{ pform.salutation.label }}</label>
+                {{ pform.salutation }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ uform.first_name.auto_id }}">{{ uform.first_name.label }}</label>
+                {{ uform.first_name }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ uform.last_name.auto_id }}">{{ uform.last_name.label }}</label>
+                {{ uform.last_name }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ pform.internal_note.auto_id }}">{{ pform.internal_note.label }}</label>
+                {{ pform.internal_note }}
+            </p>
+        </fieldset>
+        <fieldset>
+            <legend>{% translate 'Contact information' %}</legend>
+            <p>
+                <label class="common-label" for="{{ pform.address.auto_id }}">{{ pform.address.label }}</label>
+                {{ pform.address }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ pform.city.auto_id }}">{{ pform.city.label }}</label>
+                {{ pform.city }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ pform.post_code.auto_id }}">{{ pform.post_code.label }}</label>
+                {{ pform.post_code }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ pform.country.auto_id }}">{{ pform.country.label }}</label>
+                {{ pform.country }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ pform.phone.auto_id }}">{{ pform.phone.label }}</label>
+                {{ pform.phone }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ uform.email.auto_id }}">{{ uform.email.label }}</label>
+                {{ uform.email }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ pform.show_in_phonelist.auto_id }}">{{ pform.show_in_phonelist.label }}</label>
+                {{ pform.show_in_phonelist }}
+            </p>
+        </fieldset>
+        <fieldset>
+            <legend>{% translate 'Login information' %}</legend>
+            <p>
+                <label class="common-label" for="{{ uform.username.auto_id }}">{{ uform.username.label }}</label>
+                {{ uform.username }}
+            </p>
+            <p>
+                <label class="common-label" id="lpass-label" for="lpass-input">{% translate 'Password' %}</label>
+                <input class="common-input" id="lpass-input" type="password" name="password" maxlength="20" size="50" value="" />
+            </p>
+            <p>
+                <label class="common-label" id="sendc-label" for="sendc-input">{% translate 'Send Credentials By E-Mail' %}</label>
+                <input class="common-input-chck" id="sendc-input" type="checkbox" name="send_credentials"  />
+            </p>
+            <p>
+                <label class="common-label" for="{{ uform.is_active.auto_id }}">{{ uform.is_active.label }}</label>
+                {{ uform.is_active }}
+            </p>
+        </fieldset>
+    </form>
+
+    <div class="edit-sidebar">
+
+        <div class="card">
+            <div class="card__body">
+                <input class="btn--primary btn--block" id="submit" form="admin-user-form" type="submit" value="{% translate 'Save' %}" />
+            </div>
+        </div>
+
+        {% if unit %}
+        <div class="card">
+            <div class="card__body">
+                {% if unit_role == 'owner' %}
+                <p class="form-hint">{% blocktranslate with label=unit.type.description reg=unit.registration_id %}The new user will be added to unit "{{ label }} {{ reg }}" as an owner.{% endblocktranslate %}</p>
+                {% else %}
+                <p class="form-hint">{% blocktranslate with label=unit.type.description reg=unit.registration_id %}The new user will be added to unit "{{ label }} {{ reg }}" as a tenant.{% endblocktranslate %}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Member of' %}</div>
+            <div class="card__body">
+                {% if group_list %}
+                <details class="group-select">
+                    <summary class="group-select__summary"><span id="group-select-label">{% translate 'Select groups' %}</span></summary>
+                    <div class="group-select__panel">
+                        {% for obj in group_list %}
+                        <label class="group-select__option">
+                            <input type="checkbox" form="admin-user-form" name="{{ obj.name }}" value="{{ obj.name }}" {% if obj.checked %}checked{% endif %}>
+                            {{ obj.name }}
+                        </label>
+                        {% endfor %}
+                    </div>
+                </details>
+                {% else %}
+                <p class="empty-state">{% translate 'No groups available.' %}</p>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+(function () {
+    var details = document.querySelector('.group-select');
+    if (!details) return;
+    var label = details.querySelector('#group-select-label');
+    function refresh() {
+        var checked = details.querySelectorAll('input[type="checkbox"]:checked');
+        if (checked.length === 0) {
+            label.textContent = '{% translate "Select groups" %}';
+        } else {
+            label.textContent = Array.prototype.map.call(checked, function (c) { return c.value; }).join(', ');
+        }
+    }
+    details.addEventListener('change', refresh);
+    document.addEventListener('click', function (e) {
+        if (!details.contains(e.target)) details.open = false;
+    });
+    refresh();
+})();
+</script>
 
 {% endblock content %}

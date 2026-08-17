@@ -4,8 +4,6 @@
 
 {% block content %}
 
-{{ form.media }}
-
 <h1 class="page-title">{% translate 'Article' %}</h1>
 
 <div class="edit-layout">
@@ -141,8 +139,8 @@
 </div>
 
 <script>
-// Upload handler for images inserted in the TinyMCE body editor.
-// Referenced by name from the ArticleForm widget config (images_upload_handler).
+// Upload handler for images inserted in the HugeRTE body editor.
+// Referenced by the editor init in includes/hugerte.html.
 window.articleImagesUploadHandler = function (blobInfo, progress) {
     return new Promise(function (resolve, reject) {
         var form = document.getElementById('article-edit-form');
@@ -188,5 +186,7 @@ window.articleImagesUploadHandler = function (blobInfo, progress) {
     refresh();
 })();
 </script>
+
+{% include 'includes/hugerte.html' %}
 
 {% endblock content %}

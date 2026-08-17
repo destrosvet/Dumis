@@ -22,6 +22,14 @@ def static_version(path):
 
 
 @register.filter()
+def get_item(mapping, key):
+    """Lookup of a dict value by key, used by the reusable admin list table."""
+    if not mapping:
+        return ''
+    return mapping.get(key, '')
+
+
+@register.filter()
 def highlight(text, search):
     if search == '':
         return text

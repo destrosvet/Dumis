@@ -1,40 +1,12 @@
 {% extends "base-with-aside-menu-content.html" %}
 
-{% load article_filters i18n %}
+{% load i18n %}
 
 {% block content %}
 
 <h1 class="page-title" id="menu">{% translate 'Menu' %}</h1>
 <a class="secondary-button" href="{% url 'redaction_menu_edit' pk=0 %}">{% translate 'Create new menu entry' %}</a>
 
-<table class="list" aria-describedby="menu">
-    <tr>
-        <th class="icon">&nbsp;</th>
-        <th>{% translate 'Name' %}</th>
-        <th>{% translate 'Parent' %}</th>
-        <th>{% translate 'Level' %}</th>
-        <th>{% translate 'Hide' %}</th>
-        <th>{% translate 'Articles' %}</th>
-        <th class="icon">&nbsp;</th>
-    </tr>
-
-    {% if object_list %}
-    {% for obj in object_list %}
-    <tr class="row-link" onclick="location.href='{% url 'redaction_menu_edit' pk=obj.item.pk %}'">
-        <td class="icon">
-            {% if obj.articles == 0 %}
-            <a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="event.stopPropagation(); if (!confirm('{% translate 'Do you want to delete' %} {{ obj.item.description }} ?')) return false;" href="{% url 'redaction_menu_delete' pk=obj.item.pk %}">{% icon 'delete' %}</a>
-            {% endif %}
-        </td>
-        <td {% if obj.level > 1 %}style="background-color:#f1948a;"{% endif %}>{% with range=''|center:obj.level %}{% for _ in range %}&nbsp;&nbsp;&nbsp;{% endfor %}{% endwith %}{{ obj.item.description }}</td>
-        <td>{{ obj.item.parent.description }}</td>
-        <td {% if obj.level > 1 %}style="background-color:#f1948a;"{% endif %}>{{ obj.level }}</td>
-        <td>{{ obj.item.hide|yes_no }}</td>
-        <td>{{ obj.articles }}</td>
-        <td class="icon"><a class="icon-btn" title="{% translate 'Edit' %}" onclick="event.stopPropagation()" href="{% url 'redaction_menu_edit' pk=obj.item.pk %}">{% icon 'edit' %}</a></td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
+{% include 'includes/admin_list_table.html' %}
 
 {% endblock content %}

@@ -5,28 +5,15 @@
 {% block content %}
 
 <h1 class="page-title" id="preferences">{% translate 'Preferences' %}</h1>
-<a class="secondary-button" href="{% url 'admin_preferences_edit' pk=0 %}">{% translate 'Create new entry' %}</a>
 
-<table class="list fixed-on-mobile" aria-describedby="preferences">
-    <tr>
-        <th class="hide-on-mobile">&nbsp;</th>
-        <th class="icon">&nbsp;</th>
-        <th>{% translate 'Key' %}</th>
-        <th class="hide-on-mobile">{% translate 'Value' %}</th>
-        <th class="icon">&nbsp;</th>
-    </tr>
+<div class="filter-container">
+    <div class="filter-item">
+        <p>
+            <a class="btn--primary" href="{% url 'admin_preferences_edit' pk=0 %}">{% translate 'Create new entry' %}</a>&nbsp;
+        </p>
+    </div>
+</div>
 
-    {% if object_list %}
-    {% for obj in object_list %}
-    <tr class="row-link" onclick="location.href='{% url 'admin_preferences_edit' pk=obj.pk %}'">
-        <td class="hide-on-mobile">{{ forloop.counter }}</td>
-        <td class="icon"><a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="event.stopPropagation(); if (!confirm('{% translate 'Do you want to delete' %} {{ obj.key }} ?')) return false;" href="{% url 'admin_preferences_delete' pk=obj.id %}">{% icon 'delete' %}</a></td>
-        <td>{{ obj.key }}</td>
-        <td class="hide-on-mobile">{{ obj.value }}</td>
-        <td class="icon"><a class="icon-btn" title="{% translate 'Edit' %}" onclick="event.stopPropagation()" href="{% url 'admin_preferences_edit' pk=obj.pk %}">{% icon 'edit' %}</a></td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
+{% include 'includes/admin_list_table.html' %}
 
 {% endblock content %}

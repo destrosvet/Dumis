@@ -166,7 +166,7 @@ def send_new_password(user):
     user.save()
     msg = f"Username: {user.username}<br>Password: {password}<br>"
     subj = models.Company.objects.get(pk=1).internet_domain
-    send_mails([user.email], subj, template.value.format(msg), False)
+    send_mails([user.email], subj, template.value.format(message=msg), False)
 
 
 def send_article_notification(user_list, host, article):
@@ -178,7 +178,7 @@ def send_article_notification(user_list, host, article):
     send_mails(
         [user.email for user in user_list if user.is_active and user.email != ''],
         f'{subj} - {article.header}',
-        template.value.format(link),
+        template.value.format(link=link),
         False,
     )
 
@@ -193,7 +193,9 @@ def send_article_comment_notification(user_list, host, article, comment):
         [user.email for user in user_list if user.is_active and user.email != ''],
         f'{subj} - {article.header}',
         template.value.format(
-            f"{comment.author.first_name} {comment.author.last_name}", link, comment.body.replace('\n', '<br>')
+            author=f"{comment.author.first_name} {comment.author.last_name}",
+            link=link,
+            comment=comment.body.replace('\n', '<br>'),
         ),
         False,
     )
@@ -209,9 +211,9 @@ def send_new_fault_notification(user_list, host, fault_report):
         [user.email for user in user_list if user.is_active and user.email != ''],
         f'{subj} - {fault_report.subject}',
         template.value.format(
-            f"{fault_report.created_by_user.first_name} {fault_report.created_by_user.last_name}",
-            link,
-            fault_report.description.replace('\n', '<br>'),
+            author=f"{fault_report.created_by_user.first_name} {fault_report.created_by_user.last_name}",
+            link=link,
+            description=fault_report.description.replace('\n', '<br>'),
         ),
         False,
     )
@@ -227,7 +229,9 @@ def send_fault_comment_notification(user_list, host, fault_report, comment):
         [user.email for user in user_list if user.is_active and user.email != ''],
         f'{subj} - {fault_report.subject}',
         template.value.format(
-            f"{comment.author.first_name} {comment.author.last_name}", link, comment.body.replace('\n', '<br>')
+            author=f"{comment.author.first_name} {comment.author.last_name}",
+            link=link,
+            comment=comment.body.replace('\n', '<br>'),
         ),
         False,
     )
@@ -243,9 +247,9 @@ def send_fault_assigned_notification(user, who_assigned_you, host, fault_report)
         [user.email],
         f'{subj} - {fault_report.subject}',
         template.value.format(
-            f"{who_assigned_you.first_name} {who_assigned_you.last_name}",
-            link,
-            fault_report.description.replace('\n', '<br>'),
+            assignor=f"{who_assigned_you.first_name} {who_assigned_you.last_name}",
+            link=link,
+            description=fault_report.description.replace('\n', '<br>'),
         ),
         False,
     )
@@ -261,7 +265,9 @@ def send_fault_closed_notification(user_list, who_closed, host, fault_report):
         [user.email for user in user_list if user.is_active and user.email != ''],
         f'{subj} - {fault_report.subject}',
         template.value.format(
-            f"{who_closed.first_name} {who_closed.last_name}", link, fault_report.description.replace('\n', '<br>')
+            user=f"{who_closed.first_name} {who_closed.last_name}",
+            link=link,
+            description=fault_report.description.replace('\n', '<br>'),
         ),
         False,
     )
@@ -277,7 +283,9 @@ def send_fault_reopened_notification(user_list, who_closed, host, fault_report):
         [user.email for user in user_list if user.is_active and user.email != ''],
         f'{subj} - {fault_report.subject}',
         template.value.format(
-            f"{who_closed.first_name} {who_closed.last_name}", link, fault_report.description.replace('\n', '<br>')
+            user=f"{who_closed.first_name} {who_closed.last_name}",
+            link=link,
+            description=fault_report.description.replace('\n', '<br>'),
         ),
         False,
     )

@@ -1,36 +1,12 @@
 {% extends "base-with-aside-menu-content.html" %}
 
-{% load article_filters i18n %}
+{% load i18n %}
 
 {% block content %}
 
 <h1 class="page-title" id="news">{{ header }}</h1>
 <a class="btn--primary" href="{% url 'redaction_news_edit' pk=0 %}">{% translate 'Create new news' %}</a>
 
-<div class="table-wrapper">
-<table class="list full-width" aria-describedby="news">
-    <tr>
-        <th class="icon">&nbsp;</th>
-        <th class="hide-on-mobile">{% translate 'Date' %}</th>
-        <th class="hide-on-mobile">{% translate 'Author' %}</th>
-        <th>{% translate 'Published' %}</th>
-        <th>{% translate 'Body' %}</th>
-        <th class="icon">&nbsp;</th>
-    </tr>
-
-    {% if object_list %}
-    {% for obj in object_list %}
-    <tr class="row-link" onclick="location.href='{% url 'redaction_news_edit' pk=obj.id %}'">
-        <td class="icon"><a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="event.stopPropagation(); if (!confirm('{% translate 'Do you want to delete this news' %}?')) return false;" href="{% url 'redaction_news_delete' pk=obj.id %}">{% icon 'delete' %}</a></td>
-        <td class="hide-on-mobile">{{ obj.created_date|date:"d.m.Y H:i" }}</td>
-        <td class="hide-on-mobile">{{ obj.author.first_name }}&nbsp;{{ obj.author.last_name }}</td>
-        <td>{{ obj.published|yes_no }}</td>
-        <td>{{ obj.body|safe }}</td>
-        <td class="icon"><a class="icon-btn" title="{% translate 'Edit' %}" onclick="event.stopPropagation()" href="{% url 'redaction_news_edit' pk=obj.id %}">{% icon 'edit' %}</a></td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
-</div>
+{% include 'includes/admin_list_table.html' %}
 
 {% endblock content %}

@@ -4,6 +4,8 @@
 
 {% block content %}
 
+{% include 'includes/breadcrumbs.html' %}
+
 <h1 id="log" class="page-title" {% if obj.closed %}style="text-decoration: line-through;"{% endif %}>#{{ obj.pk }} - {{ obj.subject }}</h1>
 
 {% if obj.logs.all %}
@@ -25,9 +27,5 @@
     {% endfor %}
     </table>
 {% endif %}
-
-<div  class="back_to_detail">
-    <a class="secondary-button" href="{% url 'fault' slug=obj.slug %}">&lt;&lt;&nbsp{% translate 'Back to ticket' %}</a>
-</div>
 
 {% endblock content %}

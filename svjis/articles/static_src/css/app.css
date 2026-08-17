@@ -1,0 +1,354 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   SVJIS Design System — Tailwind CSS 4 Theme
+   ========================================================================== */
+
+@theme {
+  /* Brand colors — modern teal/emerald palette */
+  --color-brand-50: #f0fdfa;
+  --color-brand-100: #ccfbf1;
+  --color-brand-200: #99f6e4;
+  --color-brand-300: #5eead4;
+  --color-brand-400: #2dd4bf;
+  --color-brand-500: #14b8a6;
+  --color-brand-600: #0d9488;
+  --color-brand-700: #0f766e;
+  --color-brand-800: #115e59;
+  --color-brand-900: #134e4a;
+  --color-brand-950: #042f2e;
+
+  /* Accent — warm amber for highlights */
+  --color-accent-50: #fffbeb;
+  --color-accent-100: #fef3c7;
+  --color-accent-200: #fde68a;
+  --color-accent-300: #fcd34d;
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+  --color-accent-700: #b45309;
+
+  /* Typography */
+  --font-sans: "Inter", "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Custom shadows */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-card-hover: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* ==========================================================================
+   Base styles
+   ========================================================================== */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-800 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight text-slate-900;
+  }
+
+  a {
+    @apply text-brand-600 transition-colors hover:text-brand-700;
+  }
+
+  /* Focus visible — accessible */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-white;
+  }
+}
+
+/* ==========================================================================
+   Component classes
+   ========================================================================== */
+
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium
+           transition-all duration-200 focus:outline-none focus-visible:ring-2
+           focus-visible:ring-brand-500 focus-visible:ring-offset-2
+           disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-600 text-white shadow-sm hover:bg-brand-700 hover:shadow;
+  }
+
+  .btn-secondary {
+    @apply btn bg-white text-slate-700 border border-slate-300 shadow-sm
+           hover:bg-slate-50 hover:border-slate-400;
+  }
+
+  .btn-ghost {
+    @apply btn text-slate-600 hover:bg-slate-100 hover:text-slate-900;
+  }
+
+  .btn-danger {
+    @apply btn bg-red-600 text-white shadow-sm hover:bg-red-700;
+  }
+
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white shadow-sm;
+  }
+
+  .card-hover {
+    @apply card transition-all duration-200 hover:shadow-md hover:border-slate-300;
+  }
+
+  .card-header {
+    @apply border-b border-slate-200 px-5 py-4;
+  }
+
+  .card-body {
+    @apply p-5;
+  }
+
+  /* Forms */
+  .form-label {
+    @apply mb-1.5 block text-sm font-medium text-slate-700;
+  }
+
+  .form-input {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800
+           shadow-sm transition-colors
+           placeholder:text-slate-400
+           focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20;
+  }
+
+  .form-input-error {
+    @apply border-red-400 focus:border-red-500 focus:ring-red-500/20;
+  }
+
+  .form-select {
+    @apply form-input pr-8;
+  }
+
+  .form-textarea {
+    @apply form-input min-h-[120px] resize-y;
+  }
+
+  .form-hint {
+    @apply mt-1 text-xs text-slate-500;
+  }
+
+  .form-error {
+    @apply mt-1 text-xs text-red-600;
+  }
+
+  /* Tables */
+  .table-wrapper {
+    @apply overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm;
+  }
+
+  .data-table {
+    @apply w-full text-left text-sm;
+  }
+
+  .data-table thead {
+    @apply bg-slate-50;
+  }
+
+  .data-table th {
+    @apply px-4 py-3 font-semibold text-slate-700 whitespace-nowrap;
+  }
+
+  .data-table tbody tr {
+    @apply border-t border-slate-100 transition-colors hover:bg-slate-50;
+  }
+
+  .data-table td {
+    @apply px-4 py-3 text-slate-600;
+  }
+
+  .data-table .closed-ticket {
+    @apply bg-slate-100 text-slate-400 line-through;
+  }
+
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-brand {
+    @apply badge bg-brand-100 text-brand-800;
+  }
+
+  .badge-green {
+    @apply badge bg-green-100 text-green-800;
+  }
+
+  .badge-red {
+    @apply badge bg-red-100 text-red-800;
+  }
+
+  .badge-amber {
+    @apply badge bg-amber-100 text-amber-800;
+  }
+
+  .badge-slate {
+    @apply badge bg-slate-100 text-slate-700;
+  }
+
+  /* Alerts */
+  .alert {
+    @apply flex items-start gap-3 rounded-lg border p-4 text-sm;
+  }
+
+  .alert-error {
+    @apply alert border-red-200 bg-red-50 text-red-800;
+  }
+
+  .alert-info {
+    @apply alert border-blue-200 bg-blue-50 text-blue-800;
+  }
+
+  .alert-success {
+    @apply alert border-green-200 bg-green-50 text-green-800;
+  }
+
+  .alert-warning {
+    @apply alert border-amber-200 bg-amber-50 text-amber-800;
+  }
+
+  /* Sidebar nav */
+  .nav-link {
+    @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600
+           transition-colors hover:bg-slate-100 hover:text-slate-900;
+  }
+
+  .nav-link-active {
+    @apply nav-link bg-brand-50 text-brand-700 hover:bg-brand-100 hover:text-brand-800;
+  }
+
+  .nav-sublink {
+    @apply flex items-center gap-2 rounded-lg py-1.5 pl-9 pr-3 text-sm text-slate-500
+           transition-colors hover:bg-slate-100 hover:text-slate-800;
+  }
+
+  .nav-sublink-active {
+    @apply nav-sublink text-brand-700 font-medium;
+  }
+
+  /* Article */
+  .article-card {
+    @apply card-hover p-5;
+  }
+
+  .article-title-link {
+    @apply text-lg font-semibold text-slate-900 hover:text-brand-700;
+  }
+
+  .article-meta {
+    @apply flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500;
+  }
+
+  /* Pagination */
+  .pagination-link {
+    @apply inline-flex items-center justify-center min-w-[2.5rem] rounded-lg border border-slate-300
+           bg-white px-3 py-2 text-sm font-medium text-slate-700
+           transition-colors hover:bg-slate-50 hover:border-slate-400;
+  }
+
+  .pagination-link-active {
+    @apply pagination-link border-brand-600 bg-brand-600 text-white hover:bg-brand-700 hover:border-brand-700;
+  }
+
+  .pagination-disabled {
+    @apply pagination-link cursor-not-allowed border-slate-200 bg-slate-100 text-slate-400;
+  }
+}
+
+/* ==========================================================================
+   Utility helpers
+   ========================================================================== */
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-slate-300;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400;
+}
+
+/* Line clamp helpers */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Prose — for article body content */
+.prose-svjis {
+  @apply text-slate-700 leading-relaxed;
+}
+
+.prose-svjis p {
+  @apply mb-4;
+}
+
+.prose-svjis h2 {
+  @apply mt-6 mb-3 text-xl font-semibold text-slate-900;
+}
+
+.prose-svjis h3 {
+  @apply mt-5 mb-2 text-lg font-semibold text-slate-900;
+}
+
+.prose-svjis ul {
+  @apply mb-4 list-disc pl-6;
+}
+
+.prose-svjis ol {
+  @apply mb-4 list-decimal pl-6;
+}
+
+.prose-svjis a {
+  @apply text-brand-600 underline hover:text-brand-700;
+}
+
+.prose-svjis img {
+  @apply mb-4 rounded-lg;
+}
+
+.prose-svjis table {
+  @apply mb-4 w-full border-collapse;
+}
+
+.prose-svjis blockquote {
+  @apply mb-4 border-l-4 border-brand-300 bg-brand-50 py-2 pl-4 italic text-slate-600;
+}

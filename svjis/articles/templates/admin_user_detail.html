@@ -4,119 +4,132 @@
 
 {% block content %}
 
-<h1 id="person" class="page-title">{{ usr.first_name }} {{ usr.last_name }}</h1>
-<a class="btn--secondary" href="{% url 'admin_user_edit' pk=usr.pk %}">{% translate 'Modify user' %}</a>
+{% include 'includes/breadcrumbs.html' %}
 
-<div class="card mt-4">
-    <div class="card__header card__header--light">{% translate 'Person' %}</div>
-    <div class="card__body">
-        <table class="detail no-border" aria-describedby="person">
-            <tr>
-                <th scope="row">{% translate 'Salutation' %}</th>
-                <td>{{ profile.salutation }}</td>
-            </tr>
-            <tr>
-                <th scope="row">{% translate 'First name' %}</th>
-                <td>{{ usr.first_name }}</td>
-            </tr>
-            <tr>
-                <th scope="row">{% translate 'Last name' %}</th>
-                <td>{{ usr.last_name }}</td>
-            </tr>
-            <tr>
-                <th scope="row">{% translate 'Internal note' %}</th>
-                <td>{{ profile.internal_note|linebreaksbr }}</td>
-            </tr>
-        </table>
+<h1 class="page-title" id="person">{{ usr.first_name }} {{ usr.last_name }}</h1>
+
+<div class="edit-layout">
+
+    <div class="edit-main">
+
+        <div class="card mt-4">
+            <div class="card__header card__header--light">{% translate 'Person' %}</div>
+            <div class="card__body">
+                <table class="detail no-border" aria-describedby="person">
+                    <tr>
+                        <th scope="row">{% translate 'Salutation' %}</th>
+                        <td>{{ profile.salutation }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{% translate 'First name' %}</th>
+                        <td>{{ usr.first_name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{% translate 'Last name' %}</th>
+                        <td>{{ usr.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{% translate 'Internal note' %}</th>
+                        <td>{{ profile.internal_note|linebreaksbr }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <h2 id="contact">{% translate 'Contact information' %}</h2>
+
+        <div class="card">
+            <div class="card__body">
+                <table class="detail no-border" aria-describedby="contact">
+                    <tr>
+                        <th scope="row">{% translate 'Address' %}</th>
+                        <td>{{ profile.address }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{% translate 'City' %}</th>
+                        <td>{{ profile.city }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{% translate 'Post code' %}</th>
+                        <td>{{ profile.post_code }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{% translate 'Country' %}</th>
+                        <td>{{ profile.country }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{% translate 'Phone' %}</th>
+                        <td>{{ profile.phone }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{% translate 'E-Mail' %}</th>
+                        <td><a href="mailto:{{ usr.email }}">{{ usr.email }}</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <h2 id="account">{% translate 'Login information' %}</h2>
+
+        <div class="card">
+            <div class="card__body">
+                <table class="detail no-border" aria-describedby="account">
+                    <tr>
+                        <th scope="row">{% translate 'Username' %}</th>
+                        <td>{{ usr.username }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{% translate 'Active' %}</th>
+                        <td>{{ usr.is_active|yes_no }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{% translate 'Last login' %}</th>
+                        <td>{{ usr.last_login|date:"d.m.Y H:i" }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">{% translate 'Member of' %}</th>
+                        <td>
+                            <ul>
+                                {% for grp in user_group_list %}
+                                <li>{{ grp.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
     </div>
-</div>
 
-<h2 id="contact">{% translate 'Contact information' %}</h2>
+    <div class="edit-sidebar">
 
-<div class="card">
-    <div class="card__body">
-        <table class="detail no-border" aria-describedby="contact">
-            <tr>
-                <th scope="row">{% translate 'Address' %}</th>
-                <td>{{ profile.address }}</td>
-            </tr>
-            <tr>
-                <th scope="row">{% translate 'City' %}</th>
-                <td>{{ profile.city }}</td>
-            </tr>
-            <tr>
-                <th scope="row">{% translate 'Post code' %}</th>
-                <td>{{ profile.post_code }}</td>
-            </tr>
-            <tr>
-                <th scope="row">{% translate 'Country' %}</th>
-                <td>{{ profile.country }}</td>
-            </tr>
-            <tr>
-                <th scope="row">{% translate 'Phone' %}</th>
-                <td>{{ profile.phone }}</td>
-            </tr>
-            <tr>
-                <th scope="row">{% translate 'E-Mail' %}</th>
-                <td><a href="mailto:{{ usr.email }}">{{ usr.email }}</a></td>
-            </tr>
-        </table>
+        <div class="card">
+            <div class="card__body">
+                <a class="btn--primary btn--block" href="{% url 'admin_user_edit' pk=usr.pk %}">{% translate 'Modify user' %}</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Building units' %}</div>
+            <div class="card__body">
+                {% if usr.building_units.all %}
+                <ul class="member-list">
+                    {% for unit in usr.building_units.all|dictsort:'id' %}
+                    <li class="member-list__item">
+                        <span class="member-list__name"><a href="{% url 'admin_building_unit_owners' pk=unit.pk %}">{{ unit.type.description }} - {{ unit.registration_id }} - {{ unit.description }}</a></span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="empty-state">{% translate 'No units assigned yet.' %}</p>
+                {% endif %}
+                <a class="btn--secondary btn--block" href="{% url 'admin_user_owns' pk=usr.pk %}">{% translate 'Modify units' %}</a>
+            </div>
+        </div>
+
     </div>
-</div>
 
-<h2 id="account">{% translate 'Login information' %}</h2>
-
-<div class="card">
-    <div class="card__body">
-        <table class="detail no-border" aria-describedby="account">
-            <tr>
-                <th scope="row">{% translate 'Username' %}</th>
-                <td>{{ usr.username }}</td>
-            </tr>
-            <tr>
-                <th scope="row">{% translate 'Active' %}</th>
-                <td>{{ usr.is_active|yes_no }}</td>
-            </tr>
-            <tr>
-                <th scope="row">{% translate 'Last login' %}</th>
-                <td>{{ usr.last_login|date:"d.m.Y H:i" }}</td>
-            </tr>
-            <tr>
-                <th scope="row">{% translate 'Member of' %}</th>
-                <td>
-                    <ul>
-                        {% for grp in user_group_list %}
-                        <li>{{ grp.name }}</li>
-                        {% endfor %}
-                    </ul>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
-
-<h2 id="units">{% translate 'Building units' %}</h2>
-<a class="btn--secondary" href="{% url 'admin_user_owns' pk=usr.pk %}">{% translate 'Modify units' %}</a>
-
-<div class="card mt-4">
-    <div class="card__body">
-        <table class="detail no-border" aria-describedby="units">
-            <tr>
-                <th scope="row" class="hide-on-mobile">{% translate 'Units' %}</th>
-                <td>
-                    <ul>
-                        {% for unit in usr.buildingunit_set.all|dictsort:'id' %}
-                        <li><a href="{% url 'admin_building_unit_owners' pk=unit.pk %}">{{ unit.type.description }} - {{ unit.registration_id }} - {{ unit.description }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
-
-<div class="back_to_list">
-    <a class="btn--secondary" href="{% url 'admin_user' %}#user_{{ usr.id }}"><<&nbsp{% translate 'Back to list' %}</a>
 </div>
 
 {% endblock content %}

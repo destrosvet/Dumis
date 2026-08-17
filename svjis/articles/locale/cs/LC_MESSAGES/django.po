@@ -487,6 +487,9 @@ msgstr "Smazat"
 msgid "Do you want to delete"
 msgstr "Chcete smazat"
 
+msgid "Do you want to hide"
+msgstr "Chcete skrýt"
+
 #: svjis/articles/templates/admin_board.html:26
 #: svjis/articles/templates/admin_building_unit.html:80
 #: svjis/articles/templates/admin_entrance.html:26
@@ -627,6 +630,58 @@ msgstr "Čas vytvoření"
 #: svjis/articles/views_admin.py:72
 msgid "Preferences"
 msgstr "Nastavení"
+
+#: svjis/articles/templates/admin_preferences_edit.html:21
+msgid "Available variables"
+msgstr "Dostupné proměnné"
+
+#: svjis/articles/views_admin.py:36
+msgid "Text with the username and the new password"
+msgstr "Text s uživatelským jménem a novým heslem"
+
+#: svjis/articles/views_admin.py:39
+msgid "Link to the article"
+msgstr "Odkaz na článek"
+
+#: svjis/articles/views_admin.py:43
+msgid "Comment author"
+msgstr "Autor komentáře"
+
+#: svjis/articles/views_admin.py:44
+msgid "Link to the commented article"
+msgstr "Odkaz na komentovaný článek"
+
+#: svjis/articles/views_admin.py:45
+msgid "Comment body"
+msgstr "Text komentáře"
+
+#: svjis/articles/views_admin.py:49
+msgid "Fault reporter"
+msgstr "Autor závady"
+
+#: svjis/articles/views_admin.py:50
+msgid "Link to the fault"
+msgstr "Odkaz na závadu"
+
+#: svjis/articles/views_admin.py:51
+msgid "Fault description"
+msgstr "Popis závady"
+
+#: svjis/articles/views_admin.py:59
+msgid "User who assigned the fault to you"
+msgstr "Uživatel, který vám závadu přiřadil"
+
+#: svjis/articles/views_admin.py:63
+msgid "User who closed the fault"
+msgstr "Uživatel, který závadu uzavřel"
+
+#: svjis/articles/views_admin.py:67
+msgid "User who reopened the fault"
+msgstr "Uživatel, který závadu znovu otevřel"
+
+#: svjis/articles/views_admin.py:120
+msgid "Unknown placeholder \"{}\" in a mail template. Allowed placeholders: {}."
+msgstr "Neznámá proměnná \"{}\" v e-mailové šabloně. Povolené proměnné: {}."
 
 #: svjis/articles/templates/admin_preferences.html:8
 msgid "Create new entry"
@@ -1120,7 +1175,7 @@ msgstr "Skupiny"
 #: svjis/articles/templates/redaction_article_edit.html:81
 #: svjis/articles/templates/redaction_article_edit.html:182
 msgid "Select groups"
-msgstr ""
+msgstr "Vybrat skupiny"
 
 #: svjis/articles/templates/redaction_article_edit.html:98
 #: svjis/articles/templates/redaction_article_edit.html:132
@@ -1510,3 +1565,49 @@ msgstr "Anaýzy"
 #: svjis/articles/views_redaction.py:691
 msgid "Data for last {} days."
 msgstr "Data za posledních {} dní."
+
+#: svjis/articles/views_admin.py
+msgid "Add owner"
+msgstr "Přidat vlastníka"
+
+#: svjis/articles/views_admin.py
+msgid "Add tenant"
+msgstr "Přidat nájemníka"
+
+#: svjis/articles/templates/admin_building_unit_owners_edit.html
+msgid "Back to building units"
+msgstr "Zpět na seznam jednotek"
+
+#: svjis/articles/templates/admin_building_unit_owners_edit.html
+msgid "Edit unit"
+msgstr "Upravit jednotku"
+
+#: svjis/articles/templates/admin_building_unit_owners_edit.html
+msgid "Tenants"
+msgstr "Nájemníci"
+
+#: svjis/articles/templates/admin_building_unit_owners_edit.html
+msgid "No owner assigned yet."
+msgstr "Zatím není přiřazen žádný vlastník."
+
+#: svjis/articles/templates/admin_building_unit_owners_edit.html
+msgid "No tenant assigned yet."
+msgstr "Zatím není přiřazen žádný nájemník."
+
+#: svjis/articles/templates/admin_user_edit.html
+msgid "No groups available."
+msgstr "Žádné skupiny nejsou k dispozici."
+
+msgid "No units assigned yet."
+msgstr "Zatím není přiřazena žádná jednotka."
+
+msgid "More actions"
+msgstr "Další akce"
+
+#: svjis/articles/templates/admin_user_edit.html
+msgid "The new user will be added to unit \"%(label)s %(reg)s\" as an owner."
+msgstr "Nový uživatel bude přidán k jednotce \"%(label)s %(reg)s\" jako vlastník."
+
+#: svjis/articles/templates/admin_user_edit.html
+msgid "The new user will be added to unit \"%(label)s %(reg)s\" as a tenant."
+msgstr "Nový uživatel bude přidán k jednotce \"%(label)s %(reg)s\" jako nájemník."

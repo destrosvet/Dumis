@@ -5,28 +5,15 @@
 {% block content %}
 
 <h1 class="page-title" id="tbl-desc">{% translate 'Board' %}</h1>
-<a class="secondary-button" href="{% url 'admin_board_edit' pk=0 %}">{% translate 'Add new member' %}</a>
 
-<table class="list fixed-on-mobile" aria-describedby="tbl-desc">
-    <tr>
-        <th class="hide-on-mobile">&nbsp;</th>
-        <th class="icon">&nbsp;</th>
-        <th>{% translate 'Member' %}</th>
-        <th>{% translate 'Position' %}</th>
-        <th class="icon">&nbsp;</th>
-    </tr>
+<div class="filter-container">
+    <div class="filter-item">
+        <p>
+            <a class="btn--primary" href="{% url 'admin_board_edit' pk=0 %}">{% translate 'Add new member' %}</a>&nbsp;
+        </p>
+    </div>
+</div>
 
-    {% if object_list %}
-    {% for obj in object_list %}
-    <tr class="row-link" onclick="location.href='{% url 'admin_board_edit' pk=obj.pk %}'">
-        <td class="hide-on-mobile">{{ forloop.counter }}</td>
-        <td class="icon"><a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="event.stopPropagation(); if (!confirm('{% translate 'Do you want to delete' %} {{ obj.member.userprofile.salutation }}&nbsp;{{ obj.member.first_name }}&nbsp;{{ obj.member.last_name }} ?')) return false;" href="{% url 'admin_board_delete' pk=obj.id %}">{% icon 'delete' %}</a></td>
-        <td>{{ obj.member.userprofile.salutation }}&nbsp;{{ obj.member.first_name }}&nbsp;{{ obj.member.last_name }}</td>
-        <td>{{ obj.position }}</td>
-        <td class="icon"><a class="icon-btn" title="{% translate 'Edit' %}" onclick="event.stopPropagation()" href="{% url 'admin_board_edit' pk=obj.pk %}">{% icon 'edit' %}</a></td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
+{% include 'includes/admin_list_table.html' %}
 
 {% endblock content %}

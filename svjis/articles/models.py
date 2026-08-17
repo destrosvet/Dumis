@@ -399,13 +399,47 @@ class BuildingUnit(models.Model):
     description = models.CharField(_("Description"), max_length=50, blank=False)
     numerator = models.IntegerField(_("Numerator"), blank=False)
     denominator = models.IntegerField(_("Denominator"), blank=False)
-    owners = models.ManyToManyField(User)
+    users = models.ManyToManyField(User, through='BuildingUnitUser', related_name='building_units')
 
     def __str__(self):
         return f"BuildingUnit: {self.description}"
 
+    @property
+    def owners(self):
+        return User.objects.filter(
+            unit_memberships__building_unit=self, unit_memberships__role=BuildingUnitUser.ROLE_OWNER
+        )
+
+    @property
+    def tenants(self):
+        return User.objects.filter(
+            unit_memberships__building_unit=self, unit_memberships__role=BuildingUnitUser.ROLE_TENANT
+        )
+
     class Meta:
         ordering = ['description']
+
+
+class BuildingUnitUser(models.Model):
+    ROLE_OWNER = 'owner'
+    ROLE_TENANT = 'tenant'
+    ROLE_CHOICES = (
+        (ROLE_OWNER, _("Owner")),
+        (ROLE_TENANT, _("Tenant")),
+    )
+
+    building_unit = models.ForeignKey(
+        BuildingUnit, on_delete=models.CASCADE, related_name='unit_users', verbose_name=_("Building unit")
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='unit_memberships')
+    role = models.CharField(_("Role"), max_length=10, choices=ROLE_CHOICES, default=ROLE_OWNER)
+
+    def __str__(self):
+        return f"BuildingUnitUser: {self.user} ({self.role})"
+
+    class Meta:
+        unique_together = ('building_unit', 'user', 'role')
+        ordering = ['building_unit', 'role', 'user']
 
 
 # Faults
@@ -433,6 +467,14 @@ class FaultReport(models.Model):
     @property
     def assets(self):
         return self.faultasset_set.all()
+
+    @property
+    def image_assets(self):
+        return [a for a in self.assets if a.is_image]
+
+    @property
+    def other_assets(self):
+        return [a for a in self.assets if not a.is_image]
 
     @property
     def comments(self):
@@ -491,6 +533,10 @@ class FaultAsset(models.Model):
     @property
     def icon(self):
         return get_asset_icon(self.basename)
+
+    @property
+    def is_image(self):
+        return self.icon == 'image'
 
     def delete(self, *args, **kwargs):
         if os.path.isfile(self.file.path):

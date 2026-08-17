@@ -22,10 +22,22 @@
             <label class="common-label" for="{{ form.value.auto_id }}">{{ form.value.label }}</label>
             {{ form.value }}
         </p>
+        {% if template_vars %}
+        <div class="form-hint-card">
+            <strong>{% translate 'Available variables' %}:</strong>
+            <ul>
+                {% for var, desc in template_vars %}
+                <li><code>&#123;{{ var }}&#125;</code> — {{ desc }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
     </fieldset>
     <p>
         <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
     </p>
 </form>
+
+{% include 'includes/hugerte.html' %}
 
 {% endblock content %}

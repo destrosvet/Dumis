@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext as gt
+from django.utils.safestring import mark_safe
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_POST
 from openpyxl import Workbook
@@ -21,6 +22,59 @@ from .permissions import (
     svjis_edit_admin_building,
 )
 from svjis import __homepage_url__, __repository_url__, __issues_url__, __translations_url__
+
+
+# Variables available in the mail template preferences. The order matters only
+# for the data migration that converts the old positional {} placeholders.
+MAIL_TEMPLATE_VARS = {
+    'mail.template.lost.password': [
+        ('message', _('Text with the username and the new password')),
+    ],
+    'mail.template.article.notification': [
+        ('link', _('Link to the article')),
+    ],
+    'mail.template.comment.notification': [
+        ('author', _('Comment author')),
+        ('link', _('Link to the commented article')),
+        ('comment', _('Comment body')),
+    ],
+    'mail.template.fault.notification': [
+        ('author', _('Fault reporter')),
+        ('link', _('Link to the fault')),
+        ('description', _('Fault description')),
+    ],
+    'mail.template.fault.comment.notification': [
+        ('author', _('Comment author')),
+        ('link', _('Link to the fault')),
+        ('comment', _('Comment body')),
+    ],
+    'mail.template.fault.assigned': [
+        ('assignor', _('User who assigned the fault to you')),
+        ('link', _('Link to the fault')),
+        ('description', _('Fault description')),
+    ],
+    'mail.template.fault.closed': [
+        ('user', _('User who closed the fault')),
+        ('link', _('Link to the fault')),
+        ('description', _('Fault description')),
+    ],
+    'mail.template.fault.reopened': [
+        ('user', _('User who reopened the fault')),
+        ('link', _('Link to the fault')),
+        ('description', _('Fault description')),
+    ],
+}
+
+
+def validate_template_placeholders(value, allowed):
+    import re
+
+    bad = []
+    for m in re.finditer(r'\{[^{}]*\}', value):
+        name = m.group(0)[1:-1]
+        if name not in allowed:
+            bad.append(m.group(0))
+    return bad
 
 
 def get_side_menu(active_item, user):
@@ -133,12 +187,39 @@ def admin_company_remove_logo_view(request):
 @permission_required(svjis_edit_admin_company)
 @require_GET
 def admin_board_view(request):
-    board_list = models.Board.objects.select_related('member')
+    board_list = models.Board.objects.select_related('member', 'member__userprofile')
+    rows = []
+    for b in board_list:
+        member_name = f"{b.member.userprofile.salutation} {b.member.first_name} {b.member.last_name}".strip()
+        rows.append(
+            {
+                'url': reverse('admin_board_edit', args=[b.pk]),
+                'cells': {'member': member_name, 'position': b.position},
+                'actions': [
+                    {'url': reverse('admin_board_edit', args=[b.pk]), 'icon': 'edit', 'label': _('Edit')},
+                    {
+                        'url': reverse('admin_board_delete', args=[b.pk]),
+                        'icon': 'delete',
+                        'label': _('Delete'),
+                        'danger': True,
+                        'confirm': f"{_('Do you want to delete')} {member_name} ?",
+                    },
+                ],
+            }
+        )
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Administration")
     ctx['aside_menu_items'] = get_side_menu('board', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
     ctx['object_list'] = board_list
+    ctx['columns'] = [
+        {'key': 'member', 'label': _('Member')},
+        {'key': 'position', 'label': _('Position')},
+    ]
+    ctx['rows'] = rows
+    ctx['table_id'] = 'board-table'
+    ctx['desc_id'] = 'tbl-desc'
+    ctx['list_search'] = True
     return render(request, "admin_board.html", ctx)
 
 
@@ -221,11 +302,38 @@ def admin_building_save_view(request):
 @require_GET
 def admin_entrance_view(request):
     entrance_list = models.BuildingEntrance.objects.all()
+    rows = []
+    for e in entrance_list:
+        rows.append(
+            {
+                'url': reverse('admin_entrance_edit', args=[e.pk]),
+                'cells': {'description': e.description, 'address': e.address},
+                'actions': [
+                    {'url': reverse('admin_entrance_edit', args=[e.pk]), 'icon': 'edit', 'label': _('Edit')},
+                    {
+                        'url': reverse('admin_entrance_delete', args=[e.pk]),
+                        'icon': 'delete',
+                        'label': _('Delete'),
+                        'danger': True,
+                        'confirm': f"{_('Do you want to delete')} {e.description} ?",
+                    },
+                ],
+            }
+        )
+
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Administration")
     ctx['aside_menu_items'] = get_side_menu('entrances', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
     ctx['object_list'] = entrance_list
+    ctx['columns'] = [
+        {'key': 'description', 'label': _('Description')},
+        {'key': 'address', 'label': _('Address')},
+    ]
+    ctx['rows'] = rows
+    ctx['table_id'] = 'entrance-table'
+    ctx['desc_id'] = 'tbl-desc'
+    ctx['list_search'] = True
     return render(request, "admin_entrance.html", ctx)
 
 
@@ -292,6 +400,52 @@ def admin_building_unit_view(request):
     if entrance_filter != 0:
         unit_list = unit_list.filter(entrance_id=entrance_filter)
 
+    rows = []
+    for u in unit_list.order_by('id'):
+        unit_desc = f"{u.type.description} {u.description}"
+        actions = [
+            {'url': reverse('admin_building_unit_edit', args=[u.pk]), 'icon': 'edit', 'label': _('Edit')},
+            {'url': reverse('admin_building_unit_owners', args=[u.pk]), 'icon': 'user', 'label': _('Owners')},
+        ]
+        if not u.owners.exists():
+            actions.append(
+                {
+                    'url': reverse('admin_user_edit', args=[0]) + f'?unit={u.pk}&role=owner',
+                    'icon': 'user',
+                    'label': _('Add owner'),
+                }
+            )
+        actions.append(
+            {
+                'url': reverse('admin_user_edit', args=[0]) + f'?unit={u.pk}&role=tenant',
+                'icon': 'user',
+                'label': _('Add tenant'),
+            }
+        )
+        actions.append(
+            {
+                'url': reverse('admin_building_unit_delete', args=[u.pk]),
+                'icon': 'delete',
+                'label': _('Delete'),
+                'danger': True,
+                'confirm': f"{_('Do you want to delete')} {unit_desc} ?",
+            }
+        )
+        rows.append(
+            {
+                'url': reverse('admin_building_unit_edit', args=[u.pk]),
+                'cells': {
+                    'type': u.type.description,
+                    'entrance': u.entrance.description if u.entrance else '',
+                    'registration_id': u.registration_id,
+                    'description': u.description,
+                    'numerator': u.numerator,
+                    'denominator': u.denominator,
+                },
+                'actions': actions,
+            }
+        )
+
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Administration")
     ctx['aside_menu_items'] = get_side_menu('units', request.user)
@@ -301,6 +455,18 @@ def admin_building_unit_view(request):
     ctx['type_filter'] = type_filter
     ctx['entrance_list'] = entrance_list
     ctx['entrance_filter'] = entrance_filter
+    ctx['columns'] = [
+        {'key': 'type', 'label': _('Type')},
+        {'key': 'entrance', 'label': _('Entrance')},
+        {'key': 'registration_id', 'label': _('Registration Id')},
+        {'key': 'description', 'label': _('Description'), 'hide_on_mobile': True},
+        {'key': 'numerator', 'label': _('Numerator'), 'hide_on_mobile': True},
+        {'key': 'denominator', 'label': _('Denominator'), 'hide_on_mobile': True},
+    ]
+    ctx['rows'] = rows
+    ctx['table_id'] = 'building-unit-table'
+    ctx['desc_id'] = 'tbl-desc'
+    ctx['list_search'] = True
     return render(request, "admin_building_unit.html", ctx)
 
 
@@ -356,15 +522,26 @@ def admin_building_unit_delete_view(request, pk):
 @require_GET
 def admin_building_unit_owners_view(request, pk):
     bu = get_object_or_404(models.BuildingUnit, pk=pk)
-    user_list = [u for u in User.objects.filter(is_active=True).order_by('last_name') if u not in bu.owners.all()]
+    user_list = User.objects.filter(is_active=True).order_by('last_name', 'first_name')
+    owner_candidates = user_list.exclude(id__in=bu.owners.values('id'))
+    tenant_candidates = user_list.exclude(id__in=bu.tenants.values('id'))
 
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Administration")
     ctx['bu'] = bu
     ctx['pk'] = pk
+    ctx['owner_list'] = bu.owners
+    ctx['tenant_list'] = bu.tenants
     ctx['user_list'] = user_list
+    ctx['owner_candidates'] = owner_candidates
+    ctx['tenant_candidates'] = tenant_candidates
     ctx['aside_menu_items'] = get_side_menu('units', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
+    ctx['breadcrumbs'] = [
+        {'label': _('Administration'), 'url': reverse(admin_company_edit_view)},
+        {'label': _('Building units'), 'url': reverse(admin_building_unit_view)},
+        {'label': f'{bu.type.description} - {bu.registration_id} - {bu.description}'},
+    ]
     return render(request, "admin_building_unit_owners_edit.html", ctx)
 
 
@@ -372,22 +549,23 @@ def admin_building_unit_owners_view(request, pk):
 @require_POST
 def admin_building_unit_owners_save_view(request):
     pk = int(request.POST['pk'])
-    owner_id = int(request.POST['owner_id'])
+    user_id = int(request.POST['owner_id'])
+    role = request.POST.get('role', models.BuildingUnitUser.ROLE_OWNER)
 
-    if owner_id > 0:
+    if user_id > 0 and role in (models.BuildingUnitUser.ROLE_OWNER, models.BuildingUnitUser.ROLE_TENANT):
         bu = get_object_or_404(models.BuildingUnit, pk=pk)
-        u = get_object_or_404(User, pk=owner_id)
-        bu.owners.add(u)
+        u = get_object_or_404(User, pk=user_id)
+        models.BuildingUnitUser.objects.get_or_create(building_unit=bu, user=u, role=role)
 
     return redirect(admin_building_unit_owners_view, pk=pk)
 
 
 @permission_required(svjis_edit_admin_building)
 @require_GET
-def admin_building_unit_owners_delete_view(request, pk, owner):
+def admin_building_unit_owners_delete_view(request, pk, role, user):
     bu = get_object_or_404(models.BuildingUnit, pk=pk)
-    u = get_object_or_404(User, pk=owner)
-    bu.owners.remove(u)
+    u = get_object_or_404(User, pk=user)
+    models.BuildingUnitUser.objects.filter(building_unit=bu, user=u, role=role).delete()
     return redirect(admin_building_unit_owners_view, pk=pk)
 
 
@@ -419,7 +597,7 @@ def admin_building_unit_export_to_excel_view(request):
             cell.style = header_st
 
     # Add data from the model
-    unit_list = models.BuildingUnit.objects.select_related('user').order_by('id')
+    unit_list = models.BuildingUnit.objects.select_related('type', 'entrance').order_by('id')
     for u in unit_list:
         unit_entrance = u.entrance.description if u.entrance else ''
         ws.append([u.type.description, unit_entrance, u.registration_id, u.description, u.numerator, u.denominator])
@@ -443,6 +621,27 @@ def admin_user_view(request):
         user_list = user_list.filter(groups__in=g)
     group_list = Group.objects.all()
 
+    rows = []
+    for u in user_list.order_by('last_name', 'first_name'):
+        last_login = u.last_login.strftime('%d.%m.%Y %H:%M') if u.last_login else ''
+        rows.append(
+            {
+                'url': reverse('admin_user_detail', args=[u.pk]),
+                'cells': {
+                    'last_name': u.last_name,
+                    'first_name': u.first_name,
+                    'email': mark_safe(
+                        f'<a href="mailto:{u.email}" onclick="event.stopPropagation()">{u.email}</a>'
+                    ),
+                    'last_login': last_login,
+                },
+                'actions': [
+                    {'url': reverse('admin_user_edit', args=[u.pk]), 'icon': 'edit', 'label': _('Edit')},
+                    {'url': reverse('admin_user_detail', args=[u.pk]), 'icon': 'view', 'label': _('Detail')},
+                ],
+            }
+        )
+
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Administration")
     ctx['aside_menu_items'] = get_side_menu('users', request.user)
@@ -451,6 +650,16 @@ def admin_user_view(request):
     ctx['group_list'] = group_list.order_by('name')
     ctx['group_filter'] = group_filter
     ctx['deactivated_users'] = deactivated_users
+    ctx['columns'] = [
+        {'key': 'last_name', 'label': _('Last name')},
+        {'key': 'first_name', 'label': _('First name')},
+        {'key': 'email', 'label': _('E-Mail'), 'hide_on_mobile': True},
+        {'key': 'last_login', 'label': _('Last login'), 'hide_on_mobile': True},
+    ]
+    ctx['rows'] = rows
+    ctx['table_id'] = 'user-table'
+    ctx['desc_id'] = 'users'
+    ctx['list_search'] = True
     return render(request, "admin_user.html", ctx)
 
 
@@ -468,6 +677,11 @@ def admin_user_detail_view(request, pk):
     ctx['user_group_list'] = user_group_list
     ctx['aside_menu_items'] = get_side_menu('users', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
+    ctx['breadcrumbs'] = [
+        {'label': _('Administration'), 'url': reverse(admin_company_edit_view)},
+        {'label': _('Users'), 'url': reverse(admin_user_view)},
+        {'label': f'{user.first_name} {user.last_name}'},
+    ]
     return render(request, "admin_user_detail.html", ctx)
 
 
@@ -484,6 +698,12 @@ def admin_user_edit_view(request, pk):
         uform = forms.UserForm()
         pform = forms.UserProfileForm()
 
+    unit_pk = int(request.GET.get('unit', 0))
+    unit_role = request.GET.get('role', '')
+    unit = None
+    if unit_pk and unit_role in (models.BuildingUnitUser.ROLE_OWNER, models.BuildingUnitUser.ROLE_TENANT):
+        unit = get_object_or_404(models.BuildingUnit, pk=unit_pk)
+
     group_list = []
     user_group_list = []
     if pk:
@@ -498,6 +718,8 @@ def admin_user_edit_view(request, pk):
     ctx['pform'] = pform
     ctx['group_list'] = group_list
     ctx['pk'] = pk
+    ctx['unit'] = unit
+    ctx['unit_role'] = unit_role
     ctx['aside_menu_items'] = get_side_menu('users', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
     return render(request, "admin_user_edit.html", ctx)
@@ -507,6 +729,8 @@ def admin_user_edit_view(request, pk):
 @require_POST
 def admin_user_save_view(request):
     pk = int(request.POST['pk'])
+    unit_pk = int(request.POST.get('unit', 0))
+    unit_role = request.POST.get('unit_role', '')
     if pk:
         user_i = get_object_or_404(User, pk=pk)
         user_form = forms.UserForm(request.POST, instance=user_i)
@@ -533,11 +757,16 @@ def admin_user_save_view(request):
         # Set groups
         user_group_list = Group.objects.filter(user__id=u.id)
         for g in Group.objects.all():
-            group_set = request.POST.get(g.name, False) == 'on'
+            group_set = request.POST.get(g.name, False)
             if group_set and g not in user_group_list:
                 u.groups.add(g)
             if not group_set and g in user_group_list:
                 u.groups.remove(g)
+
+        # Assign the user to a building unit (owner/tenant) when requested
+        if unit_pk and unit_role in (models.BuildingUnitUser.ROLE_OWNER, models.BuildingUnitUser.ROLE_TENANT):
+            bu = get_object_or_404(models.BuildingUnit, pk=unit_pk)
+            models.BuildingUnitUser.objects.get_or_create(building_unit=bu, user=u, role=unit_role)
 
     else:
         for error in user_form.errors:
@@ -547,6 +776,8 @@ def admin_user_save_view(request):
         return redirect(reverse('admin_user_edit', kwargs={'pk': pk}))
 
     messages.info(request, _('Saved'))
+    if unit_pk:
+        return redirect(admin_building_unit_owners_view, pk=unit_pk)
     return redirect(admin_user_detail_view, pk=u.pk)
 
 
@@ -554,16 +785,28 @@ def admin_user_save_view(request):
 @require_GET
 def admin_user_owns_view(request, pk):
     u = get_object_or_404(User, pk=pk)
-    bu_list = list(
-        models.BuildingUnit.objects.exclude(id__in=u.buildingunit_set.values_list("id", flat=True)).order_by("id")
+    membership_list = models.BuildingUnitUser.objects.filter(user=u).select_related(
+        'building_unit', 'building_unit__type'
     )
+    owner_list = membership_list.filter(role=models.BuildingUnitUser.ROLE_OWNER)
+    tenant_list = membership_list.filter(role=models.BuildingUnitUser.ROLE_TENANT)
+    bu_list = models.BuildingUnit.objects.exclude(id__in=u.building_units.values_list("id", flat=True)).order_by("id")
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Administration")
     ctx['u'] = u
     ctx['pk'] = pk
+    ctx['membership_list'] = membership_list
+    ctx['owner_list'] = owner_list
+    ctx['tenant_list'] = tenant_list
     ctx['bu_list'] = bu_list
     ctx['aside_menu_items'] = get_side_menu('users', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
+    ctx['breadcrumbs'] = [
+        {'label': _('Administration'), 'url': reverse(admin_company_edit_view)},
+        {'label': _('Users'), 'url': reverse(admin_user_view)},
+        {'label': f'{u.first_name} {u.last_name}', 'url': reverse(admin_user_detail_view, args=[u.pk])},
+        {'label': _('Modify units')},
+    ]
     return render(request, "admin_user_ownes_edit.html", ctx)
 
 
@@ -571,22 +814,23 @@ def admin_user_owns_view(request, pk):
 @require_POST
 def admin_user_owns_save_view(request):
     pk = int(request.POST['pk'])
-    owner_id = int(request.POST['owner_id'])
+    unit_id = int(request.POST['unit_id'])
+    role = request.POST.get('role', models.BuildingUnitUser.ROLE_OWNER)
 
-    if owner_id > 0:
+    if unit_id > 0 and role in (models.BuildingUnitUser.ROLE_OWNER, models.BuildingUnitUser.ROLE_TENANT):
         u = get_object_or_404(User, pk=pk)
-        bu = get_object_or_404(models.BuildingUnit, pk=owner_id)
-        u.buildingunit_set.add(bu)
+        bu = get_object_or_404(models.BuildingUnit, pk=unit_id)
+        models.BuildingUnitUser.objects.get_or_create(building_unit=bu, user=u, role=role)
 
     return redirect(admin_user_owns_view, pk=pk)
 
 
 @permission_required(svjis_edit_admin_users)
 @require_GET
-def admin_user_owns_delete_view(request, pk, owner):
+def admin_user_owns_delete_view(request, pk, unit, role):
     u = get_object_or_404(User, pk=pk)
-    bu = get_object_or_404(models.BuildingUnit, pk=owner)
-    u.buildingunit_set.remove(bu)
+    bu = get_object_or_404(models.BuildingUnit, pk=unit)
+    models.BuildingUnitUser.objects.filter(building_unit=bu, user=u, role=role).delete()
     return redirect(admin_user_owns_view, pk=pk)
 
 
@@ -654,11 +898,40 @@ def admin_user_export_to_excel_view(request):
 @require_GET
 def admin_group_view(request):
     group_list = Group.objects.all()
+    rows = []
+    for g in group_list.order_by('name'):
+        rows.append(
+            {
+                'url': reverse('admin_group_edit', args=[g.pk]),
+                'cells': {'name': g.name},
+                'actions': [
+                    {'url': reverse('admin_group_edit', args=[g.pk]), 'icon': 'edit', 'label': _('Edit')},
+                    {
+                        'url': reverse('admin_user') + f'?group_filter={g.pk}',
+                        'icon': 'user',
+                        'label': _('List of users'),
+                    },
+                    {
+                        'url': reverse('admin_group_delete', args=[g.pk]),
+                        'icon': 'delete',
+                        'label': _('Delete'),
+                        'danger': True,
+                        'confirm': f"{_('Do you want to delete')} {g.name} ?",
+                    },
+                ],
+            }
+        )
+
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Administration")
     ctx['aside_menu_items'] = get_side_menu('groups', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
     ctx['object_list'] = group_list.order_by('name')
+    ctx['columns'] = [{'key': 'name', 'label': _('Name')}]
+    ctx['rows'] = rows
+    ctx['table_id'] = 'group-table'
+    ctx['desc_id'] = 'groups'
+    ctx['list_search'] = True
     return render(request, "admin_group.html", ctx)
 
 
@@ -774,11 +1047,38 @@ def admin_group_delete_view(request, pk):
 @require_GET
 def admin_preferences_view(request):
     property_list = models.Preferences.objects.all()
+    rows = []
+    for p in property_list.order_by('key'):
+        rows.append(
+            {
+                'url': reverse('admin_preferences_edit', args=[p.pk]),
+                'cells': {'key': p.key, 'value': p.value},
+                'actions': [
+                    {'url': reverse('admin_preferences_edit', args=[p.pk]), 'icon': 'edit', 'label': _('Edit')},
+                    {
+                        'url': reverse('admin_preferences_delete', args=[p.pk]),
+                        'icon': 'delete',
+                        'label': _('Delete'),
+                        'danger': True,
+                        'confirm': f"{_('Do you want to delete')} {p.key} ?",
+                    },
+                ],
+            }
+        )
+
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Administration")
     ctx['aside_menu_items'] = get_side_menu('preferences', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
     ctx['object_list'] = property_list.order_by('key')
+    ctx['columns'] = [
+        {'key': 'key', 'label': _('Key')},
+        {'key': 'value', 'label': _('Value'), 'hide_on_mobile': True},
+    ]
+    ctx['rows'] = rows
+    ctx['table_id'] = 'preferences-table'
+    ctx['desc_id'] = 'preferences'
+    ctx['list_search'] = True
     return render(request, "admin_preferences.html", ctx)
 
 
@@ -789,12 +1089,14 @@ def admin_preferences_edit_view(request, pk):
         i = get_object_or_404(models.Preferences, pk=pk)
         form = forms.PreferencesForm(instance=i)
     else:
+        i = None
         form = forms.PreferencesForm
 
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Administration")
     ctx['form'] = form
     ctx['pk'] = pk
+    ctx['template_vars'] = MAIL_TEMPLATE_VARS.get(i.key) if i else None
     ctx['aside_menu_items'] = get_side_menu('preferences', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
     return render(request, "admin_preferences_edit.html", ctx)
@@ -809,12 +1111,36 @@ def admin_preferences_save_view(request):
     else:
         instance = get_object_or_404(models.Preferences, pk=pk)
         form = forms.PreferencesForm(request.POST, instance=instance)
-    if form.is_valid:
-        form.save()
-        messages.info(request, _('Saved'))
-    else:
+
+    if not form.is_valid():
         for error in form.errors:
             messages.error(request, f"{_('Form validation error')}: {error}")
+        return redirect(admin_preferences_view)
+
+    template_vars = MAIL_TEMPLATE_VARS.get(form.cleaned_data['key'])
+    if template_vars is not None:
+        allowed = [name for name, _ in template_vars]
+        bad = validate_template_placeholders(form.cleaned_data['value'], allowed)
+        if bad:
+            allowed_text = ', '.join('{' + name + '}' for name in allowed)
+            for item in bad:
+                messages.error(
+                    request,
+                    _('Unknown placeholder "{}" in a mail template. Allowed placeholders: {}.').format(
+                        item, allowed_text
+                    ),
+                )
+            ctx = utils.get_context()
+            ctx['aside_menu_name'] = _("Administration")
+            ctx['form'] = form
+            ctx['pk'] = pk
+            ctx['template_vars'] = template_vars
+            ctx['aside_menu_items'] = get_side_menu('preferences', request.user)
+            ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
+            return render(request, "admin_preferences_edit.html", ctx)
+
+    form.save()
+    messages.info(request, _('Saved'))
     return redirect(admin_preferences_view)
 
 

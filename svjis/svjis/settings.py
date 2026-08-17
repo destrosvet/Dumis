@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'articles',
-    'tinymce',
     'django.contrib.sitemaps',
 ]
 
@@ -147,23 +146,6 @@ MEDIA_URL = '/media/'
 
 LOGIN_URL = '/login_page/'
 LOGOUT_URL = '/'
-
-# TinyMCE
-
-TINYMCE_DEFAULT_CONFIG = {
-    "license_key": "gpl",
-    "theme": "silver",
-    "height": 500,
-    "menubar": "edit view format table help",
-    "plugins": "advlist,autolink,lists,link,image,charmap,preview,anchor,"
-    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,"
-    "code,help,wordcount",
-    "toolbar": "undo redo | formatselect | "
-    "bold italic backcolor | alignleft aligncenter "
-    "alignright alignjustify | bullist numlist outdent indent | "
-    "removeformat | help",
-    "paste_as_text": True,
-}
 
 # EMAIL values
 

@@ -43,28 +43,6 @@
     </div>
 </div>
 
-<div class="table-wrapper">
-<table class="list full-width fixed-on-mobile" aria-describedby="users">
-    <tr>
-        <th class="hide-on-mobile">&nbsp;</th>
-        <th>{% translate 'Last name' %}</th>
-        <th>{% translate 'First name' %}</th>
-        <th class="hide-on-mobile">{% translate 'E-Mail' %}</th>
-        <th class="hide-on-mobile">{% translate 'Last login' %}</th>
-    </tr>
-
-    {% if object_list %}
-    {% for obj in object_list %}
-    <tr id="user_{{ obj.pk }}" class="row-link" onclick="location.href='{% url 'admin_user_detail' pk=obj.pk %}'">
-        <td class="hide-on-mobile">{{ forloop.counter }}</td>
-        <td>{{ obj.last_name }}</td>
-        <td>{{ obj.first_name }}</td>
-        <td class="hide-on-mobile"><a href="mailto:{{ obj.email }}" onclick="event.stopPropagation()">{{ obj.email }}</a></td>
-        <td class="hide-on-mobile">{{ obj.last_login|date:"d.m.Y H:i" }}</td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
-</div>
+{% include 'includes/admin_list_table.html' %}
 
 {% endblock content %}

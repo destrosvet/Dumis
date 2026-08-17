@@ -1,32 +1,12 @@
 {% extends "base-with-aside-menu-content.html" %}
 
-{% load article_filters i18n %}
+{% load i18n %}
 
 {% block content %}
 
 <h1 class="page-title" id="links">{{ header }}</h1>
 <a class="secondary-button" href="{% url 'redaction_useful_link_edit' pk=0 %}">{% translate 'Create new useful link' %}</a>
 
-<table class="list" aria-describedby="links">
-    <tr>
-        <th class="icon">&nbsp;</th>
-        <th>{% translate 'Header' %}</th>
-        <th>{% translate 'Order' %}</th>
-        <th>{% translate 'Published' %}</th>
-        <th class="icon">&nbsp;</th>
-    </tr>
-
-    {% if object_list %}
-    {% for obj in object_list %}
-    <tr class="row-link" onclick="location.href='{% url 'redaction_useful_link_edit' pk=obj.id %}'">
-        <td class="icon"><a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="event.stopPropagation(); if (!confirm('{% translate 'Do you want to delete this useful link' %}?')) return false;" href="{% url 'redaction_useful_link_delete' pk=obj.id %}">{% icon 'delete' %}</a></td>
-        <td><a href="{{ obj.link }}" onclick="event.stopPropagation()">{{ obj.header }}</a></td>
-        <td>{{ obj.order }}</td>
-        <td>{{ obj.published|yes_no }}</td>
-        <td class="icon"><a class="icon-btn" title="{% translate 'Edit' %}" onclick="event.stopPropagation()" href="{% url 'redaction_useful_link_edit' pk=obj.id %}">{% icon 'edit' %}</a></td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
+{% include 'includes/admin_list_table.html' %}
 
 {% endblock content %}

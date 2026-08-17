@@ -21,18 +21,27 @@
         <legend>{% translate 'Permissions' %}</legend>
 
         {% if permission_list %}
-        {% for g in permission_list %}
-
-        <fieldset>
-            <legend class="legend-permissions">{% translate g.name %}</legend>
-            {% for obj in g.perms %}
-            <p>
-                <label class="common-label-groups" id="{{ obj.codename }}-label" for="{{ obj.codename }}-input">{% translate obj.name %}</label>
-                <input class="common-input-chck" id="{{ obj.codename }}-input" type="checkbox" name="{{ obj.codename }}" {% if obj.checked %}checked{% endif %}/>
-            </p>
+        <div class="perm-tables">
+            {% for g in permission_list %}
+            <div class="card perm-table">
+                <div class="card__header card__header--light">{% translate g.name %}</div>
+                <div class="card__body">
+                    <table class="detail no-border">
+                        {% for obj in g.perms %}
+                        <tr>
+                            <td>
+                                <label class="checkbox-line">
+                                    <input type="checkbox" name="{{ obj.codename }}" {% if obj.checked %}checked{% endif %}>
+                                    {% translate obj.name %}
+                                </label>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
             {% endfor %}
-        </fieldset>
-        {% endfor %}
+        </div>
         {% endif %}
     </fieldset>
     <p>

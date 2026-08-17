@@ -9,18 +9,20 @@
 <table class="list" aria-describedby="units">
     <tr>
         <th>&nbsp;</th>
+        <th>{% translate 'Role' %}</th>
         <th>{% translate 'Type' %}</th>
         <th>{% translate 'Registration Id' %}</th>
         <th>{% translate 'Description' %}</th>
     </tr>
 
-    {% if user.buildingunit_set.all %}
-    {% for obj in user.buildingunit_set.all|dictsort:"registration_id" %}
+    {% if user.unit_memberships.all %}
+    {% for obj in user.unit_memberships.all|dictsort:"building_unit.registration_id" %}
     <tr>
         <td>{{ forloop.counter }}</td>
-        <td>{{ obj.type.description }}</td>
-        <td>{{ obj.registration_id }}</td>
-        <td>{{ obj.description }}</td>
+        <td>{{ obj.get_role_display }}</td>
+        <td>{{ obj.building_unit.type.description }}</td>
+        <td>{{ obj.building_unit.registration_id }}</td>
+        <td>{{ obj.building_unit.description }}</td>
     </tr>
     {% endfor %}
     {% endif %}

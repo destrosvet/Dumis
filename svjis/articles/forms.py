@@ -2,7 +2,6 @@ from django import forms
 from django.contrib.auth.models import User, Group
 from django.utils.translation import gettext_lazy as _
 from . import models
-from tinymce.widgets import TinyMCE
 
 
 SELECT_ENTRANCE_TEXT = "Select the entranance (if does it make sense)"
@@ -44,34 +43,11 @@ class ArticleForm(forms.ModelForm):
         widgets = {
             'header': forms.widgets.TextInput(attrs={'class': 'common-input full-width', 'size': '50'}),
             'cover_image': forms.widgets.FileInput(attrs={'class': 'common-input'}),
-            'perex': TinyMCE(
-                attrs={'class': 'common-textarea', 'rows': '20', 'cols': '30'},
-                mce_attrs={
-                    'entity_encoding': 'raw',
-                    'height': '350px',
-                    'width': '100%',
-                },
+            'perex': forms.widgets.Textarea(
+                attrs={'class': 'common-textarea hugerte', 'rows': '20', 'cols': '30', 'data-height': '350'},
             ),
-            'body': TinyMCE(
-                attrs={'class': 'common-textarea', 'rows': '20', 'cols': '30'},
-                mce_attrs={
-                    'entity_encoding': 'raw',
-                    'height': '700px',
-                    'width': '100%',
-                    'menubar': 'edit insert view format table help',
-                    'toolbar': 'undo redo | formatselect | '
-                    'bold italic backcolor | alignleft aligncenter '
-                    'alignright alignjustify | bullist numlist outdent indent | '
-                    'image | removeformat | help',
-                    # Uploaded images are stored as ArticleAssets; the handler is
-                    # defined in redaction_article_edit.html.
-                    'images_upload_handler': 'articleImagesUploadHandler',
-                    'automatic_uploads': True,
-                    'paste_data_images': True,
-                    # Keep /media/... URLs as-is so they work on the article page too.
-                    'relative_urls': False,
-                    'convert_urls': False,
-                },
+            'body': forms.widgets.Textarea(
+                attrs={'class': 'common-textarea hugerte', 'rows': '20', 'cols': '30', 'data-height': '700'},
             ),
             'menu': forms.widgets.Select(attrs={'class': 'common-input', 'form': 'article-edit-form'}),
             'allow_comments': forms.widgets.CheckboxInput(attrs={'class': 'common-input-chck', 'form': 'article-edit-form'}),
@@ -244,7 +220,9 @@ class PreferencesForm(forms.ModelForm):
         )
         widgets = {
             'key': forms.widgets.TextInput(attrs={'class': 'common-input', 'size': '50'}),
-            'value': forms.widgets.TextInput(attrs={'class': 'common-input', 'size': '50'}),
+            'value': forms.widgets.Textarea(
+                attrs={'class': 'common-textarea hugerte', 'rows': '10', 'cols': '30', 'data-height': '350'},
+            ),
         }
 
 

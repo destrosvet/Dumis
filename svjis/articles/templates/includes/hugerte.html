@@ -1,0 +1,24 @@
+<script src="https://cdn.jsdelivr.net/npm/hugerte@1/hugerte.min.js"></script>
+<script>
+(function () {
+    document.querySelectorAll('textarea.hugerte').forEach(function (el) {
+        var config = {
+            license_key: 'gpl',
+            target: el,
+            entity_encoding: 'raw',
+            relative_urls: false,
+            convert_urls: false,
+            height: parseInt(el.getAttribute('data-height') || '300', 10),
+            menubar: 'edit insert view format table help',
+            plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
+            toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | removeformat | help',
+        };
+        if (window.articleImagesUploadHandler) {
+            config.automatic_uploads = true;
+            config.paste_data_images = true;
+            config.images_upload_handler = window.articleImagesUploadHandler;
+        }
+        hugerte.init(config);
+    });
+})();
+</script>

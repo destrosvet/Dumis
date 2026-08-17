@@ -18,6 +18,7 @@ from articles.models import (
     BuildingEntrance,
     BuildingUnit,
     BuildingUnitType,
+    BuildingUnitUser,
     Company,
     FaultComment,
     FaultReport,
@@ -176,7 +177,14 @@ class Command(BaseCommand):
                 numerator=numerator,
                 denominator=10000,
             )
-            unit.owners.add(*unit_owners)
+            for owner in unit_owners:
+                BuildingUnitUser.objects.create(building_unit=unit, user=owner, role=BuildingUnitUser.ROLE_OWNER)
+
+        # Demonstrate tenants: the first flat is rented out by its owner
+        rented_flat = BuildingUnit.objects.get(registration_id='1234/1')
+        BuildingUnitUser.objects.create(
+            building_unit=rented_flat, user=owners[5], role=BuildingUnitUser.ROLE_TENANT
+        )
 
     def _create_board(self, company, owners):
         admin = User.objects.get(username='admin')

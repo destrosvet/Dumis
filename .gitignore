@@ -29,3 +29,4 @@ svjis2-data/
 _build_result.txt
 _diag.txt
 build_log.txt
+node_modules/

@@ -50,38 +50,6 @@
     </div>
 </div>
 
-<div class="table-wrapper">
-<table class="list full-width" aria-describedby="tbl-desc">
-    <tr>
-        <th class="hide-on-mobile">&nbsp;</th>
-        <th class="icon">&nbsp;</th>
-        <th class="icon">&nbsp;</th>
-        <th>{% translate 'Type' %}</th>
-        <th>{% translate 'Entrance' %}</th>
-        <th>{% translate 'Registration Id' %}</th>
-        <th class="hide-on-mobile">{% translate 'Description' %}</th>
-        <th class="hide-on-mobile">{% translate 'Numerator' %}</th>
-        <th class="hide-on-mobile">{% translate 'Denominator' %}</th>
-        <th class="icon">&nbsp;</th>
-    </tr>
-
-    {% if object_list %}
-    {% for obj in object_list %}
-    <tr id="unit_{{ obj.pk }}" class="row-link" onclick="location.href='{% url 'admin_building_unit_edit' pk=obj.pk %}'">
-        <td class="hide-on-mobile">{{ forloop.counter }}</td>
-        <td class="icon"><a class="icon-btn" title="{% translate 'Owners' %}" onclick="event.stopPropagation()" href="{% url 'admin_building_unit_owners' pk=obj.pk %}">{% icon 'user' %}</a></td>
-        <td class="icon"><a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="event.stopPropagation(); if (!confirm('{% translate 'Do you want to delete' %} {{ obj.type.description }} {{ obj.description }} ?')) return false;" href="{% url 'admin_building_unit_delete' pk=obj.id %}">{% icon 'delete' %}</a></td>
-        <td>{{ obj.type.description }}</td>
-        <td>{{ obj.entrance.description }}</td>
-        <td>{{ obj.registration_id }}</td>
-        <td class="hide-on-mobile">{{ obj.description }}</td>
-        <td class="hide-on-mobile">{{ obj.numerator }}</td>
-        <td class="hide-on-mobile">{{ obj.denominator }}</td>
-        <td class="icon"><a class="icon-btn" title="{% translate 'Edit' %}" onclick="event.stopPropagation()" href="{% url 'admin_building_unit_edit' pk=obj.pk %}">{% icon 'edit' %}</a></td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
-</div>
+{% include 'includes/admin_list_table.html' %}
 
 {% endblock content %}

@@ -1,0 +1,128 @@
+{% load article_filters i18n %}
+
+{% if list_search %}
+<div class="list-toolbar">
+    <input type="search" class="common-input list-search" data-table="#{{ table_id }}"
+           placeholder="{% translate 'Search...' %}" aria-label="{% translate 'Search' %}" />
+</div>
+{% endif %}
+
+<div class="table-wrapper">
+<table class="list full-width fixed-on-mobile sortable" id="{{ table_id }}" aria-describedby="{{ desc_id }}">
+    <thead>
+        <tr>
+            <th class="hide-on-mobile">&nbsp;</th>
+            {% for col in columns %}
+            <th class="{% if col.hide_on_mobile %}hide-on-mobile {% endif %}sortable-col" data-sort="{{ col.key }}">{{ col.label }}</th>
+            {% endfor %}
+            <th class="icon">&nbsp;</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr class="row-link" onclick="location.href='{{ row.url }}'">
+            <td class="hide-on-mobile row-number">{{ forloop.counter }}</td>
+            {% for col in columns %}
+            <td class="{% if col.hide_on_mobile %}hide-on-mobile{% endif %}">{{ row.cells|get_item:col.key }}</td>
+            {% endfor %}
+            <td class="icon">
+                {% if row.actions %}
+                <div class="action-menu" onclick="event.stopPropagation()">
+                    {% with row.actions|first as primary %}
+                    <a class="action-menu__trigger" href="{{ primary.url }}"{% if primary.confirm %} onclick="if (!confirm('{{ primary.confirm|escapejs }}')) return false;"{% endif %} title="{{ primary.label }}">{% icon primary.icon %} {{ primary.label }}</a>
+                    {% endwith %}
+                    {% if row.actions|length > 1 %}
+                    <details class="action-menu__details">
+                        <summary class="action-menu__arrow" title="{% translate 'More actions' %}"></summary>
+                        <div class="action-menu__panel">
+                            {% for action in row.actions %}
+                            <a class="action-menu__item{% if action.danger %} action-menu__item--danger{% endif %}"{% if action.confirm %} onclick="if (!confirm('{{ action.confirm|escapejs }}')) return false;"{% endif %} href="{{ action.url }}">{% icon action.icon %} {{ action.label }}</a>
+                            {% endfor %}
+                        </div>
+                    </details>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+<script>
+(function () {
+    // Edit dropdown: pin the panel to the viewport when opened so it is never
+    // clipped by the scrollable table wrapper, even on small/narrow tables.
+    document.querySelectorAll(".action-menu__details").forEach(function (menu) {
+        menu.addEventListener("toggle", function () {
+            if (!menu.open) return;
+            var panel = menu.querySelector(".action-menu__panel");
+            if (!panel) return;
+            var tr = menu.getBoundingClientRect();
+            var vw = window.innerWidth || document.documentElement.clientWidth;
+            var vh = window.innerHeight || document.documentElement.clientHeight;
+            var left = tr.right - panel.offsetWidth;
+            var top = tr.bottom + 4;
+            if (left < 8) left = 8;
+            if (left + panel.offsetWidth > vw - 8) left = vw - 8 - panel.offsetWidth;
+            if (top + panel.offsetHeight > vh - 8) top = Math.max(8, tr.top - panel.offsetHeight - 4);
+            panel.style.position = "fixed";
+            panel.style.left = left + "px";
+            panel.style.right = "auto";
+            panel.style.top = top + "px";
+        });
+    });
+    document.addEventListener("scroll", function () {
+        document.querySelectorAll(".action-menu__details[open]").forEach(function (m) { m.open = false; });
+    }, true);
+    document.addEventListener("click", function (e) {
+        if (e.target.closest(".action-menu")) return;
+        document.querySelectorAll(".action-menu__details[open]").forEach(function (m) { m.open = false; });
+    });
+
+    // Sortable columns: click a header to toggle asc/desc.
+    document.querySelectorAll("table.sortable").forEach(function (table) {
+        var thead = table.querySelector("thead");
+        if (!thead) return;
+        thead.addEventListener("click", function (e) {
+            var th = e.target.closest("th.sortable-col");
+            if (!th) return;
+            var tbody = table.querySelector("tbody");
+            if (!tbody) return;
+            var isAsc = th.classList.contains("sort-asc");
+            thead.querySelectorAll("th.sortable-col").forEach(function (t) {
+                t.classList.remove("sort-asc", "sort-desc");
+            });
+            var rows = Array.prototype.slice.call(tbody.querySelectorAll("tr"));
+            rows.sort(function (a, b) {
+                var av = a.cells[th.cellIndex].textContent.trim();
+                var bv = b.cells[th.cellIndex].textContent.trim();
+                var an = parseFloat(av.replace(",", "."));
+                var bn = parseFloat(bv.replace(",", "."));
+                if (!isNaN(an) && !isNaN(bn)) { av = an; bv = bn; }
+                var cmp = av < bv ? -1 : av > bv ? 1 : 0;
+                return isAsc ? -cmp : cmp;
+            });
+            rows.forEach(function (r, i) {
+                var num = r.querySelector("td.row-number");
+                if (num) num.textContent = i + 1;
+                tbody.appendChild(r);
+            });
+            th.classList.add(isAsc ? "sort-desc" : "sort-asc");
+        });
+    });
+
+    // Search: filter rows by text content.
+    document.querySelectorAll("input.list-search").forEach(function (input) {
+        input.addEventListener("input", function () {
+            var table = document.querySelector(input.getAttribute("data-table"));
+            if (!table) return;
+            var q = input.value.toLowerCase().trim();
+            table.querySelectorAll("tbody tr").forEach(function (tr) {
+                tr.style.display = tr.textContent.toLowerCase().indexOf(q) !== -1 ? "" : "none";
+            });
+        });
+    });
+})();
+</script>

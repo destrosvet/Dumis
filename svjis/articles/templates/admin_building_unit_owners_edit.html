@@ -4,47 +4,92 @@
 
 {% block content %}
 
+{% include 'includes/breadcrumbs.html' %}
+
 <h1 class="page-title" id="tbl-desc">{{ bu.type.description }} - {{ bu.registration_id }} - {{ bu.description }}</h1>
 
-<table class="list" aria-describedby="tbl-desc">
-    <tr>
-        <th>&nbsp;</th>
-        <th class="icon">&nbsp;</th>
-        <th>{% translate 'Owners' %}</th>
-        <th class="icon">&nbsp;</th>
-    </tr>
+<div class="detail-actions">
+    <a class="btn--secondary" href="{% url 'admin_building_unit_edit' pk=bu.pk %}">{% icon 'edit' %} {% translate 'Edit unit' %}</a>
+</div>
 
-    {% if bu.owners.all %}
-    {% for obj in bu.owners.all %}
-    <tr class="row-link" onclick="location.href='{% url 'admin_user_detail' pk=obj.pk %}'">
-        <td>{{ forloop.counter }}</td>
-        <td class="icon"><a class="icon-btn" title="{% translate 'Units' %}" onclick="event.stopPropagation()" href="{% url 'admin_user_owns' pk=obj.pk %}">{% icon 'house' %}</a></td>
-        <td>{{ obj.first_name }} {{ obj.last_name }}</td>
-        <td class="icon"><a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="event.stopPropagation(); if (!confirm('{% translate 'Do you want to delete' %} {{ obj.first_name }}&nbsp;{{ obj.last_name }} ?')) return false;" href="{% url 'admin_building_unit_owners_delete' pk=pk owner=obj.pk %}">{% icon 'delete' %}</a></td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
+<div class="member-grid">
 
-{% if user_list %}
-<form action="{% url 'admin_building_unit_owners_save' %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="pk" value="{{ pk }}" />
-    <select class="common-input" id="owner-input" name="owner_id">
-        <option value="0">------</option>
-        {% for u in user_list %}
-        <option value="{{ u.id }}">{{ u.last_name }} {{ u.first_name }}</option>
-        {% endfor %}
-    </select>
-    <input id="submit" type="submit" value="{% translate 'Add' %}" />
-</form>
+    <div class="card">
+        <div class="card__header card__header--light">
+            {% translate 'Owners' %}&nbsp;<span class="badge badge--brand">{{ owner_list|length }}</span>
+        </div>
+        <div class="card__body">
+            {% if owner_list %}
+            <ul class="member-list">
+                {% for obj in owner_list %}
+                <li class="member-list__item">
+                    <span class="member-list__name"><a href="{% url 'admin_user_detail' pk=obj.pk %}">{{ obj.first_name }} {{ obj.last_name }}</a></span>
+                    <span class="member-list__actions">
+                        <a class="icon-btn" title="{% translate 'Units' %}" href="{% url 'admin_user_owns' pk=obj.pk %}">{% icon 'house' %}</a>
+                        <a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ obj.first_name }}&nbsp;{{ obj.last_name }} ?')) return false;" href="{% url 'admin_building_unit_owners_delete' pk=pk role='owner' user=obj.pk %}">{% icon 'delete' %}</a>
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="empty-state">{% translate 'No owner assigned yet.' %}</p>
+            {% endif %}
 
-<script>
-    $(document).ready(function() {
-    $('#owner-input').select2({width: '250px'});
-});
-</script>
+            {% if owner_candidates %}
+            <form class="assign-form" action="{% url 'admin_building_unit_owners_save' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="pk" value="{{ pk }}" />
+                <input type="hidden" name="role" value="owner" />
+                <select class="common-input" name="owner_id">
+                    <option value="0">------</option>
+                    {% for u in owner_candidates %}
+                    <option value="{{ u.id }}">{{ u.last_name }} {{ u.first_name }}</option>
+                    {% endfor %}
+                </select>
+                <input class="btn--primary" type="submit" value="{% translate 'Add' %}" />
+            </form>
+            {% endif %}
+        </div>
+    </div>
 
-{% endif %}
+    <div class="card">
+        <div class="card__header card__header--light">
+            {% translate 'Tenants' %}&nbsp;<span class="badge badge--brand">{{ tenant_list|length }}</span>
+        </div>
+        <div class="card__body">
+            {% if tenant_list %}
+            <ul class="member-list">
+                {% for obj in tenant_list %}
+                <li class="member-list__item">
+                    <span class="member-list__name"><a href="{% url 'admin_user_detail' pk=obj.pk %}">{{ obj.first_name }} {{ obj.last_name }}</a></span>
+                    <span class="member-list__actions">
+                        <a class="icon-btn" title="{% translate 'Units' %}" href="{% url 'admin_user_owns' pk=obj.pk %}">{% icon 'house' %}</a>
+                        <a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ obj.first_name }}&nbsp;{{ obj.last_name }} ?')) return false;" href="{% url 'admin_building_unit_owners_delete' pk=pk role='tenant' user=obj.pk %}">{% icon 'delete' %}</a>
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="empty-state">{% translate 'No tenant assigned yet.' %}</p>
+            {% endif %}
+
+            {% if tenant_candidates %}
+            <form class="assign-form" action="{% url 'admin_building_unit_owners_save' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="pk" value="{{ pk }}" />
+                <input type="hidden" name="role" value="tenant" />
+                <select class="common-input" name="owner_id">
+                    <option value="0">------</option>
+                    {% for u in tenant_candidates %}
+                    <option value="{{ u.id }}">{{ u.last_name }} {{ u.first_name }}</option>
+                    {% endfor %}
+                </select>
+                <input class="btn--primary" type="submit" value="{% translate 'Add' %}" />
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
 
 {% endblock content %}

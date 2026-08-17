@@ -2,7 +2,7 @@ from pathlib import PurePosixPath
 from . import utils, forms, models
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.contrib import messages
 from django.core.paginator import Paginator, InvalidPage
 from django.db import transaction
@@ -120,6 +120,10 @@ def fault_view(request, slug):
     ctx['comment_form'] = forms.FaultCommentForm
     ctx['can_edit'] = fault.can_be_edited_by(request.user)
     ctx['is_resolver'] = request.user.has_perm(svjis_fault_resolver)
+    ctx['breadcrumbs'] = [
+        {'label': _('Fault reporting'), 'url': reverse(faults_list_view)},
+        {'label': fault.subject},
+    ]
     return render(request, "fault.html", ctx)
 
 
@@ -177,6 +181,8 @@ def faults_fault_create_save_view(request):
             obj.assigned_to_user = None
             obj.closed = False
         obj.save()
+        for f in request.FILES.getlist('gallery'):
+            models.FaultAsset.objects.create(fault_report=obj, description='', file=f, created_by_user=request.user)
         models.FaultReportLog.objects.log_actions(
             request=request,
             form=form,
@@ -234,6 +240,10 @@ def faults_fault_update_view(request):
     with transaction.atomic():
         if form.is_valid():
             form.save()
+            for f in request.FILES.getlist('gallery'):
+                models.FaultAsset.objects.create(
+                    fault_report=instance, description='', file=f, created_by_user=request.user
+                )
             models.FaultReportLog.objects.log_actions(
                 request=request,
                 form=form,
@@ -274,8 +284,12 @@ def faults_fault_update_view(request):
     return redirect(fault_view, slug=instance.slug)
 
 
+def can_manage_fault_assets(user):
+    return user.has_perm(svjis_fault_reporter) or user.has_perm(svjis_fault_resolver)
+
+
 # Faults - FaultAsset
-@permission_required(svjis_fault_reporter)
+@user_passes_test(can_manage_fault_assets)
 @require_POST
 def faults_fault_asset_save_view(request):
     fault_pk = int(request.POST.get('fault_pk'))
@@ -292,12 +306,12 @@ def faults_fault_asset_save_view(request):
     return redirect(reverse('fault', kwargs={'slug': fault.slug}) + '#assets')
 
 
-@permission_required(svjis_fault_reporter)
+@user_passes_test(can_manage_fault_assets)
 @require_GET
 def faults_fault_asset_delete_view(request, pk):
     obj = get_object_or_404(models.FaultAsset, pk=pk)
     fault_slug = obj.fault_report.slug
-    if obj.created_by_user == request.user:
+    if obj.created_by_user == request.user or request.user.has_perm(svjis_fault_resolver):
         obj.delete()
     return redirect(reverse('fault', kwargs={'slug': fault_slug}) + '#assets')
 
@@ -455,6 +469,11 @@ def fault_logs_view(request, slug):
     ctx['tray_menu_items'] = utils.get_tray_menu('faults', request.user)
     ctx['obj'] = fault
     ctx['log'] = log
+    ctx['breadcrumbs'] = [
+        {'label': _('Fault reporting'), 'url': reverse(faults_list_view)},
+        {'label': fault.subject, 'url': reverse(fault_view, args=[fault.slug])},
+        {'label': _('Log')},
+    ]
     return render(request, "fault_log.html", ctx)
 
 

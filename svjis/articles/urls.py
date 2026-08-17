@@ -48,6 +48,16 @@ urlpatterns = [
     ),
     path('redaction_article_save/', views_redaction.redaction_article_save_view, name='redaction_article_save'),
     path(
+        'redaction_article_hide/<int:pk>/',
+        views_redaction.redaction_article_hide_view,
+        name='redaction_article_hide',
+    ),
+    path(
+        'redaction_article_delete/<int:pk>/',
+        views_redaction.redaction_article_delete_view,
+        name='redaction_article_delete',
+    ),
+    path(
         'redaction_article_notifications/<int:pk>/',
         views_redaction.redaction_article_notifications_view,
         name='redaction_article_notifications',
@@ -191,7 +201,7 @@ urlpatterns = [
         name='admin_building_unit_owners_save',
     ),
     path(
-        'admin_building_unit_owners_delete/<int:pk>/<int:owner>/',
+        'admin_building_unit_owners_delete/<int:pk>/<str:role>/<int:user>/',
         views_admin.admin_building_unit_owners_delete_view,
         name='admin_building_unit_owners_delete',
     ),
@@ -207,7 +217,7 @@ urlpatterns = [
     path('admin_user_owns/<int:pk>/', views_admin.admin_user_owns_view, name='admin_user_owns'),
     path('admin_user_owns_save', views_admin.admin_user_owns_save_view, name='admin_user_owns_save'),
     path(
-        'admin_user_owns_delete/<int:pk>/<int:owner>/',
+        'admin_user_owns_delete/<int:pk>/<int:unit>/<str:role>/',
         views_admin.admin_user_owns_delete_view,
         name='admin_user_owns_delete',
     ),
@@ -231,7 +241,6 @@ urlpatterns = [
     path('login_page/', views.login_page_view, name='login_page'),
     path('lost_password/', views_personal_settings.lost_password_view, name='lost_password'),
     path('lost_password_send/', views_personal_settings.lost_password_send_view, name='lost_password_send'),
-    path('tinymce/', include('tinymce.urls')),
     path('i18n/', include('django.conf.urls.i18n')),  # Language switching
     path(
         "media/articles/<str:slug>/cover/<str:filename>",

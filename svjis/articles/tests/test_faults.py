@@ -1,3 +1,4 @@
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
@@ -202,3 +203,48 @@ class FaultsTest(UserDataMixin, PreferencesDataMixin, TestCase):
 
         fault.refresh_from_db()
         self.assertEqual(fault.closed, False)
+
+    # Gallery: images can be uploaded when creating a fault
+    def test_create_fault_with_gallery(self):
+        self.client.login(username='peter', password=self.u_peter_password)
+        response = self.client.post(
+            self.create_url,
+            {
+                'pk': 0,
+                'subject': 'test',
+                'description': 'test',
+                'created_by_user': '',
+                'gallery': SimpleUploadedFile('foto.jpg', b'fake-jpg', content_type='image/jpeg'),
+            },
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        fault = response.context['obj']
+        self.assertEqual(fault.assets.count(), 1)
+        self.assertTrue(fault.image_assets[0].file.name.startswith(f'faults/{fault.slug}/'))
+
+    def test_create_fault_without_gallery(self):
+        self.client.login(username='peter', password=self.u_peter_password)
+        fault = self.create_fault_and_get_created_by(
+            "peter", self.u_peter_password, {'pk': 0, 'subject': 'test', 'description': 'test'}
+        )
+        self.assertEqual(fault.assets.count(), 0)
+
+    # Gallery: images can be uploaded when updating a fault
+    def test_update_fault_with_gallery(self):
+        self.client.login(username='jiri', password=self.u_jiri_password)
+        response = self.client.post(
+            self.update_url,
+            {
+                'pk': self.fault.pk,
+                'subject': self.fault.subject,
+                'description': self.fault.description,
+                'created_by_user': self.fault.created_by_user.pk,
+                'gallery': SimpleUploadedFile('foto.jpg', b'fake-jpg', content_type='image/jpeg'),
+            },
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        self.fault.refresh_from_db()
+        self.assertEqual(self.fault.assets.count(), 1)
+        self.assertTrue(self.fault.image_assets[0].file.name.startswith(f'faults/{self.fault.slug}/'))

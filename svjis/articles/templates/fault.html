@@ -4,6 +4,8 @@
 
 {% block content %}
 
+{% include 'includes/breadcrumbs.html' %}
+
 <h1 class="page-title">{{ header }}</h1>
 
 <div class="article-detail">
@@ -46,7 +48,18 @@
         {{ obj.description|highlight:search|safe }}
     </div>
 
-    {% if obj.assets %}
+    {% if obj.image_assets %}
+    <h2 id="gallery" class="comment-title">{% translate 'Gallery' %}</h2>
+    <div class="advert-gallery">
+        {% for a in obj.image_assets %}
+        <a class="advert-gallery__item js-lightbox" href="/media/{{ a.file }}">
+            <img src="/media/{{ a.file }}" alt="{{ a.description }}">
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if obj.other_assets %}
     <h2 class="comment-title">{% translate 'Assets' %}:</h2>
     <div class="table-wrapper">
     <table class="list">
@@ -54,7 +67,7 @@
             <th class="icon">&nbsp;</th>
             <th>{% translate 'File' %}</th>
         </tr>
-        {% for a in obj.assets %}
+        {% for a in obj.other_assets %}
         <tr>
             <td class="icon"><span class="icon-static">{% icon a.icon %}</span></td>
             <td><a href="/media/{{ a.file }}">{% if a.description %}{{ a.description }}{% else %}{{ a.basename }}{% endif %}</a></td>
@@ -91,9 +104,25 @@
     </form>
     {% endif %}
 
-    <div class="back_to_list">
-        <a class="secondary-button" href="{% url 'faults_list' %}"><<&nbsp{% translate 'Back to fault list' %}</a>
-    </div>
+    {% if perms.articles.svjis_fault_reporter or perms.articles.svjis_fault_resolver %}
+    <h2 id="assets" class="comment-title">{% translate 'Attachments' %}:</h2>
+    <form action="{% url 'faults_fault_asset_save' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="fault_pk" value="{{ obj.pk }}">
+        <p>
+            <label class="label" for="{{ asset_form.description.auto_id }}">{{ asset_form.description.label }}</label><br>
+            {{ asset_form.description }}
+        </p>
+        <p>
+            <label class="label" for="{{ asset_form.file.auto_id }}">{{ asset_form.file.label }}</label><br>
+            {{ asset_form.file }}
+        </p>
+        <p>
+            <input class="black-submit" id="submit2" type="submit" value="{% translate 'Upload' %}" />
+        </p>
+    </form>
+    {% endif %}
+
 </div>
 
 {% endblock content %}

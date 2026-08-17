@@ -27,6 +27,10 @@ from .permissions import (
     svjis_edit_article_news,
     svjis_edit_useful_link,
 )
+from urllib.parse import quote
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
+from .templatetags.article_filters import highlight, yes_no
 
 
 def get_side_menu(active_item, user):
@@ -97,11 +101,55 @@ def get_article_submenu(parent, menu_items, level):
 @permission_required(svjis_edit_article_menu)
 @require_GET
 def redaction_menu_view(request):
+    columns = [
+        {'key': 'name', 'label': _('Name')},
+        {'key': 'parent', 'label': _('Parent')},
+        {'key': 'level', 'label': _('Level')},
+        {'key': 'hide', 'label': _('Hide')},
+        {'key': 'articles', 'label': _('Articles')},
+    ]
+    rows = []
+    for obj in get_article_menu():
+        actions = [
+            {'url': reverse('redaction_menu_edit', args=[obj['item'].pk]), 'icon': 'edit', 'label': _('Edit')},
+        ]
+        if obj['articles'] == 0:
+            actions.append(
+                {
+                    'url': reverse('redaction_menu_delete', args=[obj['item'].pk]),
+                    'icon': 'delete',
+                    'label': _('Delete'),
+                    'danger': True,
+                    'confirm': f"{_('Do you want to delete')} {obj['item'].description} ?",
+                }
+            )
+        name = escape(obj['item'].description)
+        if obj['level'] > 1:
+            name = f'<span style="background-color:#f1948a;">{name}</span>'
+        rows.append(
+            {
+                'url': reverse('redaction_menu_edit', args=[obj['item'].pk]),
+                'cells': {
+                    'name': mark_safe('&nbsp;' * (3 * obj['level']) + name),
+                    'parent': obj['item'].parent.description if obj['item'].parent else '',
+                    'level': obj['level'],
+                    'hide': yes_no(obj['item'].hide),
+                    'articles': obj['articles'],
+                },
+                'actions': actions,
+            }
+        )
+
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Redaction")
     ctx['aside_menu_items'] = get_side_menu('menu', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('redaction', request.user)
     ctx['object_list'] = get_article_menu()
+    ctx['columns'] = columns
+    ctx['rows'] = rows
+    ctx['table_id'] = 'menu'
+    ctx['desc_id'] = 'menu'
+    ctx['list_search'] = True
     return render(request, "redaction_menu.html", ctx)
 
 
@@ -185,6 +233,56 @@ def redaction_article_view(request):
         article_list = paginator.page(paginator.num_pages)
     page_parameter = '' if search == '' else f"search={search}"
 
+    columns = [
+        {'key': 'header', 'label': _('Article')},
+        {'key': 'menu', 'label': _('Menu'), 'hide_on_mobile': True},
+        {'key': 'author', 'label': _('Author'), 'hide_on_mobile': True},
+        {'key': 'date', 'label': _('Date'), 'hide_on_mobile': True},
+        {'key': 'published', 'label': _('Published'), 'hide_on_mobile': True},
+    ]
+    rows = []
+    for a in article_list:
+        url = reverse('article', args=[a.slug])
+        if search:
+            url += '?search=' + quote(search)
+        rows.append(
+            {
+                'url': url,
+                'cells': {
+                    'header': highlight(a.header, search),
+                    'menu': a.menu.description,
+                    'author': f"{a.author.first_name} {a.author.last_name}",
+                    'date': dateformat.format(a.published_date, 'd.m.Y') if a.published_date else '',
+                    'published': yes_no(a.published),
+                },
+                'actions': [
+                    {
+                        'url': reverse('redaction_article_edit', args=[a.pk]),
+                        'icon': 'edit',
+                        'label': _('Edit'),
+                    },
+                    {
+                        'url': reverse('redaction_article_notifications', args=[a.pk]),
+                        'icon': 'email',
+                        'label': _('Send notifications'),
+                    },
+                    {
+                        'url': reverse('redaction_article_hide', args=[a.pk]),
+                        'icon': 'view',
+                        'label': _('Hide'),
+                        'confirm': f"{_('Do you want to hide')} {a.header} ?",
+                    },
+                    {
+                        'url': reverse('redaction_article_delete', args=[a.pk]),
+                        'icon': 'delete',
+                        'label': _('Delete'),
+                        'danger': True,
+                        'confirm': f"{_('Do you want to delete')} {a.header} ?",
+                    },
+                ],
+            }
+        )
+
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Redaction")
     ctx['is_paginated'] = is_paginated
@@ -196,6 +294,11 @@ def redaction_article_view(request):
     ctx['aside_menu_items'] = get_side_menu('article', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('redaction', request.user)
     ctx['object_list'] = article_list
+    ctx['columns'] = columns
+    ctx['rows'] = rows
+    ctx['table_id'] = 'articles'
+    ctx['desc_id'] = 'articles'
+    ctx['list_search'] = False
     return render(request, "redaction_article.html", ctx)
 
 
@@ -259,6 +362,23 @@ def redaction_article_save_view(request):
             messages.error(request, f"{_('Form validation error')}: {error}")
 
     return redirect(reverse('redaction_article_edit', kwargs={'pk': pk}))
+
+
+@permission_required(svjis_edit_article)
+@require_GET
+def redaction_article_hide_view(request, pk):
+    article = get_object_or_404(models.Article, pk=pk)
+    article.published = False
+    article.save()
+    return redirect(redaction_article_view)
+
+
+@permission_required(svjis_edit_article)
+@require_GET
+def redaction_article_delete_view(request, pk):
+    article = get_object_or_404(models.Article, pk=pk)
+    article.delete()
+    return redirect(redaction_article_view)
 
 
 def get_users_for_notification(article):
@@ -327,7 +447,7 @@ def redaction_article_asset_save_view(request):
 @permission_required(svjis_edit_article)
 @require_POST
 def redaction_article_image_upload_view(request):
-    """Endpoint for images inserted via the TinyMCE editor in the article body.
+    """Endpoint for images inserted via the HugeRTE editor in the article body.
 
     Stores the image as an ArticleAsset and returns its URL as JSON:
     {"location": "/media/..."}.
@@ -378,6 +498,36 @@ def redaction_news_view(request):
     except InvalidPage:
         news_list = paginator.page(paginator.num_pages)
 
+    columns = [
+        {'key': 'date', 'label': _('Date'), 'hide_on_mobile': True},
+        {'key': 'author', 'label': _('Author'), 'hide_on_mobile': True},
+        {'key': 'published', 'label': _('Published')},
+        {'key': 'body', 'label': _('Body')},
+    ]
+    rows = []
+    for n in news_list:
+        rows.append(
+            {
+                'url': reverse('redaction_news_edit', args=[n.pk]),
+                'cells': {
+                    'date': dateformat.format(n.created_date, 'd.m.Y H:i'),
+                    'author': f"{n.author.first_name} {n.author.last_name}",
+                    'published': yes_no(n.published),
+                    'body': mark_safe(n.body),
+                },
+                'actions': [
+                    {'url': reverse('redaction_news_edit', args=[n.pk]), 'icon': 'edit', 'label': _('Edit')},
+                    {
+                        'url': reverse('redaction_news_delete', args=[n.pk]),
+                        'icon': 'delete',
+                        'label': _('Delete'),
+                        'danger': True,
+                        'confirm': f"{_('Do you want to delete this news')}?",
+                    },
+                ],
+            }
+        )
+
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Redaction")
     ctx['is_paginated'] = is_paginated
@@ -386,6 +536,11 @@ def redaction_news_view(request):
     ctx['aside_menu_items'] = get_side_menu('news', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('redaction', request.user)
     ctx['object_list'] = news_list
+    ctx['columns'] = columns
+    ctx['rows'] = rows
+    ctx['table_id'] = 'news'
+    ctx['desc_id'] = 'news'
+    ctx['list_search'] = True
     return render(request, "redaction_news.html", ctx)
 
 
@@ -454,6 +609,40 @@ def redaction_useful_link_view(request):
     except InvalidPage:
         useful_link_list = paginator.page(paginator.num_pages)
 
+    columns = [
+        {'key': 'header', 'label': _('Header')},
+        {'key': 'order', 'label': _('Order')},
+        {'key': 'published', 'label': _('Published')},
+    ]
+    rows = []
+    for l in useful_link_list:
+        rows.append(
+            {
+                'url': reverse('redaction_useful_link_edit', args=[l.pk]),
+                'cells': {
+                    'header': mark_safe(
+                        f'<a href="{escape(l.link)}" onclick="event.stopPropagation()">{escape(l.header)}</a>'
+                    ),
+                    'order': l.order,
+                    'published': yes_no(l.published),
+                },
+                'actions': [
+                    {
+                        'url': reverse('redaction_useful_link_edit', args=[l.pk]),
+                        'icon': 'edit',
+                        'label': _('Edit'),
+                    },
+                    {
+                        'url': reverse('redaction_useful_link_delete', args=[l.pk]),
+                        'icon': 'delete',
+                        'label': _('Delete'),
+                        'danger': True,
+                        'confirm': f"{_('Do you want to delete this useful link')}?",
+                    },
+                ],
+            }
+        )
+
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Redaction")
     ctx['is_paginated'] = is_paginated
@@ -462,6 +651,11 @@ def redaction_useful_link_view(request):
     ctx['aside_menu_items'] = get_side_menu('links', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('redaction', request.user)
     ctx['object_list'] = useful_link_list
+    ctx['columns'] = columns
+    ctx['rows'] = rows
+    ctx['table_id'] = 'links'
+    ctx['desc_id'] = 'links'
+    ctx['list_search'] = True
     return render(request, "redaction_useful_link.html", ctx)
 
 
@@ -527,6 +721,52 @@ def redaction_survey_view(request):
     except InvalidPage:
         survey_list = paginator.page(paginator.num_pages)
 
+    columns = [
+        {'key': 'description', 'label': _('Description')},
+        {'key': 'starting_date', 'label': _('Starting date'), 'hide_on_mobile': True},
+        {'key': 'ending_date', 'label': _('Ending date'), 'hide_on_mobile': True},
+        {'key': 'author', 'label': _('Author'), 'hide_on_mobile': True},
+        {'key': 'published', 'label': _('Published')},
+    ]
+    rows = []
+    for s in survey_list:
+        rows.append(
+            {
+                'url': reverse('redaction_survey_edit', args=[s.pk]),
+                'cells': {
+                    'description': mark_safe(s.description),
+                    'starting_date': dateformat.format(s.starting_date, 'd.m.Y'),
+                    'ending_date': dateformat.format(s.ending_date, 'd.m.Y'),
+                    'author': f"{s.author.first_name} {s.author.last_name}",
+                    'published': yes_no(s.published),
+                },
+                'actions': [
+                    {
+                        'url': reverse('redaction_survey_edit', args=[s.pk]),
+                        'icon': 'edit',
+                        'label': _('Edit'),
+                    },
+                    {
+                        'url': reverse('redaction_survey_results', args=[s.pk]),
+                        'icon': 'chart',
+                        'label': _('Results'),
+                    },
+                    {
+                        'url': reverse('redaction_survey_results_export_to_excel', args=[s.pk]),
+                        'icon': 'excel',
+                        'label': _('Export results to Excel'),
+                    },
+                    {
+                        'url': reverse('redaction_survey_delete', args=[s.pk]),
+                        'icon': 'delete',
+                        'label': _('Delete'),
+                        'danger': True,
+                        'confirm': f"{_('Do you want to delete this survey')} ?",
+                    },
+                ],
+            }
+        )
+
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Redaction")
     ctx['is_paginated'] = is_paginated
@@ -535,6 +775,11 @@ def redaction_survey_view(request):
     ctx['aside_menu_items'] = get_side_menu('surveys', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('redaction', request.user)
     ctx['object_list'] = survey_list
+    ctx['columns'] = columns
+    ctx['rows'] = rows
+    ctx['table_id'] = 'survey'
+    ctx['desc_id'] = 'survey'
+    ctx['list_search'] = True
     return render(request, "redaction_survey.html", ctx)
 
 

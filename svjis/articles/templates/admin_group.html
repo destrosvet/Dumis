@@ -5,30 +5,15 @@
 {% block content %}
 
 <h1 class="page-title" id="groups">{% translate 'Group' %}</h1>
-<a class="btn--primary" href="{% url 'admin_group_edit' pk=0 %}">{% translate 'Create new group' %}</a>
 
-<div class="table-wrapper">
-<table class="list" aria-describedby="groups">
-    <tr>
-        <th>&nbsp;</th>
-        <th class="icon">&nbsp;</th>
-        <th class="icon">&nbsp;</th>
-        <th>{% translate 'Name' %}</th>
-        <th class="icon">&nbsp;</th>
-    </tr>
-
-    {% if object_list %}
-    {% for obj in object_list %}
-    <tr class="row-link" onclick="location.href='{% url 'admin_group_edit' pk=obj.pk %}'">
-        <td>{{ forloop.counter }}</td>
-        <td class="icon"><a class="icon-btn" title="{% translate 'List of users' %}" onclick="event.stopPropagation()" href="{% url 'admin_user' %}?group_filter={{ obj.pk }}">{% icon 'user' %}</a></td>
-        <td class="icon"><a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="event.stopPropagation(); if (!confirm('{% translate 'Do you want to delete' %} {{ obj.name }} ?')) return false;" href="{% url 'admin_group_delete' pk=obj.id %}">{% icon 'delete' %}</a></td>
-        <td>{{ obj.name }}</td>
-        <td class="icon"><a class="icon-btn" title="{% translate 'Edit' %}" onclick="event.stopPropagation()" href="{% url 'admin_group_edit' pk=obj.pk %}">{% icon 'edit' %}</a></td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
+<div class="filter-container">
+    <div class="filter-item">
+        <p>
+            <a class="btn--primary" href="{% url 'admin_group_edit' pk=0 %}">{% translate 'Create new group' %}</a>&nbsp;
+        </p>
+    </div>
 </div>
+
+{% include 'includes/admin_list_table.html' %}
 
 {% endblock content %}
