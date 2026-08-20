@@ -65,6 +65,7 @@ class UserDataMixin(PreferencesDataMixin):
                 PermissionFactory(codename="svjis_edit_admin_groups"),
                 PermissionFactory(codename="svjis_view_personal_menu"),
                 PermissionFactory(codename="svjis_edit_admin_preferences"),
+                PermissionFactory(codename="svjis_edit_admin_custom_fields"),
                 PermissionFactory(codename="svjis_edit_admin_company"),
                 PermissionFactory(codename="svjis_edit_admin_building"),
                 PermissionFactory(codename="svjis_view_phonelist"),

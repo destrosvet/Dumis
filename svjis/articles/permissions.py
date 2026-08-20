@@ -40,3 +40,4 @@ svjis_edit_admin_building = "articles.svjis_edit_admin_building"  # Can edit Bui
 svjis_edit_admin_users = "articles.svjis_edit_admin_users"  # Can edit Users
 svjis_edit_admin_groups = "articles.svjis_edit_admin_groups"  # Can edit Groups
 svjis_edit_admin_preferences = "articles.svjis_edit_admin_preferences"  # Can edit Preferences
+svjis_edit_admin_custom_fields = "articles.svjis_edit_admin_custom_fields"  # Can edit Custom fields

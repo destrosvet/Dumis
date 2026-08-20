@@ -33,6 +33,12 @@
     </p>
     {% endif %}
 
+    {% if custom_fields %}
+    <table class="detail no-border">
+        {% include 'includes/custom_fields_detail.html' %}
+    </table>
+    {% endif %}
+
     {% if obj.image_assets %}
     <h2 id="gallery" class="comment-title">{% translate 'Gallery' %}</h2>
     <div class="advert-gallery">

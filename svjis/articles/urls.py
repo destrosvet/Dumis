@@ -236,6 +236,16 @@ urlpatterns = [
         views_admin.admin_preferences_delete_view,
         name='admin_preferences_delete',
     ),
+    path('admin_custom_field/', views_admin.admin_custom_field_view, name='admin_custom_field'),
+    path(
+        'admin_custom_field_edit/<int:pk>/', views_admin.admin_custom_field_edit_view, name='admin_custom_field_edit'
+    ),
+    path('admin_custom_field_save/', views_admin.admin_custom_field_save_view, name='admin_custom_field_save'),
+    path(
+        'admin_custom_field_delete/<int:pk>/',
+        views_admin.admin_custom_field_delete_view,
+        name='admin_custom_field_delete',
+    ),
     path('admin_messages/', views_admin.admin_messages_view, name='admin_messages'),
     path('admin_about/', views_admin.admin_about_view, name='admin_about'),
     path('login_page/', views.login_page_view, name='login_page'),

@@ -1,0 +1,13 @@
+{% load i18n %}
+{% for cf in custom_fields %}
+<tr>
+    <th scope="row">{{ cf.definition.name }}</th>
+    <td>
+        {% if cf.definition.field_type == 'boolean' %}
+        {% if cf.value %}{% translate 'Yes' %}{% else %}{% translate 'No' %}{% endif %}
+        {% else %}
+        {{ cf.value|default:"—" }}
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}

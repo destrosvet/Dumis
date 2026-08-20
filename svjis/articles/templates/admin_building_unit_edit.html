@@ -5,41 +5,61 @@
 {% block content %}
 
 <h1 class="page-title">{% translate 'Building unit' %}</h1>
-<form action="{% url 'admin_building_unit_save' %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="pk" value="{{ pk }}">
 
-    <fieldset>
-        <legend>{% translate 'Building unit' %}</legend>
-        <p>
-            <label class="common-label" for="{{ form.type.auto_id }}">{{ form.type.label }}</label>
-            {{ form.type }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ form.entrance.auto_id }}">{{ form.entrance.label }}</label>
-            {{ form.entrance }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ form.registration_id.auto_id }}">{{ form.registration_id.label }}</label>
-            {{ form.registration_id }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ form.description.auto_id }}">{{ form.description.label }}</label>
-            {{ form.description }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ form.numerator.auto_id }}">{{ form.numerator.label }}</label>
-            {{ form.numerator }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ form.denominator.auto_id }}">{{ form.denominator.label }}</label>
-            {{ form.denominator }}
-        </p>
-    </fieldset>
+<div class="edit-layout">
 
-    <p>
-        <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
-    </p>
-</form>
+    <form id="admin-building-unit-form" action="{% url 'admin_building_unit_save' %}" method="post" class="edit-main">
+        {% csrf_token %}
+        <input type="hidden" name="pk" value="{{ pk }}">
+
+        <fieldset>
+            <legend>{% translate 'Building unit' %}</legend>
+            <p>
+                <label class="common-label" for="{{ form.type.auto_id }}">{{ form.type.label }}</label>
+                {{ form.type }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ form.entrance.auto_id }}">{{ form.entrance.label }}</label>
+                {{ form.entrance }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ form.registration_id.auto_id }}">{{ form.registration_id.label }}</label>
+                {{ form.registration_id }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ form.description.auto_id }}">{{ form.description.label }}</label>
+                {{ form.description }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ form.numerator.auto_id }}">{{ form.numerator.label }}</label>
+                {{ form.numerator }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ form.denominator.auto_id }}">{{ form.denominator.label }}</label>
+                {{ form.denominator }}
+            </p>
+        </fieldset>
+    </form>
+
+    <div class="edit-sidebar">
+
+        <div class="card">
+            <div class="card__body">
+                <input class="btn--primary btn--block" id="submit" form="admin-building-unit-form" type="submit" value="{% translate 'Save' %}" />
+            </div>
+        </div>
+
+        {% if custom_fields %}
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Custom fields' %}</div>
+            <div class="card__body">
+                {% include 'includes/custom_fields_form.html' with form_attr='admin-building-unit-form' %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
 
 {% endblock content %}

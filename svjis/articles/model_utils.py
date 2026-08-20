@@ -1,7 +1,11 @@
+import io
 import os
 import re
+from django.conf import settings
+from django.core.files.base import ContentFile
 from django.template.defaultfilters import slugify
 from django.utils import timezone
+from PIL import Image, ImageOps
 
 
 def unique_slugify(instance, value, slug_field_name='slug', queryset=None, slug_separator='-'):
@@ -90,6 +94,47 @@ def get_asset_icon(basename):
         return 'video'
     else:
         return 'file'
+
+
+def resize_uploaded_image(uploaded_file):
+    """
+    Downscale and re-encode an uploaded image to a sane web size, returning a new
+    ContentFile (same name as the original) ready to be assigned to a FileField.
+
+    Animated GIFs are passed through untouched - collapsing them to a single frame
+    via Pillow's default save would silently destroy the animation.
+    """
+    max_dimension = getattr(settings, 'SVJIS_IMAGE_MAX_DIMENSION', 1920)
+    quality = getattr(settings, 'SVJIS_IMAGE_QUALITY', 85)
+
+    uploaded_file.seek(0)
+    image = Image.open(uploaded_file)
+    image_format = (image.format or 'JPEG').upper()
+
+    if image_format == 'GIF':
+        uploaded_file.seek(0)
+        return ContentFile(uploaded_file.read(), name=uploaded_file.name)
+
+    image = ImageOps.exif_transpose(image)
+    if image.width <= max_dimension and image.height <= max_dimension:
+        uploaded_file.seek(0)
+        return ContentFile(uploaded_file.read(), name=uploaded_file.name)
+
+    image.thumbnail((max_dimension, max_dimension), Image.LANCZOS)
+
+    save_kwargs = {}
+    if image_format in ('JPEG', 'JPG'):
+        if image.mode not in ('RGB', 'L'):
+            image = image.convert('RGB')
+        save_kwargs = {'quality': quality, 'optimize': True}
+    elif image_format == 'WEBP':
+        save_kwargs = {'quality': quality}
+    elif image_format == 'PNG':
+        save_kwargs = {'optimize': True}
+
+    buffer = io.BytesIO()
+    image.save(buffer, format=image_format, **save_kwargs)
+    return ContentFile(buffer.getvalue(), name=uploaded_file.name)
 
 
 def get_age_in_minutes(timestamp_from_model) -> int | None:

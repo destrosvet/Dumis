@@ -1,13 +1,21 @@
+import io
 import tempfile
 from datetime import date
 
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from PIL import Image
 
 from articles import models
 from .factories import PermissionFactory
 from .testdata import ArticleDataMixin
+
+
+def make_image_bytes(width, height, format='PNG'):
+    buffer = io.BytesIO()
+    Image.new('RGB', (width, height), color=(120, 140, 160)).save(buffer, format=format)
+    return buffer.getvalue()
 
 
 class ArticleListTest(ArticleDataMixin, TestCase):
@@ -208,7 +216,9 @@ class ArticleImageUploadTest(ArticleDataMixin, TestCase):
         self.addCleanup(self._media_override.disable)
         self.addCleanup(self._media_dir.cleanup)
 
-    def upload(self, article_pk, filename, content=b'fake-image-data'):
+    def upload(self, article_pk, filename, content=None):
+        if content is None:
+            content = make_image_bytes(100, 80)
         file = SimpleUploadedFile(filename, content)
         return self.client.post(
             reverse('redaction_article_image_upload'),
@@ -226,10 +236,37 @@ class ArticleImageUploadTest(ArticleDataMixin, TestCase):
         self.assertEqual(response.json()['location'], f'/media/{asset.file}')
         self.assertEqual(asset.description, 'picture.png')
 
+    def test_upload_resizes_oversized_image(self):
+        self.client.login(username='jarda', password=self.u_jarda_password)
+
+        response = self.upload(self.article_for_all.pk, 'huge.jpg', make_image_bytes(4928, 3264, format='JPEG'))
+        self.assertEqual(response.status_code, 200)
+
+        asset = models.ArticleAsset.objects.get(article=self.article_for_all)
+        with Image.open(asset.file.path) as saved:
+            self.assertLessEqual(max(saved.size), 1920)
+
+    def test_upload_leaves_small_image_untouched(self):
+        self.client.login(username='jarda', password=self.u_jarda_password)
+
+        response = self.upload(self.article_for_all.pk, 'small.png', make_image_bytes(100, 80))
+        self.assertEqual(response.status_code, 200)
+
+        asset = models.ArticleAsset.objects.get(article=self.article_for_all)
+        with Image.open(asset.file.path) as saved:
+            self.assertEqual(saved.size, (100, 80))
+
     def test_upload_rejects_non_image(self):
         self.client.login(username='jarda', password=self.u_jarda_password)
 
         response = self.upload(self.article_for_all.pk, 'document.pdf')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(models.ArticleAsset.objects.count(), 0)
+
+    def test_upload_rejects_corrupt_image_content(self):
+        self.client.login(username='jarda', password=self.u_jarda_password)
+
+        response = self.upload(self.article_for_all.pk, 'picture.png', b'not-actually-a-png')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(models.ArticleAsset.objects.count(), 0)
 
@@ -246,6 +283,45 @@ class ArticleImageUploadTest(ArticleDataMixin, TestCase):
         response = self.upload(self.article_for_all.pk, 'picture.png')
         self.assertEqual(response.status_code, 302)
         self.assertEqual(models.ArticleAsset.objects.count(), 0)
+
+
+class ArticleCoverImageTest(ArticleDataMixin, TestCase):
+    def setUp(self):
+        self._media_dir = tempfile.TemporaryDirectory()
+        self._media_override = override_settings(MEDIA_ROOT=self._media_dir.name)
+        self._media_override.enable()
+        self.addCleanup(self._media_override.disable)
+        self.addCleanup(self._media_dir.cleanup)
+        self.client.login(username='jarda', password=self.u_jarda_password)
+
+    def save_article(self, cover_image):
+        return self.client.post(
+            reverse('redaction_article_save'),
+            {
+                'pk': 0,
+                'header': 'Cover image test',
+                'perex': 'perex',
+                'body': 'body',
+                'menu': self.menu_docs.pk,
+                'published_date': '2026-01-01',
+                'cover_image': cover_image,
+            },
+        )
+
+    def test_oversized_cover_image_is_resized(self):
+        cover = SimpleUploadedFile('cover.jpg', make_image_bytes(4928, 3264, format='JPEG'), content_type='image/jpeg')
+        response = self.save_article(cover)
+        self.assertEqual(response.status_code, 302)
+
+        article = models.Article.objects.get(header='Cover image test')
+        with Image.open(article.cover_image.path) as saved:
+            self.assertLessEqual(max(saved.size), 1920)
+
+    def test_corrupt_cover_image_does_not_crash_save(self):
+        cover = SimpleUploadedFile('cover.jpg', b'not-actually-a-jpeg', content_type='image/jpeg')
+        response = self.save_article(cover)
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(models.Article.objects.filter(header='Cover image test').exists())
 
 
 class RedactionArticleListTest(ArticleDataMixin, TestCase):

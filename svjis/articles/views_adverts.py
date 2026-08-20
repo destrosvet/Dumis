@@ -1,5 +1,6 @@
+import os
 from pathlib import PurePosixPath
-from . import utils, forms, models
+from . import utils, forms, models, views_admin
 from django.conf import settings
 from django.contrib.auth.decorators import permission_required
 from django.contrib import messages
@@ -9,6 +10,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_POST
+from .model_utils import PICTURE_ICONS, resize_uploaded_image
 from .permissions import svjis_view_adverts_menu, svjis_add_advert
 
 
@@ -101,6 +103,7 @@ def adverts_edit_view(request, pk):
             raise Http404
         form = forms.AdvertForm(instance=i)
     else:
+        i = None
         form = forms.AdvertForm({'phone': request.user.userprofile.phone, 'email': request.user.email})
 
     ctx = utils.get_context()
@@ -108,6 +111,7 @@ def adverts_edit_view(request, pk):
     ctx['form'] = form
     ctx['pk'] = pk
     ctx['asset_form'] = forms.AdvertAssetForm
+    ctx['custom_fields'] = views_admin.get_custom_fields_context(models.Advert, i)
     ctx['aside_menu_items'] = get_side_menu(None, request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('adverts', request.user)
     return render(request, "advert_edit.html", ctx)
@@ -129,9 +133,22 @@ def adverts_save_view(request):
         obj = form.save(commit=False)
         if not pk:
             obj.created_by_user = request.user
+        if 'cover_image' in request.FILES:
+            try:
+                resized = resize_uploaded_image(obj.cover_image)
+            except OSError:
+                pass
+            else:
+                obj.cover_image.save(resized.name, resized, save=False)
         obj.save()
         for f in request.FILES.getlist('gallery'):
+            try:
+                f = resize_uploaded_image(f)
+            except OSError:
+                pass
             models.AdvertAsset.objects.create(advert=obj, file=f, created_by_user=request.user)
+        for error in views_admin.save_custom_fields(request, obj):
+            messages.error(request, error)
         messages.info(request, _('Saved'))
         return redirect(adverts_edit_view, pk=obj.pk)
     else:
@@ -164,6 +181,8 @@ def adverts_detail_view(request, pk):
     ctx['tray_menu_items'] = utils.get_tray_menu('adverts', request.user)
     ctx['obj'] = advert
     ctx['web_title'] = advert.header
+    # Public page - only show fields the advert owner actually filled in, not every defined field.
+    ctx['custom_fields'] = [cf for cf in views_admin.get_custom_fields_context(models.Advert, advert) if cf['value']]
     return render(request, "advert_detail.html", ctx)
 
 
@@ -180,6 +199,14 @@ def adverts_asset_save_view(request):
         obj = form.save(commit=False)
         obj.advert = advert
         obj.created_by_user = request.user
+        extension = os.path.splitext(obj.file.name)[1][1:].lower()
+        if extension in PICTURE_ICONS:
+            try:
+                resized = resize_uploaded_image(obj.file)
+            except OSError:
+                pass
+            else:
+                obj.file.save(resized.name, resized, save=False)
         obj.save()
         messages.info(request, _('Saved'))
     else:

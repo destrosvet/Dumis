@@ -6,6 +6,8 @@ from datetime import date
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User, Group
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
 from django.utils.translation import gettext_lazy as _
 from .permissions import svjis_answer_survey, svjis_fault_reporter, svjis_fault_resolver
@@ -690,3 +692,71 @@ class AdvertAsset(models.Model):
 
     class Meta:
         ordering = ['-id']
+
+
+# Custom fields
+#####################
+
+
+CUSTOM_FIELD_MODELS = [
+    (User, _("User")),
+    (BuildingUnit, _("Building unit")),
+    (Advert, _("Advert")),
+    (Board, _("Board member")),
+    (BuildingEntrance, _("Entrance")),
+    (FaultReport, _("Fault report")),
+]
+
+
+def get_custom_field_model_labels():
+    return {ContentType.objects.get_for_model(model).pk: label for model, label in CUSTOM_FIELD_MODELS}
+
+
+class CustomFieldDefinition(models.Model):
+    TYPE_TEXT = 'text'
+    TYPE_NUMBER = 'number'
+    TYPE_ENUM = 'enum'
+    TYPE_DATETIME = 'datetime'
+    TYPE_BOOLEAN = 'boolean'
+    TYPE_CHOICES = (
+        (TYPE_TEXT, _("Text")),
+        (TYPE_NUMBER, _("Number")),
+        (TYPE_ENUM, _("Choice list")),
+        (TYPE_DATETIME, _("Date/time")),
+        (TYPE_BOOLEAN, _("Yes/No")),
+    )
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, verbose_name=_("Entity type"))
+    name = models.CharField(_("Name"), max_length=50)
+    field_type = models.CharField(_("Type"), max_length=10, choices=TYPE_CHOICES, default=TYPE_TEXT)
+    enum_options = models.CharField(
+        _("Options (comma-separated)"),
+        max_length=500,
+        blank=True,
+        help_text=_("Only used when Type is 'Choice list', e.g.: malý,střední,velký"),
+    )
+
+    def enum_choices(self):
+        return [o.strip() for o in self.enum_options.split(',') if o.strip()]
+
+    def __str__(self):
+        return f"CustomFieldDefinition: {self.content_type} - {self.name}"
+
+    class Meta:
+        unique_together = ('content_type', 'name')
+        ordering = ['content_type', 'name']
+        permissions = (("svjis_edit_admin_custom_fields", _("Can edit Custom fields")),)
+
+
+class CustomFieldValue(models.Model):
+    field_definition = models.ForeignKey(CustomFieldDefinition, on_delete=models.CASCADE, related_name='values')
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+    value = models.CharField(_("Value"), max_length=255)
+
+    def __str__(self):
+        return f"CustomFieldValue: {self.field_definition.name} = {self.value}"
+
+    class Meta:
+        unique_together = ('field_definition', 'content_type', 'object_id')

@@ -15,6 +15,7 @@ dependencies = [
   "django>=6.0.7,<7",
   "django-tinymce>=4.1",
   "openpyxl>=3.1.5",
+  "pillow>=12.3.0",
   "psycopg>=3.3.4",
 ]
 urls.Homepage = "https://svjis.github.io/"

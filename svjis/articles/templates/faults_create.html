@@ -6,7 +6,7 @@
 
 <h1 class="page-title">{% translate 'Fault report' %}</h1>
 
-<form action="{% url 'faults_fault_create_save' %}" method="post" enctype="multipart/form-data">
+<form id="fault-form" action="{% url 'faults_fault_create_save' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="hidden" name="pk" value="{{ pk }}" />
     <p>

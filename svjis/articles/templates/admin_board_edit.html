@@ -5,29 +5,50 @@
 {% block content %}
 
 <h1 class="page-title">{% translate 'Board' %}</h1>
-<form action="{% url 'admin_board_save' %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="pk" value="{{ pk }}">
 
-    <fieldset>
-        <legend>{% translate 'Board' %}</legend>
-        <p>
-            <label class="common-label" for="{{ form.order.auto_id }}">{{ form.order.label }}</label>
-            {{ form.order }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ form.member.auto_id }}">{{ form.member.label }}</label>
-            {{ form.member }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ form.position.auto_id }}">{{ form.position.label }}</label>
-            {{ form.position }}
-        </p>
-    </fieldset>
-    <p>
-        <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
-    </p>
-</form>
+<div class="edit-layout">
+
+    <form id="admin-board-form" action="{% url 'admin_board_save' %}" method="post" class="edit-main">
+        {% csrf_token %}
+        <input type="hidden" name="pk" value="{{ pk }}">
+
+        <fieldset>
+            <legend>{% translate 'Board' %}</legend>
+            <p>
+                <label class="common-label" for="{{ form.order.auto_id }}">{{ form.order.label }}</label>
+                {{ form.order }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ form.member.auto_id }}">{{ form.member.label }}</label>
+                {{ form.member }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ form.position.auto_id }}">{{ form.position.label }}</label>
+                {{ form.position }}
+            </p>
+        </fieldset>
+    </form>
+
+    <div class="edit-sidebar">
+
+        <div class="card">
+            <div class="card__body">
+                <input class="btn--primary btn--block" id="submit" form="admin-board-form" type="submit" value="{% translate 'Save' %}" />
+            </div>
+        </div>
+
+        {% if custom_fields %}
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Custom fields' %}</div>
+            <div class="card__body">
+                {% include 'includes/custom_fields_form.html' with form_attr='admin-board-form' %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
 
 <script>
     $(document).ready(function() {

@@ -5,7 +5,9 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
+from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext as gt
 from django.utils.safestring import mark_safe
@@ -18,6 +20,7 @@ from .permissions import (
     svjis_edit_admin_users,
     svjis_edit_admin_groups,
     svjis_edit_admin_preferences,
+    svjis_edit_admin_custom_fields,
     svjis_edit_admin_company,
     svjis_edit_admin_building,
 )
@@ -77,6 +80,55 @@ def validate_template_placeholders(value, allowed):
     return bad
 
 
+# Custom fields
+#####################
+
+
+def get_custom_fields_context(model_cls, instance):
+    ct = ContentType.objects.get_for_model(model_cls)
+    defs = models.CustomFieldDefinition.objects.filter(content_type=ct).order_by('name')
+    values = {}
+    if instance and instance.pk:
+        values = {
+            v.field_definition_id: v.value
+            for v in models.CustomFieldValue.objects.filter(content_type=ct, object_id=instance.pk)
+        }
+    return [{'definition': d, 'field_name': f'customfield_{d.id}', 'value': values.get(d.id, '')} for d in defs]
+
+
+def save_custom_fields(request, instance):
+    D = models.CustomFieldDefinition
+    ct = ContentType.objects.get_for_model(instance)
+    errors = []
+    for d in D.objects.filter(content_type=ct):
+        field_name = f'customfield_{d.id}'
+        if d.field_type == D.TYPE_BOOLEAN:
+            raw = '1' if request.POST.get(field_name) else ''
+        else:
+            raw = request.POST.get(field_name, '').strip()
+
+        if raw and d.field_type == D.TYPE_NUMBER:
+            try:
+                float(raw.replace(',', '.'))
+            except ValueError:
+                errors.append(_('Field "{}" must be a number.').format(d.name))
+                continue
+        elif raw and d.field_type == D.TYPE_ENUM and raw not in d.enum_choices():
+            errors.append(_('Field "{}" has an invalid value.').format(d.name))
+            continue
+        elif raw and d.field_type == D.TYPE_DATETIME and parse_datetime(raw) is None:
+            errors.append(_('Field "{}" must be a valid date/time.').format(d.name))
+            continue
+
+        if raw:
+            models.CustomFieldValue.objects.update_or_create(
+                field_definition=d, content_type=ct, object_id=instance.pk, defaults={'value': raw}
+            )
+        else:
+            models.CustomFieldValue.objects.filter(field_definition=d, content_type=ct, object_id=instance.pk).delete()
+    return errors
+
+
 def get_side_menu(active_item, user):
     side_menu = [
         {
@@ -126,6 +178,12 @@ def get_side_menu(active_item, user):
             'description': _("Preferences"),
             'link': reverse(admin_preferences_view),
             'active': True if active_item == 'preferences' else False,
+        },
+        {
+            'perms': svjis_edit_admin_custom_fields,
+            'description': _("Custom fields"),
+            'link': reverse(admin_custom_field_view),
+            'active': True if active_item == 'custom_fields' else False,
         },
         {
             'perms': svjis_view_admin_menu,
@@ -230,12 +288,14 @@ def admin_board_edit_view(request, pk):
         i = get_object_or_404(models.Board, pk=pk)
         form = forms.BoardForm(instance=i)
     else:
+        i = None
         form = forms.BoardForm
 
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Administration")
     ctx['form'] = form
     ctx['pk'] = pk
+    ctx['custom_fields'] = get_custom_fields_context(models.Board, i)
     ctx['aside_menu_items'] = get_side_menu('board', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
     return render(request, "admin_board_edit.html", ctx)
@@ -254,6 +314,8 @@ def admin_board_save_view(request):
         obj = form.save(commit=False)
         obj.company = models.Company.objects.get(pk=1)
         obj.save()
+        for error in save_custom_fields(request, obj):
+            messages.error(request, error)
         messages.info(request, _('Saved'))
     else:
         for error in form.errors:
@@ -344,12 +406,14 @@ def admin_entrance_edit_view(request, pk):
         i = get_object_or_404(models.BuildingEntrance, pk=pk)
         form = forms.BuildingEntranceForm(instance=i)
     else:
+        i = None
         form = forms.BuildingEntranceForm
 
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Administration")
     ctx['form'] = form
     ctx['pk'] = pk
+    ctx['custom_fields'] = get_custom_fields_context(models.BuildingEntrance, i)
     ctx['aside_menu_items'] = get_side_menu('entrances', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
     return render(request, "admin_entrance_edit.html", ctx)
@@ -368,6 +432,8 @@ def admin_entrance_save_view(request):
         obj = form.save(commit=False)
         obj.building, _created = models.Building.objects.get_or_create(pk=1)
         obj.save()
+        for error in save_custom_fields(request, obj):
+            messages.error(request, error)
         messages.info(request, _('Saved'))
     else:
         for error in form.errors:
@@ -477,12 +543,14 @@ def admin_building_unit_edit_view(request, pk):
         i = get_object_or_404(models.BuildingUnit, pk=pk)
         form = forms.BuildingUnitForm(instance=i)
     else:
+        i = None
         form = forms.BuildingUnitForm
 
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Administration")
     ctx['form'] = form
     ctx['pk'] = pk
+    ctx['custom_fields'] = get_custom_fields_context(models.BuildingUnit, i)
     ctx['aside_menu_items'] = get_side_menu('units', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
     return render(request, "admin_building_unit_edit.html", ctx)
@@ -501,6 +569,8 @@ def admin_building_unit_save_view(request):
         obj = form.save(commit=False)
         obj.building, _created = models.Building.objects.get_or_create(pk=1)
         obj.save()
+        for error in save_custom_fields(request, obj):
+            messages.error(request, error)
         messages.info(request, _('Saved'))
     else:
         for error in form.errors:
@@ -675,6 +745,7 @@ def admin_user_detail_view(request, pk):
     ctx['usr'] = user
     ctx['profile'] = profile
     ctx['user_group_list'] = user_group_list
+    ctx['custom_fields'] = get_custom_fields_context(User, user)
     ctx['aside_menu_items'] = get_side_menu('users', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
     ctx['breadcrumbs'] = [
@@ -720,6 +791,7 @@ def admin_user_edit_view(request, pk):
     ctx['pk'] = pk
     ctx['unit'] = unit
     ctx['unit_role'] = unit_role
+    ctx['custom_fields'] = get_custom_fields_context(User, instance if pk else None)
     ctx['aside_menu_items'] = get_side_menu('users', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
     return render(request, "admin_user_edit.html", ctx)
@@ -767,6 +839,9 @@ def admin_user_save_view(request):
         if unit_pk and unit_role in (models.BuildingUnitUser.ROLE_OWNER, models.BuildingUnitUser.ROLE_TENANT):
             bu = get_object_or_404(models.BuildingUnit, pk=unit_pk)
             models.BuildingUnitUser.objects.get_or_create(building_unit=bu, user=u, role=unit_role)
+
+        for error in save_custom_fields(request, u):
+            messages.error(request, error)
 
     else:
         for error in user_form.errors:
@@ -1150,6 +1225,98 @@ def admin_preferences_delete_view(request, pk):
     obj = get_object_or_404(models.Preferences, pk=pk)
     obj.delete()
     return redirect(admin_preferences_view)
+
+
+# Administration - Custom fields
+@permission_required(svjis_edit_admin_custom_fields)
+@require_GET
+def admin_custom_field_view(request):
+    definition_list = models.CustomFieldDefinition.objects.select_related('content_type')
+    entity_labels = models.get_custom_field_model_labels()
+    rows = []
+    for d in definition_list:
+        rows.append(
+            {
+                'url': reverse('admin_custom_field_edit', args=[d.pk]),
+                'cells': {
+                    'entity': entity_labels.get(d.content_type_id, str(d.content_type)),
+                    'name': d.name,
+                    'field_type': d.get_field_type_display(),
+                },
+                'actions': [
+                    {'url': reverse('admin_custom_field_edit', args=[d.pk]), 'icon': 'edit', 'label': _('Edit')},
+                    {
+                        'url': reverse('admin_custom_field_delete', args=[d.pk]),
+                        'icon': 'delete',
+                        'label': _('Delete'),
+                        'danger': True,
+                        'confirm': f"{_('Do you want to delete')} {d.name} ?",
+                    },
+                ],
+            }
+        )
+
+    ctx = utils.get_context()
+    ctx['aside_menu_name'] = _("Administration")
+    ctx['aside_menu_items'] = get_side_menu('custom_fields', request.user)
+    ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
+    ctx['object_list'] = definition_list
+    ctx['columns'] = [
+        {'key': 'entity', 'label': _('Entity type')},
+        {'key': 'name', 'label': _('Name')},
+        {'key': 'field_type', 'label': _('Type'), 'hide_on_mobile': True},
+    ]
+    ctx['rows'] = rows
+    ctx['table_id'] = 'custom-field-table'
+    ctx['desc_id'] = 'custom-fields'
+    ctx['list_search'] = True
+    return render(request, "admin_custom_field.html", ctx)
+
+
+@permission_required(svjis_edit_admin_custom_fields)
+@require_GET
+def admin_custom_field_edit_view(request, pk):
+    if pk:
+        i = get_object_or_404(models.CustomFieldDefinition, pk=pk)
+        form = forms.CustomFieldDefinitionForm(instance=i)
+    else:
+        form = forms.CustomFieldDefinitionForm
+
+    ctx = utils.get_context()
+    ctx['aside_menu_name'] = _("Administration")
+    ctx['form'] = form
+    ctx['pk'] = pk
+    ctx['aside_menu_items'] = get_side_menu('custom_fields', request.user)
+    ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
+    return render(request, "admin_custom_field_edit.html", ctx)
+
+
+@permission_required(svjis_edit_admin_custom_fields)
+@require_POST
+def admin_custom_field_save_view(request):
+    pk = int(request.POST['pk'])
+    if not pk:
+        form = forms.CustomFieldDefinitionForm(request.POST)
+    else:
+        instance = get_object_or_404(models.CustomFieldDefinition, pk=pk)
+        form = forms.CustomFieldDefinitionForm(request.POST, instance=instance)
+
+    if not form.is_valid():
+        for error in form.errors:
+            messages.error(request, f"{_('Form validation error')}: {error}")
+        return redirect(admin_custom_field_view)
+
+    form.save()
+    messages.info(request, _('Saved'))
+    return redirect(admin_custom_field_view)
+
+
+@permission_required(svjis_edit_admin_custom_fields)
+@require_GET
+def admin_custom_field_delete_view(request, pk):
+    obj = get_object_or_404(models.CustomFieldDefinition, pk=pk)
+    obj.delete()
+    return redirect(admin_custom_field_view)
 
 
 # Administration - Waiting messages

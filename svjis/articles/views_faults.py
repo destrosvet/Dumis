@@ -1,5 +1,6 @@
+import os
 from pathlib import PurePosixPath
-from . import utils, forms, models
+from . import utils, forms, models, views_admin
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import permission_required, user_passes_test
@@ -12,7 +13,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_POST
+from .model_utils import PICTURE_ICONS, resize_uploaded_image
 from .permissions import svjis_view_fault_menu, svjis_fault_reporter, svjis_fault_resolver, svjis_add_fault_comment
+from .templatetags.article_filters import highlight, highlight_exact
 
 
 def get_side_menu(active_item, user):
@@ -91,6 +94,46 @@ def faults_list_view(request):
         fault_list = paginator.page(paginator.num_pages)
     page_parameter = f'scope={scope}' if search == '' else f"search={search}"
 
+    is_resolver = request.user.has_perm(svjis_fault_resolver)
+
+    rows = []
+    for obj in fault_list:
+        detail_url = reverse('fault', kwargs={'slug': obj.slug})
+        if search:
+            detail_url += f'?search={search}'
+        actions = []
+        if obj.can_be_edited_by(request.user):
+            actions.append({'url': reverse('faults_fault_edit', args=[obj.pk]), 'icon': 'edit', 'label': _('Edit')})
+        actions.append({'url': detail_url, 'icon': 'view', 'label': _('View')})
+        if is_resolver and not obj.closed:
+            actions.append(
+                {
+                    'url': reverse('faults_fault_close_ticket', args=[obj.pk]),
+                    'icon': 'check',
+                    'label': _('Close ticket'),
+                    'confirm': f"{_('Do you want to close ticket')} #{obj.pk} - {obj.subject} ?",
+                }
+            )
+        rows.append(
+            {
+                'url': detail_url,
+                'row_class': 'closed-ticket' if obj.closed else '',
+                'cells': {
+                    'ticket': highlight_exact(str(obj.pk), search),
+                    'date': obj.created_date.strftime('%d.%m.%Y'),
+                    'subject': highlight(obj.subject, search),
+                    'entrance': obj.entrance.description if obj.entrance else '',
+                    'author': f'{obj.created_by_user.first_name} {obj.created_by_user.last_name}',
+                    'resolver': (
+                        f'{obj.assigned_to_user.first_name} {obj.assigned_to_user.last_name}'
+                        if obj.assigned_to_user
+                        else ''
+                    ),
+                },
+                'actions': actions,
+            }
+        )
+
     ctx = utils.get_context()
     ctx['aside_menu_name'] = _("Fault reporting")
     ctx['header'] = header
@@ -102,6 +145,17 @@ def faults_list_view(request):
     ctx['aside_menu_items'] = get_side_menu(scope, request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('faults', request.user)
     ctx['object_list'] = fault_list
+    ctx['columns'] = [
+        {'key': 'ticket', 'label': _('Ticket No.')},
+        {'key': 'date', 'label': _('Date'), 'hide_on_mobile': True},
+        {'key': 'subject', 'label': _('Subject')},
+        {'key': 'entrance', 'label': _('Entrance')},
+        {'key': 'author', 'label': _('Author'), 'hide_on_mobile': True},
+        {'key': 'resolver', 'label': _('Resolver'), 'hide_on_mobile': True},
+    ]
+    ctx['rows'] = rows
+    ctx['table_id'] = 'faults-table'
+    ctx['desc_id'] = 'faults'
     return render(request, "faults_list.html", ctx)
 
 
@@ -140,6 +194,7 @@ def faults_fault_edit_view(request, pk):
     ctx['form'] = form
     ctx['pk'] = pk
     ctx['is_resolver'] = request.user.has_perm(svjis_fault_resolver)
+    ctx['custom_fields'] = views_admin.get_custom_fields_context(models.FaultReport, fault)
     ctx['aside_menu_items'] = get_side_menu('faults', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('faults', request.user)
     return render(request, "faults_edit.html", ctx)
@@ -182,6 +237,10 @@ def faults_fault_create_save_view(request):
             obj.closed = False
         obj.save()
         for f in request.FILES.getlist('gallery'):
+            try:
+                f = resize_uploaded_image(f)
+            except OSError:
+                pass
             models.FaultAsset.objects.create(fault_report=obj, description='', file=f, created_by_user=request.user)
         models.FaultReportLog.objects.log_actions(
             request=request,
@@ -241,9 +300,15 @@ def faults_fault_update_view(request):
         if form.is_valid():
             form.save()
             for f in request.FILES.getlist('gallery'):
+                try:
+                    f = resize_uploaded_image(f)
+                except OSError:
+                    pass
                 models.FaultAsset.objects.create(
                     fault_report=instance, description='', file=f, created_by_user=request.user
                 )
+            for error in views_admin.save_custom_fields(request, instance):
+                messages.error(request, error)
             models.FaultReportLog.objects.log_actions(
                 request=request,
                 form=form,
@@ -299,6 +364,14 @@ def faults_fault_asset_save_view(request):
         obj = form.save(commit=False)
         obj.fault_report = fault
         obj.created_by_user = request.user
+        extension = os.path.splitext(obj.file.name)[1][1:].lower()
+        if extension in PICTURE_ICONS:
+            try:
+                resized = resize_uploaded_image(obj.file)
+            except OSError:
+                pass
+            else:
+                obj.file.save(resized.name, resized, save=False)
         obj.save()
     else:
         for error in form.errors:

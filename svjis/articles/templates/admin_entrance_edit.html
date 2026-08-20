@@ -5,25 +5,45 @@
 {% block content %}
 
 <h1 class="page-title">{% translate 'Entrances' %}</h1>
-<form action="{% url 'admin_entrance_save' %}" method="post">
-    {% csrf_token %}
-    <input type="hidden" name="pk" value="{{ pk }}">
 
-    <fieldset>
-        <legend>{% translate 'Entrance' %}</legend>
-        <p>
-            <label class="common-label" for="{{ form.description.auto_id }}">{{ form.description.label }}</label>
-            {{ form.description }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ form.address.auto_id }}">{{ form.address.label }}</label>
-            {{ form.address }}
-        </p>
-    </fieldset>
+<div class="edit-layout">
 
-    <p>
-        <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
-    </p>
-</form>
+    <form id="admin-entrance-form" action="{% url 'admin_entrance_save' %}" method="post" class="edit-main">
+        {% csrf_token %}
+        <input type="hidden" name="pk" value="{{ pk }}">
+
+        <fieldset>
+            <legend>{% translate 'Entrance' %}</legend>
+            <p>
+                <label class="common-label" for="{{ form.description.auto_id }}">{{ form.description.label }}</label>
+                {{ form.description }}
+            </p>
+            <p>
+                <label class="common-label" for="{{ form.address.auto_id }}">{{ form.address.label }}</label>
+                {{ form.address }}
+            </p>
+        </fieldset>
+    </form>
+
+    <div class="edit-sidebar">
+
+        <div class="card">
+            <div class="card__body">
+                <input class="btn--primary btn--block" id="submit" form="admin-entrance-form" type="submit" value="{% translate 'Save' %}" />
+            </div>
+        </div>
+
+        {% if custom_fields %}
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Custom fields' %}</div>
+            <div class="card__body">
+                {% include 'includes/custom_fields_form.html' with form_attr='admin-entrance-form' %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
 
 {% endblock content %}

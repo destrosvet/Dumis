@@ -17,7 +17,7 @@ from datetime import datetime, timedelta
 import os
 from openpyxl import Workbook
 from openpyxl.styles import Font
-from .model_utils import PICTURE_ICONS
+from .model_utils import PICTURE_ICONS, resize_uploaded_image
 from .user_agent import get_browser, get_os
 from .permissions import (
     svjis_view_redaction_menu,
@@ -341,6 +341,13 @@ def redaction_article_save_view(request):
         obj = form.save(commit=False)
         if not pk:
             obj.author = request.user
+        if 'cover_image' in request.FILES:
+            try:
+                resized = resize_uploaded_image(obj.cover_image)
+            except OSError:
+                pass
+            else:
+                obj.cover_image.save(resized.name, resized, save=False)
         obj.save()
         pk = obj.pk
 
@@ -466,6 +473,11 @@ def redaction_article_image_upload_view(request):
 
     extension = os.path.splitext(file.name)[1][1:].lower()
     if extension not in PICTURE_ICONS:
+        return JsonResponse({'error': gt('Unsupported image type')}, status=400)
+
+    try:
+        file = resize_uploaded_image(file)
+    except OSError:
         return JsonResponse({'error': gt('Unsupported image type')}, status=400)
 
     asset = models.ArticleAsset.objects.create(article=article, description=file.name[:100], file=file)

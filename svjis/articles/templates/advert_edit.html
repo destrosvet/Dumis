@@ -5,87 +5,97 @@
 {% block content %}
 
 <h1 class="page-title">{% translate 'Adverts' %}</h1>
-<form action="{% url 'adverts_save' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <input type="hidden" name="pk" value="{{ pk }}">
 
-    <p>
-        <label class="label" for="{{ form.type.auto_id }}">{{ form.type.label }}</label><br>
-        {{ form.type }}
-    </p>
-    <p>
-        <label class="label" for="{{ form.header.auto_id }}">{{ form.header.label }}</label><br>
-        {{ form.header }}
-    </p>
-    <p>
-        <label class="label" for="{{ form.cover_image.auto_id }}">{{ form.cover_image.label }}</label><br>
-        {% if form.instance.cover_image %}
-        <span class="article-thumb article-thumb--form">
-            <img src="/media/{{ form.instance.cover_image }}" alt="">
-        </span>
-        {% endif %}
-        {{ form.cover_image }}
-    </p>
-    <p>
-        <label class="label" for="{{ form.body.auto_id }}">{{ form.body.label }}</label><br>
-        {{ form.body }}
-    </p>
+<div class="edit-layout">
 
-    {% if pk and form.instance.image_assets %}
-    <p>
-        <label class="label">{% translate 'Gallery' %}</label><br>
-        <div class="advert-gallery">
-            {% for a in form.instance.image_assets %}
-            <div class="advert-gallery__item">
-                <a class="js-lightbox" href="/media/{{ a.file }}"><img src="/media/{{ a.file }}" alt="{{ a.description }}"></a>
-                <a class="advert-gallery__delete icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ a.description }} ?')) return false;" href="{% url 'adverts_asset_delete' pk=a.id %}">{% icon 'delete' %}</a>
-            </div>
-            {% endfor %}
-        </div>
-    </p>
-    {% endif %}
-    <p>
-        <label class="label" for="id_gallery">{% translate 'Add photos' %}</label><br>
-        <input class="common-input" type="file" name="gallery" id="id_gallery" accept="image/*" multiple>
-        <span class="form-hint">{% translate 'You can select multiple photos at once - they are added when you save.' %}</span>
-    </p>
-
-    <fieldset>
-        <legend>{% translate 'Properties' %}</legend>
-        <p>
-            <label class="common-label" for="{{ form.phone.auto_id }}">{{ form.phone.label }}</label>
-            {{ form.phone }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ form.email.auto_id }}">{{ form.email.label }}</label>
-            {{ form.email }}
-        </p>
-        <p>
-            <label class="common-label" for="{{ form.published.auto_id }}">{{ form.published.label }}</label>
-            {{ form.published }}
-        </p>
-    </fieldset>
-    <p>
-        <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
-    </p>
-</form>
-
-{% if pk %}
-    <p>
-        <a class="secondary-button" href="{% url 'adverts_detail' pk=pk %}">{% translate 'View advert' %}</a>
-        <a class="btn--danger" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ form.instance.header }} ?')) return false;" href="{% url 'adverts_delete' pk=pk %}">{% translate 'Delete advert' %}</a>
-    </p>
-
-    <h2 id="assets">{% translate 'Assets' %}</h2>
-    <form action="{% url 'adverts_asset_save' %}" method="post" enctype="multipart/form-data">
+    <form id="advert-form" action="{% url 'adverts_save' %}" method="post" enctype="multipart/form-data" class="edit-main">
         {% csrf_token %}
-        <input type="hidden" name="advert_pk" value="{{ form.instance.pk }}">
-        <fieldset>
-            <legend>{% translate 'Assets' %}</legend>
-            <p class="form-hint">{% translate 'Documents and other non-photo files for this advert.' %}</p>
-            <p>
+        <input type="hidden" name="pk" value="{{ pk }}">
+
+        <p>
+            <label class="label" for="{{ form.type.auto_id }}">{{ form.type.label }}</label><br>
+            {{ form.type }}
+        </p>
+        <p>
+            <label class="label" for="{{ form.header.auto_id }}">{{ form.header.label }}</label><br>
+            {{ form.header }}
+        </p>
+        <p>
+            <label class="label" for="{{ form.cover_image.auto_id }}">{{ form.cover_image.label }}</label><br>
+            {% if form.instance.cover_image %}
+            <span class="article-thumb article-thumb--form">
+                <img src="/media/{{ form.instance.cover_image }}" alt="">
+            </span>
+            {% endif %}
+            {{ form.cover_image }}
+        </p>
+        <p>
+            <label class="label" for="{{ form.body.auto_id }}">{{ form.body.label }}</label><br>
+            {{ form.body }}
+        </p>
+
+        {% if pk and form.instance.image_assets %}
+        <p>
+            <label class="label">{% translate 'Gallery' %}</label><br>
+            <div class="advert-gallery">
+                {% for a in form.instance.image_assets %}
+                <div class="advert-gallery__item">
+                    <a class="js-lightbox" href="/media/{{ a.file }}"><img src="/media/{{ a.file }}" alt="{{ a.description }}"></a>
+                    <a class="advert-gallery__delete icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ a.description }} ?')) return false;" href="{% url 'adverts_asset_delete' pk=a.id %}">{% icon 'delete' %}</a>
+                </div>
+                {% endfor %}
+            </div>
+        </p>
+        {% endif %}
+        <p>
+            <label class="label" for="id_gallery">{% translate 'Add photos' %}</label><br>
+            <input class="common-input" type="file" name="gallery" id="id_gallery" accept="image/*" multiple>
+            <span class="form-hint">{% translate 'You can select multiple photos at once - they are added when you save.' %}</span>
+        </p>
+    </form>
+
+    <div class="edit-sidebar">
+
+        <div class="card">
+            <div class="card__body">
+                <input class="btn--primary btn--block" id="submit" form="advert-form" type="submit" value="{% translate 'Save' %}" />
+            </div>
+        </div>
+
+        {% if custom_fields %}
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Custom fields' %}</div>
+            <div class="card__body">
+                {% include 'includes/custom_fields_form.html' with form_attr='advert-form' %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Properties' %}</div>
+            <div class="card__body">
+                <p>
+                    <label class="common-label" for="{{ form.phone.auto_id }}">{{ form.phone.label }}</label>
+                    {{ form.phone }}
+                </p>
+                <p>
+                    <label class="common-label" for="{{ form.email.auto_id }}">{{ form.email.label }}</label>
+                    {{ form.email }}
+                </p>
+                <p>
+                    <label class="common-label" for="{{ form.published.auto_id }}">{{ form.published.label }}</label>
+                    {{ form.published }}
+                </p>
+            </div>
+        </div>
+
+        {% if pk %}
+        <div class="card" id="assets">
+            <div class="card__header card__header--light">{% translate 'Assets' %}</div>
+            <div class="card__body">
+                <p class="form-hint" id="assets-desc">{% translate 'Documents and other non-photo files for this advert.' %}</p>
                 {% if form.instance.other_assets %}
-                <table class="list" aria-describedby="assets">
+                <table class="list" aria-describedby="assets-desc">
                     <tr>
                         <th class="icon">&nbsp;</th>
                         <th>{% translate 'Description' %}</th>
@@ -102,20 +112,32 @@
                     {% endfor %}
                 </table>
                 {% endif %}
-            </p>
-            <p>
-                <label class="common-label" for="{{ asset_form.description.auto_id }}">{{ asset_form.description.label }}</label>
-                {{ asset_form.description }}
-            </p>
-            <p>
-                <label class="common-label" for="{{ asset_form.file.auto_id }}">{{ asset_form.file.label }}</label>
-                {{ asset_form.file }}
-            </p>
-        </fieldset>
-        <p>
-            <input class="black-submit" id="submit2" type="submit" value="{% translate 'Upload' %}" />
-        </p>
-    </form>
+                <form action="{% url 'adverts_asset_save' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="advert_pk" value="{{ form.instance.pk }}">
+                    <p>
+                        <label class="common-label" for="{{ asset_form.description.auto_id }}">{{ asset_form.description.label }}</label>
+                        {{ asset_form.description }}
+                    </p>
+                    <p>
+                        <label class="common-label" for="{{ asset_form.file.auto_id }}">{{ asset_form.file.label }}</label>
+                        {{ asset_form.file }}
+                    </p>
+                    <input class="btn--secondary btn--block" id="submit2" type="submit" value="{% translate 'Upload' %}" />
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% if pk %}
+    <p>
+        <a class="secondary-button" href="{% url 'adverts_detail' pk=pk %}">{% translate 'View advert' %}</a>
+        <a class="btn--danger" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ form.instance.header }} ?')) return false;" href="{% url 'adverts_delete' pk=pk %}">{% translate 'Delete advert' %}</a>
+    </p>
 {% endif %}
 
 {% endblock content %}

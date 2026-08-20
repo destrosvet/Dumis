@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User, Group
+from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
 from . import models
 
@@ -226,6 +227,35 @@ class PreferencesForm(forms.ModelForm):
         }
 
 
+class CustomFieldContentTypeChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return models.get_custom_field_model_labels().get(obj.pk, obj.name)
+
+
+class CustomFieldDefinitionForm(forms.ModelForm):
+    content_type = CustomFieldContentTypeChoiceField(
+        queryset=ContentType.objects.filter(
+            pk__in=[ContentType.objects.get_for_model(model).pk for model, _label in models.CUSTOM_FIELD_MODELS]
+        ),
+        label=_("Entity type"),
+        widget=forms.widgets.Select(attrs={'class': 'common-input'}),
+    )
+
+    class Meta:
+        model = models.CustomFieldDefinition
+        fields = (
+            "content_type",
+            "name",
+            "field_type",
+            "enum_options",
+        )
+        widgets = {
+            'name': forms.widgets.TextInput(attrs={'class': 'common-input', 'size': '50'}),
+            'field_type': forms.widgets.Select(attrs={'class': 'common-input'}),
+            'enum_options': forms.widgets.TextInput(attrs={'class': 'common-input', 'size': '50'}),
+        }
+
+
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = models.Company
@@ -351,7 +381,7 @@ class FaultReportForm(forms.ModelForm):
         .order_by('last_name', 'first_name'),
         required=False,
         label=_("Resolver"),
-        widget=forms.widgets.Select(attrs={'class': 'common-input'}),
+        widget=forms.widgets.Select(attrs={'class': 'common-input', 'form': 'fault-form'}),
     )
     created_by_user = UserChoiceField(
         queryset=User.objects.exclude(is_active=False).distinct().order_by('last_name', 'first_name'),
@@ -368,7 +398,9 @@ class FaultReportForm(forms.ModelForm):
             'description': forms.widgets.Textarea(
                 attrs={'class': 'common-textarea', 'rows': '5', 'cols': '80', 'wrap': True}
             ),
-            'closed': forms.widgets.CheckboxInput(attrs={'class': 'common-input-chck', 'size': '50'}),
+            'closed': forms.widgets.CheckboxInput(
+                attrs={'class': 'common-input-chck', 'size': '50', 'form': 'fault-form'}
+            ),
         }
 
 

@@ -20,7 +20,7 @@
     </thead>
     <tbody>
         {% for row in rows %}
-        <tr class="row-link" onclick="location.href='{{ row.url }}'">
+        <tr class="row-link{% if row.row_class %} {{ row.row_class }}{% endif %}" onclick="location.href='{{ row.url }}'">
             <td class="hide-on-mobile row-number">{{ forloop.counter }}</td>
             {% for col in columns %}
             <td class="{% if col.hide_on_mobile %}hide-on-mobile{% endif %}">{{ row.cells|get_item:col.key }}</td>

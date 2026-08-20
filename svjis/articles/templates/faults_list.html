@@ -10,32 +10,6 @@
 <a href="{% url 'faults_fault_create' %}" class="btn--primary">{% translate 'Report fault or request' %}</a>
 {% endif %}
 
-<div class="table-wrapper">
-<table class="list full-width" aria-describedby="faults">
-    <tr>
-        <th>{% translate 'Ticket No.' %}</th>
-        <th class="hide-on-mobile">{% translate 'Date' %}</th>
-        <th>{% translate 'Subject' %}</th>
-        <th>{% translate 'Entrance' %}</th>
-        <th class="hide-on-mobile">{% translate 'Author' %}</th>
-        <th class="hide-on-mobile">{% translate 'Resolver' %}</th>
-        <th class="icon">&nbsp;</th>
-    </tr>
-
-    {% if object_list %}
-    {% for obj in object_list %}
-    <tr class="row-link" onclick="location.href='{% url 'fault' slug=obj.slug %}{% if search %}?search={{ search|urlencode }}{% endif %}'">
-        <td class="{% if obj.closed %}closed-ticket{% endif %}">{{ obj.pk|stringformat:"s"|highlight_exact:search }}</td>
-        <td class="hide-on-mobile {% if obj.closed %}closed-ticket{% endif %}">{{ obj.created_date|date:"d.m.Y" }}</td>
-        <td class="{% if obj.closed %}closed-ticket{% endif %}">{{ obj.subject|highlight:search }}</td>
-        <td class="{% if obj.closed %}closed-ticket{% endif %}">{{ obj.entrance.description }}</td>
-        <td class="hide-on-mobile {% if obj.closed %}closed-ticket{% endif %}">{{ obj.created_by_user.first_name }}&nbsp;{{ obj.created_by_user.last_name }}</td>
-        <td class="hide-on-mobile {% if obj.closed %}closed-ticket{% endif %}">{{ obj.assigned_to_user.first_name }}&nbsp;{{ obj.assigned_to_user.last_name }}</td>
-        <td class="icon">{% if obj|fault_editable:user %}<a class="icon-btn" title="{% translate 'Edit' %}" onclick="event.stopPropagation()" href="{% url 'faults_fault_edit' pk=obj.pk %}">{% icon 'edit' %}</a>{% endif %}</td>
-    </tr>
-    {% endfor %}
-    {% endif %}
-</table>
-</div>
+{% include 'includes/admin_list_table.html' %}
 
 {% endblock content %}

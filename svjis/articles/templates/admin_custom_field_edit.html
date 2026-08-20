@@ -1,0 +1,55 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+<h1 class="page-title">{% translate 'Custom fields' %}</h1>
+<form action="{% url 'admin_custom_field_save' %}" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <input type="hidden" name="pk" value="{{ pk }}">
+
+    <fieldset>
+        <legend>{% translate 'Custom fields' %}</legend>
+        <p>
+            {{ form.content_type.errors }}
+            <label class="common-label" for="{{ form.content_type.auto_id }}">{{ form.content_type.label }}</label>
+            {{ form.content_type }}
+        </p>
+        <p>
+            {{ form.name.errors }}
+            <label class="common-label" for="{{ form.name.auto_id }}">{{ form.name.label }}</label>
+            {{ form.name }}
+        </p>
+        <p>
+            {{ form.field_type.errors }}
+            <label class="common-label" for="{{ form.field_type.auto_id }}">{{ form.field_type.label }}</label>
+            {{ form.field_type }}
+        </p>
+        <p id="enum-options-row">
+            {{ form.enum_options.errors }}
+            <label class="common-label" for="{{ form.enum_options.auto_id }}">{{ form.enum_options.label }}</label>
+            {{ form.enum_options }}
+            <span class="form-hint">{{ form.enum_options.help_text }}</span>
+        </p>
+    </fieldset>
+    <p>
+        <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
+    </p>
+</form>
+
+<script>
+(function () {
+    var typeSelect = document.getElementById('{{ form.field_type.auto_id }}');
+    var enumRow = document.getElementById('enum-options-row');
+    if (!typeSelect || !enumRow) return;
+    function refresh() {
+        enumRow.style.display = typeSelect.value === 'enum' ? '' : 'none';
+    }
+    typeSelect.addEventListener('change', refresh);
+    refresh();
+})();
+</script>
+
+{% endblock content %}

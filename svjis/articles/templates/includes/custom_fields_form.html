@@ -1,0 +1,22 @@
+{% load i18n %}
+{% for cf in custom_fields %}
+<p>
+    <label class="common-label" for="id_{{ cf.field_name }}">{{ cf.definition.name }}</label>
+    {% if cf.definition.field_type == 'number' %}
+    <input class="common-input" type="text" inputmode="decimal" id="id_{{ cf.field_name }}" name="{{ cf.field_name }}" value="{{ cf.value }}" {% if form_attr %}form="{{ form_attr }}"{% endif %}>
+    {% elif cf.definition.field_type == 'enum' %}
+    <select class="common-input" id="id_{{ cf.field_name }}" name="{{ cf.field_name }}" {% if form_attr %}form="{{ form_attr }}"{% endif %}>
+        <option value="">---------</option>
+        {% for opt in cf.definition.enum_choices %}
+        <option value="{{ opt }}" {% if opt == cf.value %}selected{% endif %}>{{ opt }}</option>
+        {% endfor %}
+    </select>
+    {% elif cf.definition.field_type == 'datetime' %}
+    <input class="common-input" type="datetime-local" id="id_{{ cf.field_name }}" name="{{ cf.field_name }}" value="{{ cf.value }}" {% if form_attr %}form="{{ form_attr }}"{% endif %}>
+    {% elif cf.definition.field_type == 'boolean' %}
+    <input class="common-input-chck" type="checkbox" id="id_{{ cf.field_name }}" name="{{ cf.field_name }}" {% if cf.value %}checked{% endif %} {% if form_attr %}form="{{ form_attr }}"{% endif %}>
+    {% else %}
+    <input class="common-input" type="text" id="id_{{ cf.field_name }}" name="{{ cf.field_name }}" value="{{ cf.value }}" {% if form_attr %}form="{{ form_attr }}"{% endif %}>
+    {% endif %}
+</p>
+{% endfor %}

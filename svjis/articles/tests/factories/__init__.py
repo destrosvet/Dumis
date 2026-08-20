@@ -8,6 +8,7 @@ from .preferences import PreferencesFactory
 from .company import CompanyFactory
 from .advert_type import AdvertTypeFactory
 from .fault_report import FaultReportFactory
+from .custom_field import CustomFieldDefinitionFactory, CustomFieldValueFactory
 
 __all__ = [
     "ContentTypeFactory",
@@ -20,4 +21,6 @@ __all__ = [
     "CompanyFactory",
     "AdvertTypeFactory",
     "FaultReportFactory",
+    "CustomFieldDefinitionFactory",
+    "CustomFieldValueFactory",
 ]
