@@ -11,6 +11,12 @@
         <th scope="row">SVJIS</th>
         <td >{{ svjis_version }}</td>
     </tr>
+    {% if fork_version %}
+    <tr>
+        <th scope="row">{% translate 'Deployment version' %}</th>
+        <td>{{ fork_version }}</td>
+    </tr>
+    {% endif %}
     <tr>
         <th scope="row">Django</th>
         <td >{{ django_version }}</td>
@@ -18,6 +24,10 @@
     <tr>
         <th scope="row">Python</th>
         <td>{{ python_version }}</td>
+    </tr>
+    <tr>
+        <th scope="row">{% translate 'Created by' %}</th>
+        <td><a href="https://uhlir.me" target="_blank" rel="noopener">Filip Uhlíř</a></td>
     </tr>
 </table>
 

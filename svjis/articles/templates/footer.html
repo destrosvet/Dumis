@@ -1,5 +1,6 @@
+{% load i18n %}
 <footer class="app-footer">
     <div class="app-footer__inner">
-        System <strong><a href="https://svjis.github.io/">SVJIS</a> v{{ svjis_version }}</strong>. All Rights Reserved &reg; 2007-{% now "Y" %}
+        {% translate 'Based on' %} <a href="https://svjis.github.io/">SVJIS</a> v3 &middot; {% translate 'created by' %} <a href="https://uhlir.me" target="_blank" rel="noopener">Filip Uhlíř</a>{% if fork_version %} &middot; v{{ fork_version }}{% endif %} &middot; &copy; 2007-{% now "Y" %}
     </div>
 </footer>

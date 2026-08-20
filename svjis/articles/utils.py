@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 def get_context():
     ctx = {}
     ctx['svjis_version'] = svjis_version
+    ctx['fork_version'] = getattr(settings, 'SVJIS_FORK_VERSION', '')
     company, _created = models.Company.objects.get_or_create(pk=1)
     if company is not None:
         ctx['company_picture'] = company.header_picture

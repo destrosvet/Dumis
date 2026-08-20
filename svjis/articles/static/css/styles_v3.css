@@ -1924,6 +1924,11 @@ table.sortable thead th.sortable-col.sort-desc::after { content: '\25be'; opacit
   margin-bottom: 1.75rem;
 }
 
+/* Reserves space for one alert line so the card doesn't shift/jump when a
+   login error appears - the box is the same height whether it's empty or not. */
+.login-card__messages { min-height: 3rem; margin-bottom: 0.5rem; }
+.login-card__messages .alert { margin-bottom: 0; }
+
 .login-card__body fieldset { border: none; padding: 0; margin: 0; }
 .login-card__body legend { display: none; }
 .login-card__body p { margin-bottom: 1.125rem; }

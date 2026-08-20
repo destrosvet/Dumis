@@ -404,7 +404,6 @@ def user_login(request):
             return redirect(next_page)
     else:
         messages.error(request, _("Wrong username or password"))
-        messages.info(request, _("In case you lost your password use Lost Password link"))
         return redirect(login_page_view)
     return redirect(main_view)
 

@@ -19,9 +19,11 @@
     <div class="app-shell">
         {% include 'tray-menu.html' %}
         {% block hero %}{% endblock hero %}
+        {% block messages %}
         <div class="messages-wrapper">
             {% include 'messages.html' %}
         </div>
+        {% endblock messages %}
         <div class="app-body">
             {% block sitecontent %}
             {% endblock sitecontent %}
