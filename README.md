@@ -4,6 +4,11 @@
 
 Information system for homeowners' associations (SVJ). :house_with_garden:
 
+> [!IMPORTANT]
+> **This is a fork.** This repository is [Uhlíř's](https://uhlir.me) fork of the upstream [SVJIS](https://github.com/svjis/svjis2) project, and it is not a light customization: the visual design and a good part of the functional base have been reworked. Highlights include a redesigned admin UI built around a shared sortable/dropdown list component, a generic custom fields system for attaching arbitrary data to users, units, adverts, board members, entrances and fault reports, server-side resizing of uploaded images so pages stay responsive instead of shipping full-resolution originals, and a number of smaller UX fixes throughout.
+>
+> This fork's own deployment version is tracked separately from the upstream SVJIS package version and is shown in the application's footer and About page. If you're looking for the original, unmodified project, see [svjis/svjis2](https://github.com/svjis/svjis2).
+
 ## Project Description
 
 SVJIS is a CMS for Homeowners' Associations. The system provides a content management system :memo:, discussions under articles, polls :bar_chart:, reporting and tracking of issues, advertisements, and a database of owners :family_man_woman_boy: including records of units and shares. More on the [project website](https://svjis.github.io/Vlastnosti/).

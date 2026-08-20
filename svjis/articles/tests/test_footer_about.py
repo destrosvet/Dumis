@@ -11,7 +11,7 @@ class FooterAttributionTest(UserDataMixin, TestCase):
         content = response.content.decode()
         self.assertIn('href="https://svjis.github.io/"', content)
         self.assertIn('href="https://uhlir.me"', content)
-        self.assertIn('Filip Uhlíř', content)
+        self.assertIn('Uhlíř', content)
 
     @override_settings(SVJIS_FORK_VERSION='3.1')
     def test_footer_shows_fork_version_when_configured(self):
@@ -36,7 +36,7 @@ class AboutPageAttributionTest(UserDataMixin, TestCase):
         content = response.content.decode()
         self.assertIn('3.1', content)
         self.assertIn('href="https://uhlir.me"', content)
-        self.assertIn('Filip Uhlíř', content)
+        self.assertIn('Uhlíř', content)
 
     @override_settings(SVJIS_FORK_VERSION='')
     def test_about_page_hides_deployment_version_row_when_not_configured(self):
