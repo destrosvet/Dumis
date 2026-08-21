@@ -1,0 +1,109 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load article_filters i18n %}
+
+{% block content %}
+
+<h1 class="page-title" {% if form.instance.status.is_closed %}style="text-decoration: line-through;"{% endif %}>#{{ form.instance.pk }} - {{ form.instance.subject }}</h1>
+
+<div class="edit-layout">
+
+    <form id="project-form" action="{% url 'projects_project_update' %}" method="post" enctype="multipart/form-data" class="edit-main">
+        {% csrf_token %}
+        <input type="hidden" name="pk" value="{{ pk }}" />
+        <input type="hidden" name="created_by_user" value="{{ form.instance.created_by_user.pk }}" />
+        <p>
+            <label class="label" for="{{ form.subject.auto_id }}">{{ form.subject.label }}</label><br>
+            {{ form.subject }}
+        </p>
+        <p>
+            <label class="label" for="{{ form.description.auto_id }}">{{ form.description.label }}</label><br>
+            {{ form.description }}
+        </p>
+        {% if pk and form.instance.image_assets %}
+        <p>
+            <label class="label">{% translate 'Gallery' %}</label><br>
+            <div class="advert-gallery">
+                {% for a in form.instance.image_assets %}
+                <div class="advert-gallery__item">
+                    <a class="js-lightbox" href="/media/{{ a.file }}"><img src="/media/{{ a.file }}" alt="{{ a.description }}"></a>
+                    <a class="advert-gallery__delete icon-btn icon-btn--delete" title="{% translate 'Delete' %}" onclick="if (!confirm('{% translate 'Do you want to delete' %} {{ a.description }} ?')) return false;" href="{% url 'projects_project_asset_delete' pk=a.id %}">{% icon 'delete' %}</a>
+                </div>
+                {% endfor %}
+            </div>
+        </p>
+        {% endif %}
+        <p>
+            <label class="label" for="id_gallery">{% translate 'Add photos' %}</label><br>
+            <input class="common-input" type="file" name="gallery" id="id_gallery" accept="image/*" multiple>
+            <span class="form-hint">{% translate 'You can select multiple photos at once - they are added when you save.' %}</span>
+        </p>
+    </form>
+
+    <div class="edit-sidebar">
+
+        <div class="card">
+            <div class="card__body">
+                <input class="btn--primary btn--block" id="submit" form="project-form" type="submit" value="{% translate 'Save' %}" />
+            </div>
+        </div>
+
+        {% if can_manage %}
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Properties' %}</div>
+            <div class="card__body">
+                <p>
+                    <label class="common-label" for="{{ form.assigned_to_user.auto_id }}">{{ form.assigned_to_user.label }}</label>
+                    {{ form.assigned_to_user }}
+                </p>
+                <p>
+                    <label class="common-label" for="{{ form.status.auto_id }}">{{ form.status.label }}</label>
+                    {{ form.status }}
+                </p>
+                <p>
+                    <label class="common-label" for="{{ form.deadline.auto_id }}">{{ form.deadline.label }}</label>
+                    {{ form.deadline }}
+                </p>
+            </div>
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Properties' %}</div>
+            <div class="card__body">
+                <p>
+                    <label class="common-label" for="{{ form.deadline.auto_id }}">{{ form.deadline.label }}</label>
+                    {{ form.deadline }}
+                </p>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Tags' %}</div>
+            <div class="card__body">
+                {% include 'includes/tags_form.html' with form_attr='project-form' %}
+            </div>
+        </div>
+
+        {% if custom_fields %}
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Custom fields' %}</div>
+            <div class="card__body">
+                {% include 'includes/custom_fields_form.html' with form_attr='project-form' %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function() {
+        {% if can_manage %}
+        $('#id_assigned_to_user').select2({width: '250px'});
+        {% endif %}
+    });
+</script>
+
+{% endblock content %}

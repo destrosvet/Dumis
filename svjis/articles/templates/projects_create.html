@@ -1,0 +1,57 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+<h1 class="page-title">{% translate 'New project' %}</h1>
+
+<form id="project-form" action="{% url 'projects_project_create_save' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="pk" value="{{ pk }}" />
+    <p>
+        <label class="label" for="{{ form.subject.auto_id }}">{{ form.subject.label }}</label><br>
+        {{ form.subject }}
+    </p>
+    <p>
+        <label class="label" for="{{ form.description.auto_id }}">{{ form.description.label }}</label><br>
+        {{ form.description }}
+    </p>
+    <p>
+        <label class="label" for="{{ form.deadline.auto_id }}">{{ form.deadline.label }}</label><br>
+        {{ form.deadline }}
+    </p>
+    <p>
+        <label class="label" for="id_gallery">{% translate 'Add photos' %}</label><br>
+        <input class="common-input" type="file" name="gallery" id="id_gallery" accept="image/*" multiple>
+        <span class="form-hint">{% translate 'You can select multiple photos at once - they are added when you save.' %}</span>
+    </p>
+    {% if perms.articles.svjis_manage_projects %}
+    <p>
+        <label class="label" for="{{ form.created_by_user.auto_id }}">{{ form.created_by_user.label }}</label><br>
+        {{ form.created_by_user }}
+    </p>
+    <p>
+        <label class="label" for="{{ form.assigned_to_user.auto_id }}">{{ form.assigned_to_user.label }}</label><br>
+        {{ form.assigned_to_user }}
+    </p>
+    <p>
+        <label class="label" for="{{ form.status.auto_id }}">{{ form.status.label }}</label><br>
+        {{ form.status }}
+    </p>
+    {% endif %}
+    <p>
+        <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
+    </p>
+</form>
+
+<script>
+    $(document).ready(function() {
+        {% if perms.articles.svjis_manage_projects %}
+        $('#id_created_by_user').select2({width: '250px'});
+        $('#id_assigned_to_user').select2({width: '250px'});
+        {% endif %}
+    });
+</script>
+
+{% endblock content %}

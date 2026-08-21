@@ -6,6 +6,7 @@ from django.contrib.auth.models import User, Group, Permission
 from django.contrib.auth.hashers import make_password
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import ProtectedError
 from django.http import HttpResponse
 from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _
@@ -23,6 +24,8 @@ from .permissions import (
     svjis_edit_admin_custom_fields,
     svjis_edit_admin_company,
     svjis_edit_admin_building,
+    svjis_edit_admin_project_statuses,
+    svjis_edit_admin_tags,
 )
 from svjis import __homepage_url__, __repository_url__, __issues_url__, __translations_url__
 
@@ -65,6 +68,27 @@ MAIL_TEMPLATE_VARS = {
         ('user', _('User who reopened the fault')),
         ('link', _('Link to the fault')),
         ('description', _('Fault description')),
+    ],
+    'mail.template.project.notification': [
+        ('author', _('Project creator')),
+        ('link', _('Link to the project')),
+        ('description', _('Project description')),
+    ],
+    'mail.template.project.comment.notification': [
+        ('author', _('Comment author')),
+        ('link', _('Link to the project')),
+        ('comment', _('Comment body')),
+    ],
+    'mail.template.project.assigned': [
+        ('assignor', _('User who assigned the project to you')),
+        ('link', _('Link to the project')),
+        ('description', _('Project description')),
+    ],
+    'mail.template.project.status.changed': [
+        ('user', _('User who changed the status')),
+        ('link', _('Link to the project')),
+        ('old_status', _('Previous status')),
+        ('new_status', _('New status')),
     ],
 }
 
@@ -129,6 +153,31 @@ def save_custom_fields(request, instance):
     return errors
 
 
+# Tags
+#####################
+
+
+def get_tags_context(model_cls, instance):
+    ct = ContentType.objects.get_for_model(model_cls)
+    selected_ids = set()
+    if instance and instance.pk:
+        selected_ids = set(
+            models.TaggedItem.objects.filter(content_type=ct, object_id=instance.pk).values_list('tag_id', flat=True)
+        )
+    return {'all_tags': models.Tag.objects.all(), 'selected_tag_ids': selected_ids}
+
+
+def save_tags(request, instance):
+    ct = ContentType.objects.get_for_model(instance)
+    posted_ids = {int(pk) for pk in request.POST.getlist('tags') if pk.isdigit()}
+    models.TaggedItem.objects.filter(content_type=ct, object_id=instance.pk).exclude(tag_id__in=posted_ids).delete()
+    existing_ids = set(
+        models.TaggedItem.objects.filter(content_type=ct, object_id=instance.pk).values_list('tag_id', flat=True)
+    )
+    for tag_id in posted_ids - existing_ids:
+        models.TaggedItem.objects.get_or_create(tag_id=tag_id, content_type=ct, object_id=instance.pk)
+
+
 def get_side_menu(active_item, user):
     side_menu = [
         {
@@ -184,6 +233,18 @@ def get_side_menu(active_item, user):
             'description': _("Custom fields"),
             'link': reverse(admin_custom_field_view),
             'active': True if active_item == 'custom_fields' else False,
+        },
+        {
+            'perms': svjis_edit_admin_project_statuses,
+            'description': _("Project statuses"),
+            'link': reverse(admin_project_status_view),
+            'active': True if active_item == 'project_statuses' else False,
+        },
+        {
+            'perms': svjis_edit_admin_tags,
+            'description': _("Tags"),
+            'link': reverse(admin_tag_view),
+            'active': True if active_item == 'tags' else False,
         },
         {
             'perms': svjis_view_admin_menu,
@@ -1049,6 +1110,15 @@ def admin_group_edit_view(request, pk):
         },
         {'name': 'Adverts', 'perms': [{'codename': 'svjis_view_adverts_menu'}, {'codename': 'svjis_add_advert'}]},
         {
+            'name': 'Projects',
+            'perms': [
+                {'codename': 'svjis_view_project_menu'},
+                {'codename': 'svjis_add_project'},
+                {'codename': 'svjis_manage_projects'},
+                {'codename': 'svjis_add_project_comment'},
+            ],
+        },
+        {
             'name': 'Administration',
             'perms': [
                 {'codename': 'svjis_view_admin_menu'},
@@ -1057,6 +1127,8 @@ def admin_group_edit_view(request, pk):
                 {'codename': 'svjis_edit_admin_users'},
                 {'codename': 'svjis_edit_admin_groups'},
                 {'codename': 'svjis_edit_admin_preferences'},
+                {'codename': 'svjis_edit_admin_project_statuses'},
+                {'codename': 'svjis_edit_admin_tags'},
             ],
         },
     ]
@@ -1317,6 +1389,185 @@ def admin_custom_field_delete_view(request, pk):
     obj = get_object_or_404(models.CustomFieldDefinition, pk=pk)
     obj.delete()
     return redirect(admin_custom_field_view)
+
+
+# Administration - Project statuses
+@permission_required(svjis_edit_admin_project_statuses)
+@require_GET
+def admin_project_status_view(request):
+    status_list = models.ProjectStatus.objects.all()
+    rows = []
+    for s in status_list:
+        rows.append(
+            {
+                'url': reverse('admin_project_status_edit', args=[s.pk]),
+                'cells': {
+                    'name': s.name,
+                    'order': s.order,
+                    'is_closed': _('Yes') if s.is_closed else _('No'),
+                },
+                'actions': [
+                    {'url': reverse('admin_project_status_edit', args=[s.pk]), 'icon': 'edit', 'label': _('Edit')},
+                    {
+                        'url': reverse('admin_project_status_delete', args=[s.pk]),
+                        'icon': 'delete',
+                        'label': _('Delete'),
+                        'danger': True,
+                        'confirm': f"{_('Do you want to delete')} {s.name} ?",
+                    },
+                ],
+            }
+        )
+
+    ctx = utils.get_context()
+    ctx['aside_menu_name'] = _("Administration")
+    ctx['aside_menu_items'] = get_side_menu('project_statuses', request.user)
+    ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
+    ctx['object_list'] = status_list
+    ctx['columns'] = [
+        {'key': 'name', 'label': _('Name')},
+        {'key': 'order', 'label': _('Order'), 'hide_on_mobile': True},
+        {'key': 'is_closed', 'label': _('Closed state'), 'hide_on_mobile': True},
+    ]
+    ctx['rows'] = rows
+    ctx['table_id'] = 'project-status-table'
+    ctx['desc_id'] = 'project-statuses'
+    ctx['list_search'] = True
+    return render(request, "admin_project_status.html", ctx)
+
+
+@permission_required(svjis_edit_admin_project_statuses)
+@require_GET
+def admin_project_status_edit_view(request, pk):
+    if pk:
+        i = get_object_or_404(models.ProjectStatus, pk=pk)
+        form = forms.ProjectStatusForm(instance=i)
+    else:
+        form = forms.ProjectStatusForm
+
+    ctx = utils.get_context()
+    ctx['aside_menu_name'] = _("Administration")
+    ctx['form'] = form
+    ctx['pk'] = pk
+    ctx['aside_menu_items'] = get_side_menu('project_statuses', request.user)
+    ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
+    return render(request, "admin_project_status_edit.html", ctx)
+
+
+@permission_required(svjis_edit_admin_project_statuses)
+@require_POST
+def admin_project_status_save_view(request):
+    pk = int(request.POST['pk'])
+    if not pk:
+        form = forms.ProjectStatusForm(request.POST)
+    else:
+        instance = get_object_or_404(models.ProjectStatus, pk=pk)
+        form = forms.ProjectStatusForm(request.POST, instance=instance)
+
+    if not form.is_valid():
+        for error in form.errors:
+            messages.error(request, f"{_('Form validation error')}: {error}")
+        return redirect(admin_project_status_view)
+
+    form.save()
+    messages.info(request, _('Saved'))
+    return redirect(admin_project_status_view)
+
+
+@permission_required(svjis_edit_admin_project_statuses)
+@require_GET
+def admin_project_status_delete_view(request, pk):
+    obj = get_object_or_404(models.ProjectStatus, pk=pk)
+    try:
+        obj.delete()
+    except ProtectedError:
+        messages.error(
+            request, _('Cannot delete "{}" - it is still used by one or more projects.').format(obj.name)
+        )
+    return redirect(admin_project_status_view)
+
+
+# Administration - Tags
+@permission_required(svjis_edit_admin_tags)
+@require_GET
+def admin_tag_view(request):
+    tag_list = models.Tag.objects.all()
+    rows = []
+    for t in tag_list:
+        rows.append(
+            {
+                'url': reverse('admin_tag_edit', args=[t.pk]),
+                'cells': {'name': t.name},
+                'actions': [
+                    {'url': reverse('admin_tag_edit', args=[t.pk]), 'icon': 'edit', 'label': _('Edit')},
+                    {
+                        'url': reverse('admin_tag_delete', args=[t.pk]),
+                        'icon': 'delete',
+                        'label': _('Delete'),
+                        'danger': True,
+                        'confirm': f"{_('Do you want to delete')} {t.name} ?",
+                    },
+                ],
+            }
+        )
+
+    ctx = utils.get_context()
+    ctx['aside_menu_name'] = _("Administration")
+    ctx['aside_menu_items'] = get_side_menu('tags', request.user)
+    ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
+    ctx['object_list'] = tag_list
+    ctx['columns'] = [{'key': 'name', 'label': _('Name')}]
+    ctx['rows'] = rows
+    ctx['table_id'] = 'tag-table'
+    ctx['desc_id'] = 'tags'
+    ctx['list_search'] = True
+    return render(request, "admin_tag.html", ctx)
+
+
+@permission_required(svjis_edit_admin_tags)
+@require_GET
+def admin_tag_edit_view(request, pk):
+    if pk:
+        i = get_object_or_404(models.Tag, pk=pk)
+        form = forms.TagForm(instance=i)
+    else:
+        form = forms.TagForm
+
+    ctx = utils.get_context()
+    ctx['aside_menu_name'] = _("Administration")
+    ctx['form'] = form
+    ctx['pk'] = pk
+    ctx['aside_menu_items'] = get_side_menu('tags', request.user)
+    ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
+    return render(request, "admin_tag_edit.html", ctx)
+
+
+@permission_required(svjis_edit_admin_tags)
+@require_POST
+def admin_tag_save_view(request):
+    pk = int(request.POST['pk'])
+    if not pk:
+        form = forms.TagForm(request.POST)
+    else:
+        instance = get_object_or_404(models.Tag, pk=pk)
+        form = forms.TagForm(request.POST, instance=instance)
+
+    if not form.is_valid():
+        for error in form.errors:
+            messages.error(request, f"{_('Form validation error')}: {error}")
+        return redirect(admin_tag_view)
+
+    form.save()
+    messages.info(request, _('Saved'))
+    return redirect(admin_tag_view)
+
+
+@permission_required(svjis_edit_admin_tags)
+@require_GET
+def admin_tag_delete_view(request, pk):
+    obj = get_object_or_404(models.Tag, pk=pk)
+    obj.delete()
+    return redirect(admin_tag_view)
 
 
 # Administration - Waiting messages

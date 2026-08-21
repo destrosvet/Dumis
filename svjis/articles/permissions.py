@@ -32,6 +32,13 @@ svjis_add_fault_comment = "articles.svjis_add_fault_comment"  # Can add Fault co
 svjis_view_adverts_menu = "articles.svjis_view_adverts_menu"  # Can view Adverts menu
 svjis_add_advert = "articles.svjis_add_advert"  # Can add Advert
 
+# Projects
+
+svjis_view_project_menu = "articles.svjis_view_project_menu"  # Can view Projects menu
+svjis_add_project = "articles.svjis_add_project"  # Can add Project
+svjis_manage_projects = "articles.svjis_manage_projects"  # Can manage all Projects
+svjis_add_project_comment = "articles.svjis_add_project_comment"  # Can add Project comment
+
 # Admin
 
 svjis_view_admin_menu = "articles.svjis_view_admin_menu"  # Can view Administration menu
@@ -41,3 +48,5 @@ svjis_edit_admin_users = "articles.svjis_edit_admin_users"  # Can edit Users
 svjis_edit_admin_groups = "articles.svjis_edit_admin_groups"  # Can edit Groups
 svjis_edit_admin_preferences = "articles.svjis_edit_admin_preferences"  # Can edit Preferences
 svjis_edit_admin_custom_fields = "articles.svjis_edit_admin_custom_fields"  # Can edit Custom fields
+svjis_edit_admin_project_statuses = "articles.svjis_edit_admin_project_statuses"  # Can edit Project statuses
+svjis_edit_admin_tags = "articles.svjis_edit_admin_tags"  # Can edit Tags

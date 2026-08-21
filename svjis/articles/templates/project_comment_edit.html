@@ -1,0 +1,18 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load article_filters i18n %}
+
+{% block content %}
+
+<h1 class="article-title">{% translate 'Modify comment' %}</h1>
+
+<form action="{% url 'project_comment_modify' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="comment_pk" value="{{ form.instance.pk }}">
+    <p>{{ form.body }}</p>
+    <p>
+        <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" name="submit">
+    </p>
+</form>
+
+{% endblock content %}

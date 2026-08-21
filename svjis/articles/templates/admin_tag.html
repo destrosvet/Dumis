@@ -1,0 +1,19 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load article_filters i18n %}
+
+{% block content %}
+
+<h1 class="page-title" id="tags">{% translate 'Tags' %}</h1>
+
+<div class="filter-container">
+    <div class="filter-item">
+        <p>
+            <a class="btn--primary" href="{% url 'admin_tag_edit' pk=0 %}">{% translate 'Create new entry' %}</a>&nbsp;
+        </p>
+    </div>
+</div>
+
+{% include 'includes/admin_list_table.html' %}
+
+{% endblock content %}

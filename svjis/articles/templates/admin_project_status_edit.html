@@ -1,0 +1,41 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+<h1 class="page-title">{% translate 'Project status' %}</h1>
+<form action="{% url 'admin_project_status_save' %}" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <input type="hidden" name="pk" value="{{ pk }}">
+
+    <fieldset>
+        <legend>{% translate 'Project status' %}</legend>
+        <p>
+            {{ form.name.errors }}
+            <label class="common-label" for="{{ form.name.auto_id }}">{{ form.name.label }}</label>
+            {{ form.name }}
+        </p>
+        <p>
+            {{ form.order.errors }}
+            <label class="common-label" for="{{ form.order.auto_id }}">{{ form.order.label }}</label>
+            {{ form.order }}
+        </p>
+        <p>
+            {{ form.color.errors }}
+            <label class="common-label" for="{{ form.color.auto_id }}">{{ form.color.label }}</label>
+            {{ form.color }}
+        </p>
+        <p>
+            {{ form.is_closed.errors }}
+            <label class="common-label" for="{{ form.is_closed.auto_id }}">{{ form.is_closed.label }}</label>
+            {{ form.is_closed }}
+        </p>
+    </fieldset>
+    <p>
+        <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
+    </p>
+</form>
+
+{% endblock content %}

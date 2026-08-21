@@ -7,6 +7,8 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone
 
+from django.contrib.contenttypes.models import ContentType
+
 from articles.models import (
     Advert,
     AdvertType,
@@ -24,9 +26,14 @@ from articles.models import (
     FaultReport,
     FaultReportLog,
     News,
+    Project,
+    ProjectComment,
+    ProjectStatus,
     Survey,
     SurveyAnswerLog,
     SurveyOption,
+    Tag,
+    TaggedItem,
     UsefulLink,
     UserProfile,
 )
@@ -94,6 +101,7 @@ class Command(BaseCommand):
             self._create_survey(owners)
             self._create_faults(owners, entrances)
             self._create_adverts(owners)
+            self._create_projects(owners)
 
         self.stdout.write(self.style.SUCCESS('Demo data created.'))
 
@@ -385,3 +393,70 @@ class Command(BaseCommand):
             phone=owners[5].userprofile.phone,
             email=owners[5].email,
         )
+
+    def _create_projects(self, owners):
+        admin = User.objects.get(username='admin')
+        now = timezone.now()
+        today = timezone.now().date()
+
+        new_status = ProjectStatus.objects.get(name='Nový')
+        in_progress_status = ProjectStatus.objects.get(name='V realizaci')
+        waiting_status = ProjectStatus.objects.get(name='Čeká na schválení')
+        done_status = ProjectStatus.objects.get(name='Dokončeno')
+
+        tag_asap = Tag.objects.create(name='ASAP', color='red')
+        tag_navrh = Tag.objects.create(name='Návrh', color='amber')
+        project_ct = ContentType.objects.get_for_model(Project)
+
+        projects_data = [
+            (
+                'Výměna vchodových dveří',
+                'Stávající vchodové dveře u vchodu A jsou opotřebené a špatně těsní. Je třeba oslovit dodavatele '
+                'a nechat vypracovat nabídku na výměnu.',
+                new_status,
+                owners[1],
+                today + timedelta(days=45),
+                [tag_navrh],
+            ),
+            (
+                'Revize výtahu',
+                'Pravidelná roční revize výtahu ve vchodu B, včetně kontroly bezpečnostních prvků.',
+                in_progress_status,
+                owners[2],
+                today + timedelta(days=10),
+                [tag_asap],
+            ),
+            (
+                'Malování společných prostor',
+                'Vymalování chodeb a schodiště v obou vchodech, poslední malování proběhlo před 8 lety.',
+                waiting_status,
+                owners[1],
+                today + timedelta(days=60),
+                [],
+            ),
+            (
+                'Nákup nové sekačky',
+                'Stará sekačka na údržbu zeleně dosloužila, je potřeba pořídit novou.',
+                done_status,
+                owners[2],
+                today - timedelta(days=5),
+                [],
+            ),
+        ]
+
+        for subject, description, status, assignee, deadline, tags in projects_data:
+            project = Project.objects.create(
+                subject=subject,
+                description=description,
+                created_date=now,
+                created_by_user=admin,
+                assigned_to_user=assignee,
+                status=status,
+                deadline=deadline,
+            )
+            project.watching_users.add(admin, assignee)
+            for tag in tags:
+                TaggedItem.objects.create(tag=tag, content_type=project_ct, object_id=project.pk)
+            ProjectComment.objects.create(
+                project=project, author=assignee, body='Beru na vědomí, budu řešit.'
+            )

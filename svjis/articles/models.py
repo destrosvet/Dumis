@@ -10,7 +10,13 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Count
 from django.utils.translation import gettext_lazy as _
-from .permissions import svjis_answer_survey, svjis_fault_reporter, svjis_fault_resolver
+from .permissions import (
+    svjis_answer_survey,
+    svjis_fault_reporter,
+    svjis_fault_resolver,
+    svjis_view_project_menu,
+    svjis_manage_projects,
+)
 
 
 COMMENT_IS_EDITABLE_MINUTES = getattr(settings, "SVJIS_COMMENT_IS_EDITABLE_MINUTES", 10)
@@ -18,6 +24,17 @@ MEDIA_ADVERT_ASSETS_DIR = 'inzerce'  # not "adverts"/"ads" - that gets blocked b
 MEDIA_ARTICLE_ASSETS_DIR = 'articles'
 MEDIA_COMPANY_ASSETS_DIR = 'company'
 MEDIA_FAULT_ASSETS_DIR = 'faults'
+MEDIA_PROJECT_ASSETS_DIR = 'projects'
+
+# Shared badge color palette (project statuses, tags) - maps 1:1 to the
+# .badge--* CSS classes already defined in styles_v3.css.
+BADGE_COLOR_CHOICES = (
+    ('slate', _("Grey")),
+    ('brand', _("Teal")),
+    ('green', _("Green")),
+    ('amber', _("Amber")),
+    ('red', _("Red")),
+)
 
 
 # Article / Redaction
@@ -694,6 +711,214 @@ class AdvertAsset(models.Model):
         ordering = ['-id']
 
 
+# Projects
+#####################
+
+
+class ProjectStatus(models.Model):
+    name = models.CharField(_("Name"), max_length=50)
+    order = models.IntegerField(_("Order"))
+    is_closed = models.BooleanField(_("Closed state"), default=False)
+    color = models.CharField(_("Color"), max_length=10, choices=BADGE_COLOR_CHOICES, default='slate')
+
+    def __str__(self):
+        return f"ProjectStatus: {self.name}"
+
+    class Meta:
+        ordering = ['order']
+        permissions = (("svjis_edit_admin_project_statuses", _("Can edit Project statuses")),)
+
+
+class Project(models.Model):
+    subject = models.CharField(_("Subject"), max_length=100)
+    slug = models.CharField(max_length=100, unique=True)
+    description = models.TextField(_("Description"))
+    created_date = models.DateTimeField(auto_now_add=True)
+    created_by_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    assigned_to_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='assigned_project_set', null=True, blank=True
+    )
+    watching_users = models.ManyToManyField(User, related_name='watching_project_set')
+    status = models.ForeignKey(ProjectStatus, on_delete=models.PROTECT, verbose_name=_("Status"))
+    deadline = models.DateField(_("Deadline"), null=True, blank=True)
+
+    def __str__(self):
+        return f"Project: {self.subject}"
+
+    @property
+    def assets(self):
+        return self.projectasset_set.all()
+
+    @property
+    def image_assets(self):
+        return [a for a in self.assets if a.is_image]
+
+    @property
+    def other_assets(self):
+        return [a for a in self.assets if not a.is_image]
+
+    @property
+    def comments(self):
+        return self.projectcomment_set.all()
+
+    class Meta:
+        ordering = ['-id']
+        permissions = (
+            ("svjis_view_project_menu", _("Can view Projects menu")),
+            ("svjis_add_project", _("Can add Project")),
+            ("svjis_manage_projects", _("Can manage all Projects")),
+        )
+
+    def can_be_edited_by(self, user: User) -> bool:
+        if user.has_perm(svjis_manage_projects):
+            return True
+        if self.status.is_closed:
+            return False
+        return user.has_perm(svjis_view_project_menu) and user.id in (
+            self.created_by_user_id,
+            self.assigned_to_user_id,
+        )
+
+    def log_status_change(self, user: User, from_status: ProjectStatus, to_status: ProjectStatus):
+        ProjectLog.objects.create(
+            project=self,
+            user=user,
+            assignee=self.assigned_to_user,
+            from_status=from_status,
+            to_status=to_status,
+            type=ProjectLog.TYPE_STATUS_CHANGED,
+        )
+
+    def save(self, **kwargs):
+        if not self.slug:
+            unique_slugify(self, self.subject)
+        super().save(**kwargs)
+
+
+def project_directory_path(instance, filename):
+    return f'{MEDIA_PROJECT_ASSETS_DIR}/{instance.project.slug}/{filename}'
+
+
+class ProjectAsset(models.Model):
+    description = models.CharField(_("Description"), max_length=100)
+    file = models.FileField(_("File"), upload_to=project_directory_path)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name=_("Project"))
+    created_date = models.DateTimeField(auto_now_add=True)
+    created_by_user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"ProjectAsset: {self.description}"
+
+    @property
+    def basename(self):
+        return os.path.basename(self.file.path)
+
+    @property
+    def icon(self):
+        return get_asset_icon(self.basename)
+
+    @property
+    def is_image(self):
+        return self.icon == 'image'
+
+    def delete(self, *args, **kwargs):
+        if os.path.isfile(self.file.path):
+            os.remove(self.file.path)
+        super().delete(*args, **kwargs)
+
+    class Meta:
+        ordering = ['id']
+
+
+class ProjectComment(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name=_("Project"))
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(auto_now_add=True)
+    body = models.TextField(_("Body"))
+
+    def __str__(self):
+        return f"ProjectComment: {self.project} - {self.body}"
+
+    @property
+    def is_editable(self) -> bool:
+        age = get_age_in_minutes(self.created_date)
+        if age is not None:
+            return age <= COMMENT_IS_EDITABLE_MINUTES
+        else:
+            return False
+
+    class Meta:
+        ordering = ['id']
+        permissions = (("svjis_add_project_comment", _("Can add Project comment")),)
+
+
+class ProjectLog(models.Model):
+    TYPE_MODIFIED = "modified"
+    TYPE_ASSIGNED = "assigned"
+    TYPE_STATUS_CHANGED = "status_changed"
+    TYPE_CREATED = "created"
+
+    TYPE_CHOICES = (
+        (TYPE_MODIFIED, _("Modified")),
+        (TYPE_ASSIGNED, _("Assigned")),
+        (TYPE_STATUS_CHANGED, _("Status changed")),
+        (TYPE_CREATED, _("Created")),
+    )
+
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='logs')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='created_project_logs', null=True)
+    assignee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assigned_project_logs', null=True)
+    from_status = models.ForeignKey(
+        ProjectStatus, on_delete=models.SET_NULL, related_name='+', null=True, blank=True
+    )
+    to_status = models.ForeignKey(ProjectStatus, on_delete=models.SET_NULL, related_name='+', null=True, blank=True)
+    type = models.CharField(_("Type"), max_length=15, choices=TYPE_CHOICES, default=TYPE_MODIFIED)
+    entry_time = models.DateTimeField(auto_now_add=True)
+
+    objects = managers.ProjectLogManager()
+
+    def __str__(self):
+        return f"ProjectLog: {self.project} ({self.type})"
+
+
+# Tags
+#####################
+
+
+class Tag(models.Model):
+    name = models.CharField(_("Name"), max_length=30, unique=True)
+    color = models.CharField(_("Color"), max_length=10, choices=BADGE_COLOR_CHOICES, default='slate')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+        permissions = (("svjis_edit_admin_tags", _("Can edit Tags")),)
+
+
+TAG_MODELS = [
+    (Project, _("Project")),
+]
+
+
+def get_tag_model_labels():
+    return {ContentType.objects.get_for_model(model).pk: label for model, label in TAG_MODELS}
+
+
+class TaggedItem(models.Model):
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    def __str__(self):
+        return f"TaggedItem: {self.tag} - {self.content_object}"
+
+    class Meta:
+        unique_together = ('tag', 'content_type', 'object_id')
+
+
 # Custom fields
 #####################
 
@@ -705,6 +930,7 @@ CUSTOM_FIELD_MODELS = [
     (Board, _("Board member")),
     (BuildingEntrance, _("Entrance")),
     (FaultReport, _("Fault report")),
+    (Project, _("Project")),
 ]
 
 

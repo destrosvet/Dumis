@@ -2055,3 +2055,61 @@ table.sortable thead th.sortable-col.sort-desc::after { content: '\25be'; opacit
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
 }
+
+/* --------------------------------------------------------------------------
+   Kanban board (Projects)
+   -------------------------------------------------------------------------- */
+
+.kanban-board {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+.kanban-column {
+  flex: 0 0 260px;
+  width: 260px;
+  background: var(--slate-50);
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  max-height: 75vh;
+}
+.kanban-column__header {
+  display: block;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+}
+.kanban-column__body {
+  flex: 1;
+  min-height: 60px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+}
+.kanban-column__body--over { background: var(--brand-50); }
+.kanban-card {
+  display: block;
+  background: #fff;
+  border: 1px solid var(--slate-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 0.75rem;
+  color: var(--slate-800);
+  text-decoration: none;
+}
+.kanban-card:hover { box-shadow: var(--shadow-md); border-color: var(--slate-300); }
+.kanban-card--draggable { cursor: grab; }
+.kanban-card--draggable:active { cursor: grabbing; }
+.kanban-card__subject { font-weight: 600; margin-bottom: 0.4rem; }
+.kanban-card__tags { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-bottom: 0.4rem; }
+.kanban-card__meta { display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.85rem; color: var(--slate-500); }
+
+@media (max-width: 640px) {
+  .kanban-column { flex: 0 0 220px; width: 220px; }
+}

@@ -1,0 +1,34 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load article_filters i18n %}
+
+{% block content %}
+
+<h1 class="page-title" id="projects">{{ header }}</h1>
+
+<div class="filter-container">
+    <div class="filter-item">
+        {% if perms.articles.svjis_add_project %}
+        <a href="{% url 'projects_project_create' %}" class="btn--primary">{% translate 'Create new project' %}</a>
+        {% endif %}
+    </div>
+    <form class="filter-item" method="get" action="{{ search_endpoint }}">
+        <input type="hidden" name="scope" value="{{ request.GET.scope|default:'active' }}">
+        <select class="common-input" name="status" onchange="this.form.submit()">
+            <option value="">{% translate 'All statuses' %}</option>
+            {% for s in all_statuses %}
+            <option value="{{ s.pk }}" {% if selected_status == s.pk|stringformat:'s' %}selected{% endif %}>{{ s.name }}</option>
+            {% endfor %}
+        </select>
+        <select class="common-input" name="tag" onchange="this.form.submit()">
+            <option value="">{% translate 'All tags' %}</option>
+            {% for t in all_tags %}
+            <option value="{{ t.pk }}" {% if selected_tag == t.pk|stringformat:'s' %}selected{% endif %}>{{ t.name }}</option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+
+{% include 'includes/admin_list_table.html' %}
+
+{% endblock content %}

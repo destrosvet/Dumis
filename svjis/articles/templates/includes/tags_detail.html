@@ -1,0 +1,7 @@
+{% if tags %}
+<p class="tag-pills">
+    {% for t in tags %}
+    <span class="badge badge--{{ t.color }}">{{ t.name }}</span>
+    {% endfor %}
+</p>
+{% endif %}

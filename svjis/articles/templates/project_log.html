@@ -1,0 +1,33 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+{% include 'includes/breadcrumbs.html' %}
+
+<h1 id="log" class="page-title" {% if obj.status.is_closed %}style="text-decoration: line-through;"{% endif %}>#{{ obj.pk }} - {{ obj.subject }}</h1>
+
+{% if obj.logs.all %}
+    <h2 class="comment-title">{% translate 'Log' %}:</h2>
+    <table class="list full-width fixed-on-mobile" aria-describedby="log">
+    <tr>
+        <th>{% translate 'User' %}</th>
+        <th>{% translate 'Event' %}</th>
+        <th>{% translate 'From' %}</th>
+        <th>{% translate 'To' %}</th>
+        <th>{% translate 'Time' %}</th>
+    </tr>
+    {% for log in obj.logs.all %}
+        <tr>
+            <td>{{ log.user.first_name }}&nbsp;{{ log.user.last_name }}</td>
+            <td>{{ log.get_type_display }}</td>
+            <td>{{ log.from_status.name }}</td>
+            <td>{{ log.to_status.name }}</td>
+            <td>{{ log.entry_time|date:"d.m.Y" }}&nbsp;{{ log.entry_time|date:"H:i" }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endif %}
+
+{% endblock content %}

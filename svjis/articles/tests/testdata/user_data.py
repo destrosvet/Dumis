@@ -20,6 +20,9 @@ class UserDataMixin(PreferencesDataMixin):
                 PermissionFactory(codename="svjis_add_fault_comment"),
                 PermissionFactory(codename="svjis_view_adverts_menu"),
                 PermissionFactory(codename="svjis_add_advert"),
+                PermissionFactory(codename="svjis_view_project_menu"),
+                PermissionFactory(codename="svjis_add_project"),
+                PermissionFactory(codename="svjis_add_project_comment"),
             ],
         )
         cls.g_board_member = GroupFactory(
@@ -29,6 +32,10 @@ class UserDataMixin(PreferencesDataMixin):
                 PermissionFactory(codename="svjis_view_personal_menu"),
                 PermissionFactory(codename="svjis_view_phonelist"),
                 PermissionFactory(codename="svjis_fault_resolver"),
+                PermissionFactory(codename="svjis_view_project_menu"),
+                PermissionFactory(codename="svjis_add_project"),
+                PermissionFactory(codename="svjis_manage_projects"),
+                PermissionFactory(codename="svjis_add_project_comment"),
             ],
         )
         cls.g_vendor = GroupFactory(
@@ -40,6 +47,8 @@ class UserDataMixin(PreferencesDataMixin):
                 PermissionFactory(codename="svjis_fault_reporter"),
                 PermissionFactory(codename="svjis_fault_resolver"),
                 PermissionFactory(codename="svjis_add_fault_comment"),
+                PermissionFactory(codename="svjis_view_project_menu"),
+                PermissionFactory(codename="svjis_add_project_comment"),
             ],
         )
         cls.g_redactor = GroupFactory(
@@ -73,6 +82,8 @@ class UserDataMixin(PreferencesDataMixin):
                 PermissionFactory(codename="svjis_fault_reporter"),
                 PermissionFactory(codename="svjis_fault_resolver"),
                 PermissionFactory(codename="svjis_add_fault_comment"),
+                PermissionFactory(codename="svjis_edit_admin_project_statuses"),
+                PermissionFactory(codename="svjis_edit_admin_tags"),
             ],
         )
 

@@ -1,0 +1,110 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+<h1 class="page-title" id="projects-kanban">{% translate 'Projects' %} - {% translate 'Kanban board' %}</h1>
+
+<p>
+    {% if show_closed %}
+    <a class="secondary-button" href="{% url 'projects_kanban' %}">{% translate 'Hide closed statuses' %}</a>
+    {% else %}
+    <a class="secondary-button" href="{% url 'projects_kanban' %}?show_closed=1">{% translate 'Show closed statuses' %}</a>
+    {% endif %}
+</p>
+
+<div class="kanban-board">
+    {% for col in columns %}
+    <div class="kanban-column">
+        <div class="kanban-column__header badge badge--{{ col.status.color }}">
+            {{ col.status.name }} ({{ col.projects|length }})
+        </div>
+        <div class="kanban-column__body" data-status-id="{{ col.status.pk }}">
+            {% for p in col.projects %}
+            <a class="kanban-card{% if p.can_edit_by_me %} kanban-card--draggable{% endif %}"
+               href="{% url 'project' slug=p.slug %}"
+               data-project-id="{{ p.pk }}"
+               {% if p.can_edit_by_me %}draggable="true"{% endif %}>
+                <div class="kanban-card__subject">{{ p.subject }}</div>
+                {% if p.tag_list %}
+                <div class="kanban-card__tags">
+                    {% for t in p.tag_list %}<span class="badge badge--{{ t.color }}">{{ t.name }}</span>{% endfor %}
+                </div>
+                {% endif %}
+                <div class="kanban-card__meta">
+                    {% if p.assigned_to_user %}<span>{{ p.assigned_to_user.first_name }} {{ p.assigned_to_user.last_name }}</span>{% endif %}
+                    {% if p.deadline %}<span>{{ p.deadline|date:"d.m.Y" }}</span>{% endif %}
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+(function () {
+    function getCookie(name) {
+        var value = null;
+        document.cookie.split(';').forEach(function (part) {
+            part = part.trim();
+            if (part.indexOf(name + '=') === 0) value = decodeURIComponent(part.slice(name.length + 1));
+        });
+        return value;
+    }
+    var csrftoken = getCookie('csrftoken');
+    var dragged = null;
+
+    document.querySelectorAll('.kanban-card--draggable').forEach(function (card) {
+        card.addEventListener('dragstart', function (e) {
+            dragged = card;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', card.dataset.projectId);
+        });
+        card.addEventListener('dragend', function () {
+            card.dataset.wasDragged = '1';
+        });
+        // Suppress the click-through navigation that follows a drag-and-drop.
+        card.addEventListener('click', function (e) {
+            if (card.dataset.wasDragged === '1') {
+                e.preventDefault();
+                card.dataset.wasDragged = '0';
+            }
+        });
+    });
+
+    document.querySelectorAll('.kanban-column__body').forEach(function (col) {
+        col.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            col.classList.add('kanban-column__body--over');
+        });
+        col.addEventListener('dragleave', function () {
+            col.classList.remove('kanban-column__body--over');
+        });
+        col.addEventListener('drop', function (e) {
+            e.preventDefault();
+            col.classList.remove('kanban-column__body--over');
+            if (!dragged) return;
+            var statusId = col.dataset.statusId;
+            var projectId = dragged.dataset.projectId;
+            col.appendChild(dragged);
+            fetch("{% url 'projects_project_change_status' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrftoken,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: 'pk=' + encodeURIComponent(projectId) + '&status_id=' + encodeURIComponent(statusId)
+            }).then(function (resp) {
+                if (!resp.ok) { location.reload(); }
+            }).catch(function () { location.reload(); });
+            dragged = null;
+        });
+    });
+})();
+</script>
+
+{% endblock content %}

@@ -1,0 +1,138 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load article_filters i18n %}
+
+{% block content %}
+
+{% include 'includes/breadcrumbs.html' %}
+
+<div class="article-detail">
+    <h1 class="article-title">{{ obj.subject|highlight:search|safe }}</h1>
+    <p class="info">
+        <strong>{{ obj.created_date|date:"d.m.Y H:i" }}</strong>,
+        {% translate 'Created by' %}: <strong>{{ obj.created_by_user.first_name }}&nbsp;{{ obj.created_by_user.last_name }}</strong>
+        {% if obj.assigned_to_user %}
+        , {% translate 'Assigned to' %}: <strong>{{ obj.assigned_to_user.first_name }}&nbsp;{{ obj.assigned_to_user.last_name }}</strong>
+        {% endif %}
+        {% if obj.deadline %}
+        , {% translate 'Deadline' %}: <strong>{{ obj.deadline|date:"d.m.Y" }}</strong>
+        {% endif %}
+        , <span class="badge badge--{{ obj.status.color }}">{{ obj.status.name }}</span>
+    </p>
+
+    {% include 'includes/tags_detail.html' with tags=tags %}
+
+    <div class="detail-actions">
+        {% if can_edit %}
+        <a class="secondary-button" href="{% url 'projects_project_edit' pk=obj.pk %}">{% translate 'Edit' %}</a>
+        {% endif %}
+        <a class="secondary-button" href="{% url 'projects_project_logs' slug=obj.slug %}">{% translate 'View log' %}</a>
+        {% if user in obj.watching_users.all %}
+        <a class="secondary-button" href="{% url 'project_watch' %}?id={{ obj.pk }}&watch=0">{% translate 'Stop watching project' %}</a>
+        {% else %}
+        <a class="secondary-button" href="{% url 'project_watch' %}?id={{ obj.pk }}&watch=1">{% translate 'Start watching project' %}</a>
+        {% endif %}
+    </div>
+
+    {% if can_edit %}
+    <form action="{% url 'projects_project_change_status' %}" method="post" class="status-change-form">
+        {% csrf_token %}
+        <input type="hidden" name="pk" value="{{ obj.pk }}">
+        <label class="label" for="id_status_id">{% translate 'Change status' %}</label>
+        <select class="common-input" name="status_id" id="id_status_id">
+            {% for s in all_statuses %}
+            <option value="{{ s.pk }}" {% if s.pk == obj.status.pk %}selected{% endif %}>{{ s.name }}</option>
+            {% endfor %}
+        </select>
+        <input class="secondary-button" type="submit" value="{% translate 'Change' %}">
+    </form>
+    {% endif %}
+
+    <div class="prose-svjis">
+        {{ obj.description|highlight:search|safe }}
+    </div>
+
+    {% if custom_fields %}
+    <table class="detail no-border">
+        {% include 'includes/custom_fields_detail.html' %}
+    </table>
+    {% endif %}
+
+    {% if obj.image_assets %}
+    <h2 id="gallery" class="comment-title">{% translate 'Gallery' %}</h2>
+    <div class="advert-gallery">
+        {% for a in obj.image_assets %}
+        <a class="advert-gallery__item js-lightbox" href="/media/{{ a.file }}">
+            <img src="/media/{{ a.file }}" alt="{{ a.description }}">
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if obj.other_assets %}
+    <h2 class="comment-title">{% translate 'Assets' %}:</h2>
+    <div class="table-wrapper">
+    <table class="list">
+        <tr>
+            <th class="icon">&nbsp;</th>
+            <th>{% translate 'File' %}</th>
+        </tr>
+        {% for a in obj.other_assets %}
+        <tr>
+            <td class="icon"><span class="icon-static">{% icon a.icon %}</span></td>
+            <td><a href="/media/{{ a.file }}">{% if a.description %}{{ a.description }}{% else %}{{ a.basename }}{% endif %}</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+    {% endif %}
+
+    {% if obj.comments %}
+    <h2 id="comments" class="comment-title">{% translate 'Comments' %}:</h2>
+    {% for comment in obj.comments %}
+    <div id="comment_{{ comment.id }}" class="comment-box">
+        <strong>{{ comment.author.first_name }}&nbsp;{{ comment.author.last_name }} {{ comment.created_date|date:"d.m.Y H:i" }}</strong>
+        {% if comment.author == user and comment.is_editable %}
+            <a class="secondary-button" href="{% url 'project_comment_edit' pk=comment.id %}">{% translate 'Modify' %}</a>
+        {% endif %}
+        <br>{{ comment.body|replace_url_to_link|linebreaks }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% if perms.articles.svjis_add_project_comment %}
+    <h2 class="comment-title">{% translate 'Add comment' %}:</h2>
+    <form action="{% url 'project_comment_save' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="project_pk" value="{{ obj.pk }}">
+        <p>
+            <textarea class="common-textarea" name="body" rows="4"></textarea>
+        </p>
+        <p>
+            <input class="black-submit" type="submit" value="{% translate 'Insert comment' %}">
+        </p>
+    </form>
+    {% endif %}
+
+    {% if can_edit %}
+    <h2 id="assets" class="comment-title">{% translate 'Attachments' %}:</h2>
+    <form action="{% url 'projects_project_asset_save' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="project_pk" value="{{ obj.pk }}">
+        <p>
+            <label class="label" for="{{ asset_form.description.auto_id }}">{{ asset_form.description.label }}</label><br>
+            {{ asset_form.description }}
+        </p>
+        <p>
+            <label class="label" for="{{ asset_form.file.auto_id }}">{{ asset_form.file.label }}</label><br>
+            {{ asset_form.file }}
+        </p>
+        <p>
+            <input class="black-submit" id="submit2" type="submit" value="{% translate 'Upload' %}" />
+        </p>
+    </form>
+    {% endif %}
+
+</div>
+
+{% endblock content %}

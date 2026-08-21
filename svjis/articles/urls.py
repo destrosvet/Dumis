@@ -1,4 +1,13 @@
-from . import views, views_contact, views_personal_settings, views_redaction, views_faults, views_adverts, views_admin
+from . import (
+    views,
+    views_contact,
+    views_personal_settings,
+    views_redaction,
+    views_faults,
+    views_adverts,
+    views_projects,
+    views_admin,
+)
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -158,6 +167,37 @@ urlpatterns = [
     path('fault_comment_modify/', views_faults.fault_comment_modify_view, name='fault_comment_modify'),
     path('fault_watch/', views_faults.fault_watch_view, name='fault_watch'),
     path('faults_fault_logs/<str:slug>/', views_faults.fault_logs_view, name='faults_fault_logs'),
+    path('project/<str:slug>/', views_projects.project_view, name='project'),
+    path('projects_list/', views_projects.projects_list_view, name='projects_list'),
+    path('projects_kanban/', views_projects.projects_kanban_view, name='projects_kanban'),
+    path('projects_project_create/', views_projects.projects_project_create_view, name='projects_project_create'),
+    path('projects_project_edit/<int:pk>/', views_projects.projects_project_edit_view, name='projects_project_edit'),
+    path(
+        'projects_project_create_save/',
+        views_projects.projects_project_create_save_view,
+        name='projects_project_create_save',
+    ),
+    path('projects_project_update/', views_projects.projects_project_update_view, name='projects_project_update'),
+    path(
+        'projects_project_change_status/',
+        views_projects.projects_project_change_status_view,
+        name='projects_project_change_status',
+    ),
+    path(
+        'projects_project_asset_save/',
+        views_projects.projects_project_asset_save_view,
+        name='projects_project_asset_save',
+    ),
+    path(
+        'projects_project_asset_delete/<int:pk>/',
+        views_projects.projects_project_asset_delete_view,
+        name='projects_project_asset_delete',
+    ),
+    path('project_comment_save/', views_projects.project_comment_save_view, name='project_comment_save'),
+    path('project_comment_edit/<int:pk>/', views_projects.project_comment_edit_view, name='project_comment_edit'),
+    path('project_comment_modify/', views_projects.project_comment_modify_view, name='project_comment_modify'),
+    path('project_watch/', views_projects.project_watch_view, name='project_watch'),
+    path('projects_project_logs/<str:slug>/', views_projects.projects_project_logs_view, name='projects_project_logs'),
     path('adverts_list/', views_adverts.adverts_list_view, name='adverts_list'),
     path('adverts_detail/<int:pk>/', views_adverts.adverts_detail_view, name='adverts_detail'),
     path('adverts_edit/<int:pk>/', views_adverts.adverts_edit_view, name='adverts_edit'),
@@ -246,6 +286,24 @@ urlpatterns = [
         views_admin.admin_custom_field_delete_view,
         name='admin_custom_field_delete',
     ),
+    path('admin_project_status/', views_admin.admin_project_status_view, name='admin_project_status'),
+    path(
+        'admin_project_status_edit/<int:pk>/',
+        views_admin.admin_project_status_edit_view,
+        name='admin_project_status_edit',
+    ),
+    path(
+        'admin_project_status_save/', views_admin.admin_project_status_save_view, name='admin_project_status_save'
+    ),
+    path(
+        'admin_project_status_delete/<int:pk>/',
+        views_admin.admin_project_status_delete_view,
+        name='admin_project_status_delete',
+    ),
+    path('admin_tag/', views_admin.admin_tag_view, name='admin_tag'),
+    path('admin_tag_edit/<int:pk>/', views_admin.admin_tag_edit_view, name='admin_tag_edit'),
+    path('admin_tag_save/', views_admin.admin_tag_save_view, name='admin_tag_save'),
+    path('admin_tag_delete/<int:pk>/', views_admin.admin_tag_delete_view, name='admin_tag_delete'),
     path('admin_messages/', views_admin.admin_messages_view, name='admin_messages'),
     path('admin_about/', views_admin.admin_about_view, name='admin_about'),
     path('login_page/', views.login_page_view, name='login_page'),
@@ -259,6 +317,7 @@ urlpatterns = [
     ),
     path("media/articles/<str:slug>/<str:filename>", views.get_article_asset, name="get_article_asset"),
     path("media/faults/<str:slug>/<str:filename>", views_faults.get_fault_asset, name="get_fault_asset"),
+    path("media/projects/<str:slug>/<str:filename>", views_projects.get_project_asset, name="get_project_asset"),
     path("media/inzerce/<int:advert_id>/<str:filename>", views_adverts.get_advert_asset, name="get_advert_asset"),
     path(
         "media/inzerce/covers/<int:user_id>/<str:filename>",

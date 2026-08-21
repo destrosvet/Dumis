@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User, Group, Permission
 from django.db import transaction
 
-from articles.models import ArticleMenu, Preferences, BuildingUnitType, AdvertType
+from articles.models import ArticleMenu, Preferences, BuildingUnitType, AdvertType, ProjectStatus
 
 
 def create_groups():
@@ -42,6 +42,14 @@ def create_groups():
                 # Adverts
                 'svjis_view_adverts_menu',
                 'svjis_add_advert',
+                # Projects
+                'svjis_view_project_menu',
+                'svjis_add_project',
+                'svjis_manage_projects',
+                'svjis_add_project_comment',
+                # Administration
+                'svjis_edit_admin_project_statuses',
+                'svjis_edit_admin_tags',
             ],
         },
         {
@@ -61,6 +69,10 @@ def create_groups():
                 # Adverts
                 'svjis_view_adverts_menu',
                 'svjis_add_advert',
+                # Projects
+                'svjis_view_project_menu',
+                'svjis_add_project',
+                'svjis_add_project_comment',
             ],
         },
         {
@@ -79,6 +91,10 @@ def create_groups():
                 # Adverts
                 'svjis_view_adverts_menu',
                 'svjis_add_advert',
+                # Projects
+                'svjis_view_project_menu',
+                'svjis_add_project',
+                'svjis_add_project_comment',
             ],
         },
         {
@@ -90,6 +106,11 @@ def create_groups():
                 'svjis_view_phonelist',
                 # Personal settings
                 'svjis_view_personal_menu',
+                # Projects
+                'svjis_view_project_menu',
+                'svjis_add_project',
+                'svjis_manage_projects',
+                'svjis_add_project_comment',
             ],
         },
         {
@@ -127,6 +148,9 @@ def create_groups():
                 'svjis_fault_reporter',
                 'svjis_fault_resolver',
                 'svjis_add_fault_comment',
+                # Projects
+                'svjis_view_project_menu',
+                'svjis_add_project_comment',
             ],
         },
     ]
@@ -188,6 +212,22 @@ def create_preferences():
         {'key': 'mail.template.fault.assigned', 'value': 'Uživatel {assignor} vám přiřadil tiket {link}: <br><br><br>{description}'},
         {'key': 'mail.template.fault.closed', 'value': 'Uživatel {user} uzavřel tiket {link}: <br><br><br>{description}'},
         {'key': 'mail.template.fault.reopened', 'value': 'Uživatel {user} znovu otevřel tiket {link}: <br><br><br>{description}'},
+        {
+            'key': 'mail.template.project.notification',
+            'value': 'Uživatel {author} založil nový projekt {link}: <br><br><br>{description}',
+        },
+        {
+            'key': 'mail.template.project.comment.notification',
+            'value': 'Uživatel {author} přidal nový komentář k projektu {link}: <br><br><br>{comment}',
+        },
+        {
+            'key': 'mail.template.project.assigned',
+            'value': 'Uživatel {assignor} vám přiřadil projekt {link}: <br><br><br>{description}',
+        },
+        {
+            'key': 'mail.template.project.status.changed',
+            'value': 'Uživatel {user} změnil stav projektu {link} z "{old_status}" na "{new_status}".',
+        },
     ]
     for p in preferences:
         Preferences.objects.create(key=p['key'], value=p['value'])
@@ -207,6 +247,21 @@ def create_advert_types():
     types = ['Koupím', 'Prodám', 'Ostatní']
     for t in types:
         AdvertType.objects.create(description=t)
+    print("Done")
+
+
+def create_project_statuses():
+    print("Creating project statuses...")
+    statuses = [
+        ('Nový', 'slate', False),
+        ('V realizaci', 'brand', False),
+        ('Čeká na schválení', 'amber', False),
+        ('Dokončeno', 'green', True),
+        ('Zrušeno', 'red', True),
+        ('Archiv', 'slate', True),
+    ]
+    for order, (name, color, is_closed) in enumerate(statuses, start=1):
+        ProjectStatus.objects.create(name=name, order=order, color=color, is_closed=is_closed)
     print("Done")
 
 
@@ -230,6 +285,7 @@ class Command(BaseCommand):
             create_article_menu()
             create_advert_types()
             create_building_unit_types()
+            create_project_statuses()
             create_groups()
             create_preferences()
             create_admin_user(password=password)

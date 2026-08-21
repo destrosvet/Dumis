@@ -1,0 +1,13 @@
+{% load i18n %}
+{% if all_tags %}
+<div class="tag-checklist">
+    {% for t in all_tags %}
+    <label class="checkbox-line">
+        <input type="checkbox" name="tags" value="{{ t.pk }}" {% if t.pk in selected_tag_ids %}checked{% endif %} {% if form_attr %}form="{{ form_attr }}"{% endif %}>
+        <span class="badge badge--{{ t.color }}">{{ t.name }}</span>
+    </label>
+    {% endfor %}
+</div>
+{% else %}
+<span class="form-hint">{% translate 'No tags defined yet.' %}</span>
+{% endif %}

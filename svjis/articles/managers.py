@@ -3,7 +3,7 @@ import typing
 from django.db import models
 
 if typing.TYPE_CHECKING:
-    from articles.models import FaultReportLog  # noqa: F401
+    from articles.models import FaultReportLog, ProjectLog  # noqa: F401
 
 
 class FaultReportLogManager(models.Manager["FaultReportLog"]):
@@ -29,6 +29,34 @@ class FaultReportLogManager(models.Manager["FaultReportLog"]):
                         fault_report=obj,
                         user=request.user,
                         resolver=obj.assigned_to_user,
+                        type=_type,
+                    )
+                )
+        self.bulk_create(result)
+
+
+class ProjectLogManager(models.Manager["ProjectLog"]):
+    def log_actions(self, request, form, queryset, created=False) -> None:
+        result = []
+        others_recorded = False
+        for obj in queryset:
+            for change in form.changed_data:
+                if change == 'assigned_to_user' and not created:
+                    _type = self.model.TYPE_ASSIGNED
+                elif change == 'status':
+                    # Status changes are logged separately via Project.log_status_change(),
+                    # which records the from/to transition - skip it here to avoid a duplicate.
+                    continue
+                else:
+                    if others_recorded:
+                        continue
+                    _type = self.model.TYPE_MODIFIED if not created else self.model.TYPE_CREATED
+                    others_recorded = True
+                result.append(
+                    self.model(
+                        project=obj,
+                        user=request.user,
+                        assignee=obj.assigned_to_user,
                         type=_type,
                     )
                 )

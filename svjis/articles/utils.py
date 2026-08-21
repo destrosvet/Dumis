@@ -9,6 +9,7 @@ from . import (
     views_redaction,
     views_faults,
     views_adverts,
+    views_projects,
     views_admin,
     models,
 )
@@ -24,6 +25,7 @@ from .permissions import (
     svjis_view_personal_menu,
     svjis_view_fault_menu,
     svjis_view_adverts_menu,
+    svjis_view_project_menu,
 )
 from svjis import __version__ as svjis_version
 
@@ -80,6 +82,12 @@ def get_tray_menu(active_item: str, user) -> list:
             'description': _("Adverts"),
             'link': reverse(views_adverts.adverts_list_view) + '?scope=all',
             'active': True if active_item == 'adverts' else False,
+        },
+        {
+            'perms': svjis_view_project_menu,
+            'description': _("Projects"),
+            'link': reverse(views_projects.projects_list_view) + '?scope=active',
+            'active': True if active_item == 'projects' else False,
         },
         {
             'perms': svjis_view_admin_menu,
@@ -287,6 +295,79 @@ def send_fault_reopened_notification(user_list, who_closed, host, fault_report):
             user=f"{who_closed.first_name} {who_closed.last_name}",
             link=link,
             description=fault_report.description.replace('\n', '<br>'),
+        ),
+        False,
+    )
+
+
+def send_new_project_notification(user_list, host, project):
+    template = get_template('mail.template.project.notification')
+    if template is None:
+        return
+    subj = models.Company.objects.get(pk=1).internet_domain
+    link = f"<a href='{host}/project/{project.slug}/'>{project.subject}</a>"
+    send_mails(
+        [user.email for user in user_list if user.is_active and user.email != ''],
+        f'{subj} - {project.subject}',
+        template.value.format(
+            author=f"{project.created_by_user.first_name} {project.created_by_user.last_name}",
+            link=link,
+            description=project.description.replace('\n', '<br>'),
+        ),
+        False,
+    )
+
+
+def send_project_comment_notification(user_list, host, project, comment):
+    template = get_template('mail.template.project.comment.notification')
+    if template is None:
+        return
+    subj = models.Company.objects.get(pk=1).internet_domain
+    link = f"<a href='{host}/project/{project.slug}/#comment_{comment.pk}'>{project.subject}</a>"
+    send_mails(
+        [user.email for user in user_list if user.is_active and user.email != ''],
+        f'{subj} - {project.subject}',
+        template.value.format(
+            author=f"{comment.author.first_name} {comment.author.last_name}",
+            link=link,
+            comment=comment.body.replace('\n', '<br>'),
+        ),
+        False,
+    )
+
+
+def send_project_assigned_notification(user, who_assigned_you, host, project):
+    template = get_template('mail.template.project.assigned')
+    if template is None:
+        return
+    subj = models.Company.objects.get(pk=1).internet_domain
+    link = f"<a href='{host}/project/{project.slug}/'>{project.subject}</a>"
+    send_mails(
+        [user.email],
+        f'{subj} - {project.subject}',
+        template.value.format(
+            assignor=f"{who_assigned_you.first_name} {who_assigned_you.last_name}",
+            link=link,
+            description=project.description.replace('\n', '<br>'),
+        ),
+        False,
+    )
+
+
+def send_project_status_changed_notification(user_list, who_changed, host, project, old_status, new_status):
+    template = get_template('mail.template.project.status.changed')
+    if template is None:
+        return
+    subj = models.Company.objects.get(pk=1).internet_domain
+    link = f"<a href='{host}/project/{project.slug}/'>{project.subject}</a>"
+    send_mails(
+        [user.email for user in user_list if user.is_active and user.email != ''],
+        f'{subj} - {project.subject}',
+        template.value.format(
+            user=f"{who_changed.first_name} {who_changed.last_name}",
+            link=link,
+            old_status=old_status.name,
+            new_status=new_status.name,
         ),
         False,
     )

@@ -7,6 +7,7 @@ from .. import (
     views_redaction,
     views_faults,
     views_adverts,
+    views_projects,
     views_admin,
 )
 
@@ -22,6 +23,7 @@ class MenuTest(ArticleDataMixin, TestCase):
             {'item': 'Redaction', 'link': reverse(views_redaction.redaction_article_view)},
             {'item': 'Fault reporting', 'link': reverse(views_faults.faults_list_view) + '?scope=open'},
             {'item': 'Adverts', 'link': reverse(views_adverts.adverts_list_view) + '?scope=all'},
+            {'item': 'Projects', 'link': reverse(views_projects.projects_list_view) + '?scope=active'},
             {'item': 'Administration', 'link': reverse(views_admin.admin_company_edit_view)},
         ]
         # Login user
@@ -55,24 +57,37 @@ class MenuTest(ArticleDataMixin, TestCase):
         self.do_menu_test(
             'jarda',
             self.u_jarda_password,
-            ['Articles', 'Contact', 'Personal settings', 'Redaction', 'Fault reporting', 'Adverts', 'Administration'],
+            [
+                'Articles',
+                'Contact',
+                'Personal settings',
+                'Redaction',
+                'Fault reporting',
+                'Adverts',
+                'Projects',
+                'Administration',
+            ],
         )
 
     def test_board_user(self):
         self.do_menu_test(
             'jiri',
             self.u_jiri_password,
-            ['Articles', 'Contact', 'Personal settings', 'Redaction', 'Fault reporting', 'Adverts'],
+            ['Articles', 'Contact', 'Personal settings', 'Redaction', 'Fault reporting', 'Adverts', 'Projects'],
         )
 
     def test_owner_user(self):
         self.do_menu_test(
-            'peter', self.u_peter_password, ['Articles', 'Contact', 'Personal settings', 'Fault reporting', 'Adverts']
+            'peter',
+            self.u_peter_password,
+            ['Articles', 'Contact', 'Personal settings', 'Fault reporting', 'Adverts', 'Projects'],
         )
 
     def test_vendor_user(self):
         self.do_menu_test(
-            'karel', self.u_karel_password, ['Articles', 'Contact', 'Personal settings', 'Fault reporting']
+            'karel',
+            self.u_karel_password,
+            ['Articles', 'Contact', 'Personal settings', 'Fault reporting', 'Projects'],
         )
 
     def test_anonymous_user(self):

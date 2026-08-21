@@ -256,6 +256,28 @@ class CustomFieldDefinitionForm(forms.ModelForm):
         }
 
 
+class ProjectStatusForm(forms.ModelForm):
+    class Meta:
+        model = models.ProjectStatus
+        fields = ("name", "order", "is_closed", "color")
+        widgets = {
+            'name': forms.widgets.TextInput(attrs={'class': 'common-input', 'size': '50'}),
+            'order': forms.widgets.NumberInput(attrs={'class': 'common-input'}),
+            'is_closed': forms.widgets.CheckboxInput(attrs={'class': 'common-input-chck'}),
+            'color': forms.widgets.Select(attrs={'class': 'common-input'}),
+        }
+
+
+class TagForm(forms.ModelForm):
+    class Meta:
+        model = models.Tag
+        fields = ("name", "color")
+        widgets = {
+            'name': forms.widgets.TextInput(attrs={'class': 'common-input', 'size': '50'}),
+            'color': forms.widgets.Select(attrs={'class': 'common-input'}),
+        }
+
+
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = models.Company
@@ -420,6 +442,64 @@ class FaultAssetForm(forms.ModelForm):
 class FaultCommentForm(forms.ModelForm):
     class Meta:
         model = models.FaultComment
+        fields = ("body",)
+        widgets = {
+            'body': forms.widgets.Textarea(attrs={'class': 'common-textarea', 'rows': '7', 'wrap': True}),
+        }
+
+
+class ProjectForm(forms.ModelForm):
+    assigned_to_user = UserChoiceField(
+        queryset=User.objects.exclude(is_active=False).distinct().order_by('last_name', 'first_name'),
+        required=False,
+        label=_("Assigned to"),
+        widget=forms.widgets.Select(attrs={'class': 'common-input', 'form': 'project-form'}),
+    )
+    created_by_user = UserChoiceField(
+        queryset=User.objects.exclude(is_active=False).distinct().order_by('last_name', 'first_name'),
+        required=False,
+        label=_("On Behalf Of"),
+        widget=forms.widgets.Select(attrs={'class': 'common-input'}),
+    )
+    # Not required at the form level - non-managers never see this field (it's hidden by
+    # the template), and the view falls back to the default status when it's left blank.
+    status = forms.ModelChoiceField(
+        queryset=models.ProjectStatus.objects.all(),
+        required=False,
+        label=_("Status"),
+        widget=forms.widgets.Select(attrs={'class': 'common-input', 'form': 'project-form'}),
+    )
+
+    class Meta:
+        model = models.Project
+        fields = ("subject", "description", "created_by_user", "assigned_to_user", "status", "deadline")
+        widgets = {
+            'subject': forms.widgets.TextInput(attrs={'class': 'common-input full-width', 'size': '80'}),
+            'description': forms.widgets.Textarea(
+                attrs={'class': 'common-textarea', 'rows': '5', 'cols': '80', 'wrap': True}
+            ),
+            'deadline': forms.widgets.DateInput(
+                attrs={'class': 'common-input', 'type': 'date', 'form': 'project-form'}, format='%Y-%m-%d'
+            ),
+        }
+
+
+class ProjectAssetForm(forms.ModelForm):
+    class Meta:
+        model = models.ProjectAsset
+        fields = (
+            "description",
+            "file",
+        )
+        widgets = {
+            'description': forms.widgets.TextInput(attrs={'class': 'common-input', 'size': '50'}),
+            'file': forms.widgets.FileInput(attrs={'class': 'common-input', 'size': '50'}),
+        }
+
+
+class ProjectCommentForm(forms.ModelForm):
+    class Meta:
+        model = models.ProjectComment
         fields = ("body",)
         widgets = {
             'body': forms.widgets.Textarea(attrs={'class': 'common-textarea', 'rows': '7', 'wrap': True}),

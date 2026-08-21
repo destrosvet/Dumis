@@ -1,0 +1,31 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+<h1 class="page-title">{% translate 'Tag' %}</h1>
+<form action="{% url 'admin_tag_save' %}" method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <input type="hidden" name="pk" value="{{ pk }}">
+
+    <fieldset>
+        <legend>{% translate 'Tag' %}</legend>
+        <p>
+            {{ form.name.errors }}
+            <label class="common-label" for="{{ form.name.auto_id }}">{{ form.name.label }}</label>
+            {{ form.name }}
+        </p>
+        <p>
+            {{ form.color.errors }}
+            <label class="common-label" for="{{ form.color.auto_id }}">{{ form.color.label }}</label>
+            {{ form.color }}
+        </p>
+    </fieldset>
+    <p>
+        <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
+    </p>
+</form>
+
+{% endblock content %}
