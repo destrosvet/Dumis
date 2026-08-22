@@ -21,11 +21,28 @@
             {{ form.color.errors }}
             <label class="common-label" for="{{ form.color.auto_id }}">{{ form.color.label }}</label>
             {{ form.color }}
+            <span id="color-preview" class="badge badge--{{ form.instance.color|default:'slate' }} color-preview">{% translate 'Preview' %}</span>
         </p>
     </fieldset>
     <p>
         <input class="black-submit" id="submit" type="submit" value="{% translate 'Save' %}" />
     </p>
 </form>
+
+<script>
+(function () {
+    var colorSelect = document.getElementById('{{ form.color.auto_id }}');
+    var nameInput = document.getElementById('{{ form.name.auto_id }}');
+    var preview = document.getElementById('color-preview');
+    if (!colorSelect || !preview) return;
+    function refresh() {
+        preview.className = 'badge badge--' + colorSelect.value + ' color-preview';
+        preview.textContent = (nameInput && nameInput.value) || '{% translate "Preview" %}';
+    }
+    colorSelect.addEventListener('change', refresh);
+    if (nameInput) nameInput.addEventListener('input', refresh);
+    refresh();
+})();
+</script>
 
 {% endblock content %}

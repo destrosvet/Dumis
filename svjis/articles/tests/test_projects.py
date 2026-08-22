@@ -9,6 +9,8 @@ from .. import models
 from .factories.project import ProjectFactory
 from .factories.project_status import ProjectStatusFactory
 from .factories.project_comment import ProjectCommentFactory
+from .factories.project_asset import ProjectAssetFactory
+from .factories.project_checklist_item import ProjectChecklistItemFactory
 from .factories.tag import TagFactory
 from .testdata import UserDataMixin
 
@@ -228,6 +230,46 @@ class ProjectsTest(UserDataMixin, TestCase):
         self.client.get(reverse('project_watch') + f'?id={self.project.pk}&watch=0')
         self.assertNotIn(self.u_jarda, self.project.watching_users.all())
 
+    # Checklist - karel is the assignee of self.project, so can_be_edited_by allows it
+    def test_checklist_item_add_toggle_delete(self):
+        self.client.login(username='karel', password=self.u_karel_password)
+        response = self.client.post(
+            reverse('project_checklist_item_save'),
+            {'project_pk': self.project.pk, 'text': 'Buy milk'},
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        item = self.project.checklist_items.get(text='Buy milk')
+        self.assertFalse(item.is_checked)
+
+        response = self.client.get(reverse('project_checklist_item_toggle', kwargs={'pk': item.pk}))
+        self.assertEqual(response.status_code, 302)
+        item.refresh_from_db()
+        self.assertTrue(item.is_checked)
+
+        self.client.get(reverse('project_checklist_item_delete', kwargs={'pk': item.pk}))
+        self.assertFalse(self.project.checklist_items.filter(pk=item.pk).exists())
+
+    def test_checklist_item_mutation_requires_edit_permission(self):
+        item = ProjectChecklistItemFactory(project=self.project, text='untouched')
+        self.client.login(username='peter', password=self.u_peter_password)
+
+        response = self.client.post(
+            reverse('project_checklist_item_save'), {'project_pk': self.project.pk, 'text': 'hacked'}
+        )
+        self.assertEqual(response.status_code, 404)
+        response = self.client.get(reverse('project_checklist_item_toggle', kwargs={'pk': item.pk}))
+        self.assertEqual(response.status_code, 404)
+
+        # Delete silently no-ops on a lack of permission instead of 404ing, matching the
+        # existing projects_project_asset_delete_view convention.
+        self.client.get(reverse('project_checklist_item_delete', kwargs={'pk': item.pk}))
+        self.assertTrue(models.ProjectChecklistItem.objects.filter(pk=item.pk).exists())
+
+        item.refresh_from_db()
+        self.assertFalse(item.is_checked)
+        self.assertFalse(self.project.checklist_items.filter(text='hacked').exists())
+
 
 class ProjectsListTest(UserDataMixin, TestCase):
     @classmethod
@@ -305,6 +347,45 @@ class ProjectsKanbanTest(UserDataMixin, TestCase):
         self.assertNotIn(self.status_done.name, response.content.decode())
         response = self.client.get(reverse('projects_kanban') + '?show_closed=1')
         self.assertIn(self.status_done.name, response.content.decode())
+
+    def test_kanban_annotates_comment_asset_and_checklist_counts(self):
+        self.client.login(username='jiri', password=self.u_jiri_password)
+        project = ProjectFactory(created_by_user=self.u_jiri, assigned_to_user=None, status=self.status_new)
+        ProjectCommentFactory(project=project)
+        ProjectCommentFactory(project=project)
+        ProjectAssetFactory(project=project)
+        ProjectChecklistItemFactory(project=project, is_checked=True)
+        ProjectChecklistItemFactory(project=project, is_checked=False)
+
+        response = self.client.get(reverse('projects_kanban'))
+        rows = [p for col in response.context['columns'] for p in col['projects'] if p.pk == project.pk]
+        self.assertEqual(len(rows), 1)
+        row = rows[0]
+        self.assertEqual(row.comment_count, 2)
+        self.assertEqual(row.asset_count, 1)
+        self.assertEqual(row.checklist_total, 2)
+        self.assertEqual(row.checklist_done, 1)
+
+    def test_quick_create_card_from_kanban(self):
+        self.client.login(username='jiri', password=self.u_jiri_password)
+        response = self.client.post(
+            reverse('projects_project_quick_create'),
+            {'subject': 'Quick card', 'status_id': self.status_new.pk},
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        project = models.Project.objects.get(subject='Quick card')
+        self.assertEqual(project.status, self.status_new)
+        self.assertEqual(project.created_by_user, self.u_jiri)
+
+    def test_quick_create_card_requires_add_project_permission(self):
+        self.client.login(username='karel', password=self.u_karel_password)
+        response = self.client.post(
+            reverse('projects_project_quick_create'),
+            {'subject': 'Quick card', 'status_id': self.status_new.pk},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(models.Project.objects.filter(subject='Quick card').exists())
 
 
 class ProjectStatusProtectionTest(UserDataMixin, TestCase):

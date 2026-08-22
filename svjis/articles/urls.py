@@ -196,6 +196,26 @@ urlpatterns = [
     path('project_comment_save/', views_projects.project_comment_save_view, name='project_comment_save'),
     path('project_comment_edit/<int:pk>/', views_projects.project_comment_edit_view, name='project_comment_edit'),
     path('project_comment_modify/', views_projects.project_comment_modify_view, name='project_comment_modify'),
+    path(
+        'projects_project_quick_create/',
+        views_projects.projects_project_quick_create_view,
+        name='projects_project_quick_create',
+    ),
+    path(
+        'project_checklist_item_save/',
+        views_projects.project_checklist_item_save_view,
+        name='project_checklist_item_save',
+    ),
+    path(
+        'project_checklist_item_toggle/<int:pk>/',
+        views_projects.project_checklist_item_toggle_view,
+        name='project_checklist_item_toggle',
+    ),
+    path(
+        'project_checklist_item_delete/<int:pk>/',
+        views_projects.project_checklist_item_delete_view,
+        name='project_checklist_item_delete',
+    ),
     path('project_watch/', views_projects.project_watch_view, name='project_watch'),
     path('projects_project_logs/<str:slug>/', views_projects.projects_project_logs_view, name='projects_project_logs'),
     path('adverts_list/', views_adverts.adverts_list_view, name='adverts_list'),

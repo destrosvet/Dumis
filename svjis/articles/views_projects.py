@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.core.paginator import Paginator, InvalidPage
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.http import FileResponse, Http404, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import gettext_lazy as _
@@ -173,7 +173,14 @@ def projects_kanban_view(request):
     if not show_closed:
         statuses = statuses.exclude(is_closed=True)
 
-    project_list = list(models.Project.objects.select_related('status', 'assigned_to_user'))
+    project_list = list(
+        models.Project.objects.select_related('status', 'assigned_to_user').annotate(
+            comment_count=Count('projectcomment', distinct=True),
+            asset_count=Count('projectasset', distinct=True),
+            checklist_total=Count('checklist_items', distinct=True),
+            checklist_done=Count('checklist_items', filter=Q(checklist_items__is_checked=True), distinct=True),
+        )
+    )
 
     ct = ContentType.objects.get_for_model(models.Project)
     tags_by_project = {}
@@ -222,6 +229,16 @@ def project_view(request, slug):
     ctx['all_statuses'] = models.ProjectStatus.objects.all()
     ctx['tags'] = models.Tag.objects.filter(pk__in=list(tag_ids))
     ctx['custom_fields'] = views_admin.get_custom_fields_context(models.Project, project)
+
+    checklist_items = list(project.checklist_items.all())
+    checklist_total = len(checklist_items)
+    checklist_done = sum(1 for i in checklist_items if i.is_checked)
+    ctx['checklist_items'] = checklist_items
+    ctx['checklist_total'] = checklist_total
+    ctx['checklist_done'] = checklist_done
+    ctx['checklist_percent'] = int(checklist_done / checklist_total * 100) if checklist_total else 0
+    ctx['checklist_item_form'] = forms.ProjectChecklistItemForm
+
     ctx['breadcrumbs'] = [
         {'label': _('Projects'), 'url': reverse(projects_list_view)},
         {'label': project.subject},
@@ -250,6 +267,21 @@ def projects_project_edit_view(request, pk):
     ctx['aside_menu_items'] = get_side_menu('active', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('projects', request.user)
     return render(request, "projects_edit.html", ctx)
+
+
+def add_default_watchers_and_notify(request, obj):
+    obj.watching_users.add(obj.created_by_user)
+    if obj.assigned_to_user is not None:
+        obj.watching_users.add(obj.assigned_to_user)
+    managers = (
+        models.User.objects.filter(groups__permissions__codename='svjis_manage_projects')
+        .exclude(is_active=False)
+        .distinct()
+    )
+    for u in managers:
+        obj.watching_users.add(u)
+    recipients = [u for u in obj.watching_users.all() if u != obj.created_by_user]
+    utils.send_new_project_notification(recipients, f"{request.scheme}://{request.get_host()}", obj)
 
 
 @permission_required(svjis_add_project)
@@ -302,21 +334,7 @@ def projects_project_create_save_view(request):
             models.ProjectAsset.objects.create(project=obj, description='', file=f, created_by_user=request.user)
         models.ProjectLog.objects.log_actions(request=request, form=form, queryset=[obj], created=True)
 
-        # Set watching users
-        obj.watching_users.add(obj.created_by_user)
-        if obj.assigned_to_user is not None:
-            obj.watching_users.add(obj.assigned_to_user)
-        managers = (
-            models.User.objects.filter(groups__permissions__codename='svjis_manage_projects')
-            .exclude(is_active=False)
-            .distinct()
-        )
-        for u in managers:
-            obj.watching_users.add(u)
-
-        # Send notifications
-        recipients = [u for u in obj.watching_users.all() if u != obj.created_by_user]
-        utils.send_new_project_notification(recipients, f"{request.scheme}://{request.get_host()}", obj)
+        add_default_watchers_and_notify(request, obj)
 
         # Send assigned notification
         if obj.assigned_to_user is not None and request.user != obj.assigned_to_user:
@@ -325,6 +343,28 @@ def projects_project_create_save_view(request):
             )
     messages.info(request, _('Saved'))
     return redirect(project_view, slug=obj.slug)
+
+
+@permission_required(svjis_add_project)
+@require_POST
+def projects_project_quick_create_view(request):
+    status = get_object_or_404(models.ProjectStatus, pk=int(request.POST['status_id']))
+    redirect_url = reverse(projects_kanban_view)
+    if request.POST.get('show_closed') == '1':
+        redirect_url += '?show_closed=1'
+    subject = request.POST.get('subject', '').strip()
+    if not subject:
+        messages.error(request, _('Subject is required'))
+        return redirect(redirect_url)
+    with transaction.atomic():
+        obj = models.Project.objects.create(
+            subject=subject[:100], description='', created_by_user=request.user, status=status
+        )
+        add_default_watchers_and_notify(request, obj)
+        models.ProjectLog.objects.create(
+            project=obj, user=request.user, assignee=obj.assigned_to_user, type=models.ProjectLog.TYPE_CREATED
+        )
+    return redirect(redirect_url)
 
 
 @permission_required(svjis_view_project_menu)
@@ -527,6 +567,45 @@ def project_comment_modify_view(request):
     else:
         messages.error(request, _('Comment cannot be modified anymore'))
         return redirect(reverse('project', kwargs={'slug': comment.project.slug}))
+
+
+# Projects - ProjectChecklistItem
+@permission_required(svjis_view_project_menu)
+@require_POST
+def project_checklist_item_save_view(request):
+    project_pk = int(request.POST.get('project_pk'))
+    project = get_object_or_404(models.Project, pk=project_pk)
+    if not project.can_be_edited_by(request.user):
+        raise Http404
+    form = forms.ProjectChecklistItemForm(request.POST)
+    if form.is_valid():
+        obj = form.save(commit=False)
+        obj.project = project
+        obj.save()
+    else:
+        messages.error(request, form.errors)
+    return redirect(reverse('project', kwargs={'slug': project.slug}) + '#checklist')
+
+
+@permission_required(svjis_view_project_menu)
+@require_GET
+def project_checklist_item_toggle_view(request, pk):
+    item = get_object_or_404(models.ProjectChecklistItem, pk=pk)
+    if not item.project.can_be_edited_by(request.user):
+        raise Http404
+    item.is_checked = not item.is_checked
+    item.save()
+    return redirect(reverse('project', kwargs={'slug': item.project.slug}) + '#checklist')
+
+
+@permission_required(svjis_view_project_menu)
+@require_GET
+def project_checklist_item_delete_view(request, pk):
+    item = get_object_or_404(models.ProjectChecklistItem, pk=pk)
+    project = item.project
+    if project.can_be_edited_by(request.user):
+        item.delete()
+    return redirect(reverse('project', kwargs={'slug': project.slug}) + '#checklist')
 
 
 # Projects - Watching

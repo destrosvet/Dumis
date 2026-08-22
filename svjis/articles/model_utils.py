@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.template.defaultfilters import slugify
 from django.utils import timezone
+from django.utils.translation import gettext as gt, ngettext
 from PIL import Image, ImageOps
 
 
@@ -144,3 +145,27 @@ def get_age_in_minutes(timestamp_from_model) -> int | None:
         return int(time_difference.total_seconds() / 60)
     else:
         return None
+
+
+def relative_time_display(timestamp) -> str:
+    """
+    "Classic" relative-time formatting for "last updated"-style timestamps:
+    minutes/hours ago within the same day, days ago for up to a week, and an
+    absolute date beyond that. Reusable anywhere the app needs this pattern.
+    """
+    if not timestamp:
+        return ''
+
+    delta = timezone.now() - timestamp
+    seconds = delta.total_seconds()
+    if seconds < 60:
+        return gt("just now")
+    if seconds < 3600:
+        minutes = int(seconds // 60)
+        return ngettext("%(count)d minute ago", "%(count)d minutes ago", minutes) % {'count': minutes}
+    if delta.days < 1:
+        hours = int(seconds // 3600)
+        return ngettext("%(count)d hour ago", "%(count)d hours ago", hours) % {'count': hours}
+    if delta.days < 7:
+        return ngettext("%(count)d day ago", "%(count)d days ago", delta.days) % {'count': delta.days}
+    return timestamp.strftime('%d.%m.%Y')

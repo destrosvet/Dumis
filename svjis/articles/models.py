@@ -27,13 +27,22 @@ MEDIA_FAULT_ASSETS_DIR = 'faults'
 MEDIA_PROJECT_ASSETS_DIR = 'projects'
 
 # Shared badge color palette (project statuses, tags) - maps 1:1 to the
-# .badge--* CSS classes already defined in styles_v3.css.
+# .badge--* CSS classes in styles_v3.css. Kept as a closed, curated set (not a
+# free color picker) so every combination stays a matched, readable
+# background/text pair - widen this tuple (and add a matching .badge--<key>
+# rule) rather than allowing arbitrary hex values.
 BADGE_COLOR_CHOICES = (
     ('slate', _("Grey")),
     ('brand', _("Teal")),
-    ('green', _("Green")),
-    ('amber', _("Amber")),
+    ('blue', _("Blue")),
+    ('indigo', _("Indigo")),
+    ('purple', _("Purple")),
+    ('pink', _("Pink")),
     ('red', _("Red")),
+    ('orange', _("Orange")),
+    ('amber', _("Amber")),
+    ('green', _("Green")),
+    ('cyan', _("Cyan")),
 )
 
 
@@ -734,6 +743,7 @@ class Project(models.Model):
     slug = models.CharField(max_length=100, unique=True)
     description = models.TextField(_("Description"))
     created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
     created_by_user = models.ForeignKey(User, on_delete=models.CASCADE)
     assigned_to_user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='assigned_project_set', null=True, blank=True
@@ -825,6 +835,19 @@ class ProjectAsset(models.Model):
         if os.path.isfile(self.file.path):
             os.remove(self.file.path)
         super().delete(*args, **kwargs)
+
+    class Meta:
+        ordering = ['id']
+
+
+class ProjectChecklistItem(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='checklist_items')
+    text = models.CharField(_("Text"), max_length=200)
+    is_checked = models.BooleanField(_("Checked"), default=False)
+    created_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"ProjectChecklistItem: {self.project} - {self.text}"
 
     class Meta:
         ordering = ['id']

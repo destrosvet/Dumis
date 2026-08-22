@@ -1,6 +1,6 @@
 {% extends "base-with-aside-menu-content.html" %}
 
-{% load i18n %}
+{% load article_filters i18n %}
 
 {% block content %}
 
@@ -26,18 +26,46 @@
                href="{% url 'project' slug=p.slug %}"
                data-project-id="{{ p.pk }}"
                {% if p.can_edit_by_me %}draggable="true"{% endif %}>
-                <div class="kanban-card__subject">{{ p.subject }}</div>
                 {% if p.tag_list %}
-                <div class="kanban-card__tags">
-                    {% for t in p.tag_list %}<span class="badge badge--{{ t.color }}">{{ t.name }}</span>{% endfor %}
+                <div class="kanban-card__labels">
+                    {% for t in p.tag_list %}<span class="kanban-card__label kanban-card__label--{{ t.color }}" title="{{ t.name }}"></span>{% endfor %}
                 </div>
                 {% endif %}
+                <div class="kanban-card__subject">{{ p.subject }}</div>
                 <div class="kanban-card__meta">
                     {% if p.assigned_to_user %}<span>{{ p.assigned_to_user.first_name }} {{ p.assigned_to_user.last_name }}</span>{% endif %}
                     {% if p.deadline %}<span>{{ p.deadline|date:"d.m.Y" }}</span>{% endif %}
                 </div>
+                {% if p.checklist_total or p.comment_count or p.asset_count %}
+                <div class="kanban-card__badges">
+                    {% if p.checklist_total %}
+                    <span class="kanban-badge{% if p.checklist_done == p.checklist_total %} kanban-badge--done{% endif %}">{% icon 'check-square' %}{{ p.checklist_done }}/{{ p.checklist_total }}</span>
+                    {% endif %}
+                    {% if p.comment_count %}
+                    <span class="kanban-badge">{% icon 'message-square' %}{{ p.comment_count }}</span>
+                    {% endif %}
+                    {% if p.asset_count %}
+                    <span class="kanban-badge">{% icon 'attach' %}{{ p.asset_count }}</span>
+                    {% endif %}
+                </div>
+                {% endif %}
             </a>
             {% endfor %}
+            {% if perms.articles.svjis_add_project %}
+            <div class="kanban-column__add">
+                <button type="button" class="kanban-add-card__trigger">{% icon 'plus' %} {% translate 'Add a card' %}</button>
+                <form class="kanban-add-form" method="post" action="{% url 'projects_project_quick_create' %}" hidden>
+                    {% csrf_token %}
+                    <input type="hidden" name="status_id" value="{{ col.status.pk }}">
+                    {% if show_closed %}<input type="hidden" name="show_closed" value="1">{% endif %}
+                    <textarea class="common-textarea" name="subject" maxlength="100" placeholder="{% translate 'Enter a title for this card' %}"></textarea>
+                    <div class="kanban-add-form__actions">
+                        <input class="btn--primary btn--sm" type="submit" value="{% translate 'Add card' %}">
+                        <button type="button" class="kanban-add-form__cancel btn--ghost btn--sm">{% translate 'Cancel' %}</button>
+                    </div>
+                </form>
+            </div>
+            {% endif %}
         </div>
     </div>
     {% endfor %}
@@ -89,7 +117,7 @@
             if (!dragged) return;
             var statusId = col.dataset.statusId;
             var projectId = dragged.dataset.projectId;
-            col.appendChild(dragged);
+            col.insertBefore(dragged, col.querySelector('.kanban-column__add'));
             fetch("{% url 'projects_project_change_status' %}", {
                 method: 'POST',
                 headers: {
@@ -102,6 +130,23 @@
                 if (!resp.ok) { location.reload(); }
             }).catch(function () { location.reload(); });
             dragged = null;
+        });
+    });
+
+    document.querySelectorAll('.kanban-add-card__trigger').forEach(function (trigger) {
+        trigger.addEventListener('click', function () {
+            var wrapper = trigger.closest('.kanban-column__add');
+            var form = wrapper.querySelector('.kanban-add-form');
+            trigger.hidden = true;
+            form.hidden = false;
+            form.querySelector('textarea').focus();
+        });
+    });
+    document.querySelectorAll('.kanban-add-form__cancel').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var wrapper = btn.closest('.kanban-column__add');
+            wrapper.querySelector('.kanban-add-form').hidden = true;
+            wrapper.querySelector('.kanban-add-card__trigger').hidden = false;
         });
     });
 })();

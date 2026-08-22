@@ -506,6 +506,15 @@ class ProjectCommentForm(forms.ModelForm):
         }
 
 
+class ProjectChecklistItemForm(forms.ModelForm):
+    class Meta:
+        model = models.ProjectChecklistItem
+        fields = ("text",)
+        widgets = {
+            'text': forms.widgets.TextInput(attrs={'class': 'common-input', 'maxlength': '200'}),
+        }
+
+
 class AdvertForm(forms.ModelForm):
     class Meta:
         model = models.Advert
