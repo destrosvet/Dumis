@@ -4,14 +4,14 @@
 
 {% block content %}
 
-<h1 class="page-title">{% translate 'Preferences' %}</h1>
+<h1 class="page-title">{% translate 'E-Mail templates' %}</h1>
 <form action="{% url 'admin_preferences_save' %}" method="post">
     {% csrf_token %}
     {{ form.non_field_errors }}
     <input type="hidden" name="pk" value="{{ pk }}">
 
     <fieldset>
-        <legend>{% translate 'Preferences' %}</legend>
+        <legend>{% translate 'E-Mail template' %}</legend>
         <p>
             {{ form.key.errors }}
             <label class="common-label" for="{{ form.key.auto_id }}">{{ form.key.label }}</label>

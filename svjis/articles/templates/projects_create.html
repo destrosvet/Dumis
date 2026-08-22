@@ -30,7 +30,7 @@
 
         <div class="card">
             <div class="card__body">
-                <input class="btn--primary btn--block" id="submit" form="project-form" type="submit" value="{% translate 'Save' %}" />
+                <input class="btn--primary btn--block" id="submit" form="project-form" type="submit" value="{% translate 'Create' %}" />
             </div>
         </div>
 
@@ -58,6 +58,13 @@
             </div>
         </div>
 
+        <div class="card">
+            <div class="card__header card__header--light">{% translate 'Tags' %}</div>
+            <div class="card__body">
+                {% include 'includes/tags_form.html' with form_attr='project-form' %}
+            </div>
+        </div>
+
     </div>
 
 </div>
@@ -70,5 +77,7 @@
         {% endif %}
     });
 </script>
+
+{% include 'includes/hugerte.html' %}
 
 {% endblock content %}

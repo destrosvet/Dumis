@@ -1,5 +1,6 @@
 import re
 
+from django.contrib.contenttypes.models import ContentType
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models import ProtectedError
 from django.test import TestCase
@@ -10,7 +11,6 @@ from .factories.project import ProjectFactory
 from .factories.project_status import ProjectStatusFactory
 from .factories.project_comment import ProjectCommentFactory
 from .factories.project_asset import ProjectAssetFactory
-from .factories.project_checklist_item import ProjectChecklistItemFactory
 from .factories.tag import TagFactory
 from .testdata import UserDataMixin
 
@@ -36,6 +36,14 @@ class ProjectsTest(UserDataMixin, TestCase):
         response = self.client.post(self.create_url, project_form, follow=True)
         self.assertEqual(response.status_code, 200)
         return response.context['obj']
+
+    def tag_names(self, project):
+        ct = ContentType.objects.get_for_model(models.Project)
+        return list(
+            models.TaggedItem.objects.filter(content_type=ct, object_id=project.pk).values_list(
+                'tag__name', flat=True
+            )
+        )
 
     def test_retrieve(self):
         self.client.login(username='jiri', password=self.u_jiri_password)
@@ -193,7 +201,7 @@ class ProjectsTest(UserDataMixin, TestCase):
     # Tags
     def test_tags_round_trip_on_edit(self):
         tag_asap = TagFactory(name='ASAP')
-        tag_other = TagFactory(name='Other')
+        TagFactory(name='Other')
         self.client.login(username='jiri', password=self.u_jiri_password)
         response = self.client.post(
             self.update_url,
@@ -209,10 +217,43 @@ class ProjectsTest(UserDataMixin, TestCase):
             follow=True,
         )
         self.assertEqual(response.status_code, 200)
-        response = self.client.get(reverse('projects_project_edit', kwargs={'pk': self.project.pk}))
-        content = response.content.decode()
-        self.assertIn(f'value="{tag_asap.pk}" checked', content)
-        self.assertNotIn(f'value="{tag_other.pk}" checked', content)
+        self.assertEqual(self.tag_names(self.project), ['ASAP'])
+
+    def test_tags_can_be_set_on_create(self):
+        tag = TagFactory(name='New Tag')
+        self.client.login(username='peter', password=self.u_peter_password)
+        response = self.client.post(
+            self.create_url,
+            {'pk': 0, 'subject': 'test', 'description': 'test', 'created_by_user': '', 'tags': [tag.pk]},
+            follow=True,
+        )
+        self.assertEqual(response.status_code, 200)
+        project = response.context['obj']
+        self.assertEqual(self.tag_names(project), ['New Tag'])
+
+    # Inline "+ Add tag" endpoint (AJAX from the create/edit sidebar)
+    def test_project_tag_create_endpoint_creates_new_tag(self):
+        self.client.login(username='jiri', password=self.u_jiri_password)
+        response = self.client.post(reverse('project_tag_create'), {'name': 'Brand New', 'color': 'purple'})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        tag = models.Tag.objects.get(pk=data['id'])
+        self.assertEqual(tag.name, 'Brand New')
+        self.assertEqual(tag.color, 'purple')
+
+    def test_project_tag_create_endpoint_is_case_insensitive_get_or_create(self):
+        existing = TagFactory(name='ASAP', color='red')
+        self.client.login(username='jiri', password=self.u_jiri_password)
+        response = self.client.post(reverse('project_tag_create'), {'name': 'asap', 'color': 'green'})
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data['id'], existing.pk)
+        self.assertEqual(models.Tag.objects.filter(name__iexact='asap').count(), 1)
+
+    def test_project_tag_create_endpoint_rejects_blank_name(self):
+        self.client.login(username='jiri', password=self.u_jiri_password)
+        response = self.client.post(reverse('project_tag_create'), {'name': '  ', 'color': 'slate'})
+        self.assertEqual(response.status_code, 400)
 
     # Comments
     def test_comment_editable_only_by_author(self):
@@ -229,46 +270,6 @@ class ProjectsTest(UserDataMixin, TestCase):
         self.assertIn(self.u_jarda, self.project.watching_users.all())
         self.client.get(reverse('project_watch') + f'?id={self.project.pk}&watch=0')
         self.assertNotIn(self.u_jarda, self.project.watching_users.all())
-
-    # Checklist - karel is the assignee of self.project, so can_be_edited_by allows it
-    def test_checklist_item_add_toggle_delete(self):
-        self.client.login(username='karel', password=self.u_karel_password)
-        response = self.client.post(
-            reverse('project_checklist_item_save'),
-            {'project_pk': self.project.pk, 'text': 'Buy milk'},
-            follow=True,
-        )
-        self.assertEqual(response.status_code, 200)
-        item = self.project.checklist_items.get(text='Buy milk')
-        self.assertFalse(item.is_checked)
-
-        response = self.client.get(reverse('project_checklist_item_toggle', kwargs={'pk': item.pk}))
-        self.assertEqual(response.status_code, 302)
-        item.refresh_from_db()
-        self.assertTrue(item.is_checked)
-
-        self.client.get(reverse('project_checklist_item_delete', kwargs={'pk': item.pk}))
-        self.assertFalse(self.project.checklist_items.filter(pk=item.pk).exists())
-
-    def test_checklist_item_mutation_requires_edit_permission(self):
-        item = ProjectChecklistItemFactory(project=self.project, text='untouched')
-        self.client.login(username='peter', password=self.u_peter_password)
-
-        response = self.client.post(
-            reverse('project_checklist_item_save'), {'project_pk': self.project.pk, 'text': 'hacked'}
-        )
-        self.assertEqual(response.status_code, 404)
-        response = self.client.get(reverse('project_checklist_item_toggle', kwargs={'pk': item.pk}))
-        self.assertEqual(response.status_code, 404)
-
-        # Delete silently no-ops on a lack of permission instead of 404ing, matching the
-        # existing projects_project_asset_delete_view convention.
-        self.client.get(reverse('project_checklist_item_delete', kwargs={'pk': item.pk}))
-        self.assertTrue(models.ProjectChecklistItem.objects.filter(pk=item.pk).exists())
-
-        item.refresh_from_db()
-        self.assertFalse(item.is_checked)
-        self.assertFalse(self.project.checklist_items.filter(text='hacked').exists())
 
 
 class ProjectsListTest(UserDataMixin, TestCase):
@@ -348,14 +349,12 @@ class ProjectsKanbanTest(UserDataMixin, TestCase):
         response = self.client.get(reverse('projects_kanban') + '?show_closed=1')
         self.assertIn(self.status_done.name, response.content.decode())
 
-    def test_kanban_annotates_comment_asset_and_checklist_counts(self):
+    def test_kanban_annotates_comment_and_asset_counts(self):
         self.client.login(username='jiri', password=self.u_jiri_password)
         project = ProjectFactory(created_by_user=self.u_jiri, assigned_to_user=None, status=self.status_new)
         ProjectCommentFactory(project=project)
         ProjectCommentFactory(project=project)
         ProjectAssetFactory(project=project)
-        ProjectChecklistItemFactory(project=project, is_checked=True)
-        ProjectChecklistItemFactory(project=project, is_checked=False)
 
         response = self.client.get(reverse('projects_kanban'))
         rows = [p for col in response.context['columns'] for p in col['projects'] if p.pk == project.pk]
@@ -363,29 +362,16 @@ class ProjectsKanbanTest(UserDataMixin, TestCase):
         row = rows[0]
         self.assertEqual(row.comment_count, 2)
         self.assertEqual(row.asset_count, 1)
-        self.assertEqual(row.checklist_total, 2)
-        self.assertEqual(row.checklist_done, 1)
 
-    def test_quick_create_card_from_kanban(self):
+    def test_add_a_card_link_prefills_column_status(self):
         self.client.login(username='jiri', password=self.u_jiri_password)
-        response = self.client.post(
-            reverse('projects_project_quick_create'),
-            {'subject': 'Quick card', 'status_id': self.status_new.pk},
-            follow=True,
-        )
-        self.assertEqual(response.status_code, 200)
-        project = models.Project.objects.get(subject='Quick card')
-        self.assertEqual(project.status, self.status_new)
-        self.assertEqual(project.created_by_user, self.u_jiri)
+        response = self.client.get(reverse('projects_kanban'))
+        content = response.content.decode()
+        self.assertIn(f"{reverse('projects_project_create')}?status={self.status_new.pk}", content)
 
-    def test_quick_create_card_requires_add_project_permission(self):
-        self.client.login(username='karel', password=self.u_karel_password)
-        response = self.client.post(
-            reverse('projects_project_quick_create'),
-            {'subject': 'Quick card', 'status_id': self.status_new.pk},
-        )
-        self.assertEqual(response.status_code, 302)
-        self.assertFalse(models.Project.objects.filter(subject='Quick card').exists())
+        response = self.client.get(reverse('projects_project_create') + f'?status={self.status_done.pk}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['form'].initial['status'], self.status_done.pk)
 
 
 class ProjectStatusProtectionTest(UserDataMixin, TestCase):

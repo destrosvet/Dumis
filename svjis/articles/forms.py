@@ -8,6 +8,16 @@ from . import models
 SELECT_ENTRANCE_TEXT = "Select the entranance (if does it make sense)"
 
 
+class HugeRTETextarea(forms.Textarea):
+    # HugeRTE hides the underlying <textarea> once it initializes, so the browser
+    # can never focus it to show native "required" validation - which makes Chrome
+    # refuse to submit the form at all ("form control ... not focusable") instead of
+    # just ignoring it. Suppress the attribute; ModelForm validation still enforces
+    # the field as required server-side regardless.
+    def use_required_attribute(self, initial):
+        return False
+
+
 class ArticleMenuForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -44,10 +54,10 @@ class ArticleForm(forms.ModelForm):
         widgets = {
             'header': forms.widgets.TextInput(attrs={'class': 'common-input full-width', 'size': '50'}),
             'cover_image': forms.widgets.FileInput(attrs={'class': 'common-input'}),
-            'perex': forms.widgets.Textarea(
+            'perex': HugeRTETextarea(
                 attrs={'class': 'common-textarea hugerte', 'rows': '20', 'cols': '30', 'data-height': '350'},
             ),
-            'body': forms.widgets.Textarea(
+            'body': HugeRTETextarea(
                 attrs={'class': 'common-textarea hugerte', 'rows': '20', 'cols': '30', 'data-height': '700'},
             ),
             'menu': forms.widgets.Select(attrs={'class': 'common-input', 'form': 'article-edit-form'}),
@@ -221,7 +231,7 @@ class PreferencesForm(forms.ModelForm):
         )
         widgets = {
             'key': forms.widgets.TextInput(attrs={'class': 'common-input', 'size': '50'}),
-            'value': forms.widgets.Textarea(
+            'value': HugeRTETextarea(
                 attrs={'class': 'common-textarea hugerte', 'rows': '10', 'cols': '30', 'data-height': '350'},
             ),
         }
@@ -388,6 +398,11 @@ class UserChoiceField(forms.ModelChoiceField):
         return f"{obj.last_name} {obj.first_name}"
 
 
+class ProjectStatusChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        return obj.name
+
+
 class FaultReportForm(forms.ModelForm):
     entrance = BuildingEntranceChoiceField(
         queryset=models.BuildingEntrance.objects.all().order_by('description'),
@@ -463,7 +478,7 @@ class ProjectForm(forms.ModelForm):
     )
     # Not required at the form level - non-managers never see this field (it's hidden by
     # the template), and the view falls back to the default status when it's left blank.
-    status = forms.ModelChoiceField(
+    status = ProjectStatusChoiceField(
         queryset=models.ProjectStatus.objects.all(),
         required=False,
         label=_("Status"),
@@ -475,8 +490,8 @@ class ProjectForm(forms.ModelForm):
         fields = ("subject", "description", "created_by_user", "assigned_to_user", "status", "deadline")
         widgets = {
             'subject': forms.widgets.TextInput(attrs={'class': 'common-input full-width', 'size': '80'}),
-            'description': forms.widgets.Textarea(
-                attrs={'class': 'common-textarea', 'rows': '5', 'cols': '80', 'wrap': True}
+            'description': HugeRTETextarea(
+                attrs={'class': 'common-textarea hugerte', 'rows': '10', 'cols': '80', 'data-height': '400'}
             ),
             'deadline': forms.widgets.DateInput(
                 attrs={'class': 'common-input', 'type': 'date', 'form': 'project-form'}, format='%Y-%m-%d'
@@ -503,15 +518,6 @@ class ProjectCommentForm(forms.ModelForm):
         fields = ("body",)
         widgets = {
             'body': forms.widgets.Textarea(attrs={'class': 'common-textarea', 'rows': '7', 'wrap': True}),
-        }
-
-
-class ProjectChecklistItemForm(forms.ModelForm):
-    class Meta:
-        model = models.ProjectChecklistItem
-        fields = ("text",)
-        widgets = {
-            'text': forms.widgets.TextInput(attrs={'class': 'common-input', 'maxlength': '200'}),
         }
 
 

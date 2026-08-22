@@ -1100,10 +1100,11 @@ img.article-img, video.article-video {
 }
 
 .comment-box {
+  position: relative;
   background: var(--slate-50);
   border: 1px solid var(--slate-200);
   border-radius: var(--radius);
-  padding: 0.875rem 1rem;
+  padding: 0.875rem 3rem 0.875rem 1rem;
   margin-bottom: 0.5rem;
 }
 .comment-box strong { color: var(--slate-900); font-size: 0.875rem; }
@@ -1494,12 +1495,12 @@ p.contact a { color: var(--brand-600); }
   .edit-sidebar { width: 100%; }
 }
 
-.group-select {
+.dropdown-select {
   border: 1px solid var(--slate-300);
   border-radius: var(--radius);
   background: #fff;
 }
-.group-select__summary {
+.dropdown-select__summary {
   list-style: none;
   cursor: pointer;
   padding: 0.5rem 0.75rem;
@@ -1510,25 +1511,33 @@ p.contact a { color: var(--brand-600); }
   justify-content: space-between;
   gap: 0.5rem;
 }
-.group-select__summary span {
+.dropdown-select__summary span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.group-select__summary::-webkit-details-marker { display: none; }
-.group-select__summary::after {
+.dropdown-select__summary span.dropdown-select__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+}
+.dropdown-select__summary::-webkit-details-marker { display: none; }
+.dropdown-select__summary::after {
   content: '\25be';
   flex-shrink: 0;
   color: var(--slate-400);
 }
-.group-select[open] .group-select__summary::after { content: '\25b4'; }
-.group-select__panel {
+.dropdown-select[open] .dropdown-select__summary::after { content: '\25b4'; }
+.dropdown-select__panel {
   border-top: 1px solid var(--slate-200);
   padding: 0.5rem 0.75rem;
   max-height: 180px;
   overflow-y: auto;
 }
-.group-select__option {
+.dropdown-select__option {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -1540,7 +1549,7 @@ p.contact a { color: var(--brand-600); }
   text-align: left;
   width: auto;
 }
-.group-select__option input { width: auto; }
+.dropdown-select__option input { width: auto; }
 
 .perm-tables {
   display: grid;
@@ -1567,6 +1576,11 @@ p.contact a { color: var(--brand-600); }
   width: auto;
 }
 .checkbox-line input { width: auto; margin: 0; }
+
+.tag-add__form { display: flex; flex-wrap: wrap; align-items: center; gap: 0.375rem; margin-top: 0.5rem; }
+.tag-add__form[hidden] { display: none; }
+.tag-add__name { flex: 1; min-width: 100px; }
+.tag-add__error { flex-basis: 100%; font-size: 0.75rem; color: var(--red-600); }
 
 .asset-list { list-style: none; padding: 0; margin: 0 0 1rem 0; }
 .asset-list__item {
@@ -2152,14 +2166,14 @@ table.sortable thead th.sortable-col.sort-desc::after { content: '\25be'; opacit
 .kanban-card__badges { display: flex; flex-wrap: wrap; align-items: center; gap: 0.625rem; margin-top: 0.5rem; }
 .kanban-badge { display: inline-flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: var(--slate-500); }
 .kanban-badge svg { width: 14px; height: 14px; }
-.kanban-badge--done { color: #fff; background: var(--green-600); padding: 0.125rem 0.375rem; border-radius: var(--radius-sm); font-weight: 600; }
 
 .kanban-column__add { padding: 0 0.75rem 0.75rem; }
-.kanban-add-card__trigger {
+
+/* Small muted "+ X" trigger reused for the Kanban add-card link and the tag add-form toggle */
+.inline-add-trigger {
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  width: 100%;
   padding: 0.5rem 0.625rem;
   border: none;
   border-radius: var(--radius);
@@ -2168,17 +2182,10 @@ table.sortable thead th.sortable-col.sort-desc::after { content: '\25be'; opacit
   font-family: inherit;
   font-size: 0.875rem;
   cursor: pointer;
-  text-align: left;
+  text-decoration: none;
 }
-.kanban-add-card__trigger:hover { background: var(--slate-100); color: var(--slate-800); }
-.kanban-add-card__trigger svg { width: 16px; height: 16px; }
-.kanban-add-form { display: flex; flex-direction: column; gap: 0.5rem; }
-.kanban-add-form textarea {
-  width: 100%;
-  resize: vertical;
-  min-height: 3.5rem;
-}
-.kanban-add-form__actions { display: flex; align-items: center; gap: 0.5rem; }
+.inline-add-trigger:hover { background: var(--slate-100); color: var(--slate-800); text-decoration: none; }
+.inline-add-trigger svg { width: 16px; height: 16px; }
 
 @media (max-width: 640px) {
   .kanban-column { flex: 0 0 220px; width: 220px; }
@@ -2212,15 +2219,16 @@ table.sortable thead th.sortable-col.sort-desc::after { content: '\25be'; opacit
   border-radius: var(--radius-lg);
   padding: 1.25rem 3rem 1.25rem 1.25rem;
 }
-.description-box__edit {
+
+.edit-link {
   position: absolute;
   top: 0.75rem;
   right: 0.75rem;
   display: inline-flex;
   color: var(--slate-400);
 }
-.description-box__edit svg { width: 16px; height: 16px; }
-.description-box__edit:hover { color: var(--brand-600); }
+.edit-link svg { width: 16px; height: 16px; }
+.edit-link:hover { color: var(--brand-600); }
 
 .watch-toggle {
   display: inline-flex;
@@ -2265,33 +2273,3 @@ table.sidebar-fields td {
   color: var(--slate-800);
 }
 
-/* Checklist (project detail) */
-.checklist-box { margin: 1.25rem 0; }
-.checklist-box__header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  color: var(--slate-800);
-  margin-bottom: 0.5rem;
-}
-.checklist-box__header svg { width: 18px; height: 18px; color: var(--slate-500); flex-shrink: 0; }
-.checklist-box__count { margin-left: auto; font-size: 0.8125rem; font-weight: 600; color: var(--slate-500); }
-.checklist-box__count--done { color: var(--green-600); }
-.checklist-box__bar {
-  height: 6px;
-  border-radius: 999px;
-  background: var(--slate-100);
-  overflow: hidden;
-  margin-bottom: 0.625rem;
-}
-.checklist-box__bar-fill { height: 100%; background: var(--green-500); border-radius: 999px; transition: width 0.2s ease; }
-.checklist-box__items { list-style: none; margin: 0 0 0.5rem; padding: 0; display: flex; flex-direction: column; gap: 0.125rem; }
-.checklist-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0; }
-.checklist-item__check { display: inline-flex; color: var(--slate-400); flex-shrink: 0; }
-.checklist-item__check svg { width: 18px; height: 18px; }
-.checklist-item--done .checklist-item__check { color: var(--green-600); }
-.checklist-item__text { flex: 1; font-size: 0.875rem; color: var(--slate-700); }
-.checklist-item--done .checklist-item__text { color: var(--slate-400); text-decoration: line-through; }
-.checklist-box__add { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-.checklist-box__add input[type="text"] { flex: 1; }

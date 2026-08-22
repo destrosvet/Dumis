@@ -33,46 +33,12 @@
 
         <div class="description-box">
             {% if can_edit %}
-            <a class="description-box__edit" title="{% translate 'Edit' %}" href="{% url 'projects_project_edit' pk=obj.pk %}">{% icon 'edit' %}</a>
+            <a class="edit-link" title="{% translate 'Edit' %}" href="{% url 'projects_project_edit' pk=obj.pk %}">{% icon 'edit' %}</a>
             {% endif %}
             <div class="prose-svjis">
                 {{ obj.description|highlight:search|safe }}
             </div>
         </div>
-
-        {% if checklist_items or can_edit %}
-        <div class="checklist-box" id="checklist">
-            <div class="checklist-box__header">
-                {% icon 'check-square' %}
-                <span>{% translate 'Checklist' %}</span>
-                {% if checklist_total %}
-                <span class="checklist-box__count{% if checklist_done == checklist_total %} checklist-box__count--done{% endif %}">{{ checklist_done }}/{{ checklist_total }}</span>
-                {% endif %}
-            </div>
-            {% if checklist_total %}
-            <div class="checklist-box__bar"><div class="checklist-box__bar-fill" style="width: {{ checklist_percent }}%"></div></div>
-            {% endif %}
-            <ul class="checklist-box__items">
-                {% for item in checklist_items %}
-                <li class="checklist-item{% if item.is_checked %} checklist-item--done{% endif %}">
-                    <a class="checklist-item__check" href="{% url 'project_checklist_item_toggle' pk=item.pk %}">{% if item.is_checked %}{% icon 'check-square' %}{% else %}{% icon 'square' %}{% endif %}</a>
-                    <span class="checklist-item__text">{{ item.text }}</span>
-                    {% if can_edit %}
-                    <a class="icon-btn icon-btn--delete" title="{% translate 'Delete' %}" href="{% url 'project_checklist_item_delete' pk=item.pk %}">{% icon 'delete' %}</a>
-                    {% endif %}
-                </li>
-                {% endfor %}
-            </ul>
-            {% if can_edit %}
-            <form class="checklist-box__add" action="{% url 'project_checklist_item_save' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="project_pk" value="{{ obj.pk }}">
-                <input class="common-input" type="text" name="text" maxlength="200" placeholder="{% translate 'Add an item' %}">
-                <input class="btn--secondary" type="submit" value="{% translate 'Add' %}">
-            </form>
-            {% endif %}
-        </div>
-        {% endif %}
 
         {% if obj.image_assets %}
         <h2 id="gallery" class="comment-title">{% translate 'Gallery' %}</h2>
@@ -107,10 +73,10 @@
         <h2 id="comments" class="comment-title">{% translate 'Comments' %}:</h2>
         {% for comment in obj.comments %}
         <div id="comment_{{ comment.id }}" class="comment-box">
-            <strong>{{ comment.author.first_name }}&nbsp;{{ comment.author.last_name }} {{ comment.created_date|date:"d.m.Y H:i" }}</strong>
             {% if comment.author == user and comment.is_editable %}
-                <a class="secondary-button" href="{% url 'project_comment_edit' pk=comment.id %}">{% translate 'Modify' %}</a>
+                <a class="edit-link" title="{% translate 'Modify' %}" href="{% url 'project_comment_edit' pk=comment.id %}">{% icon 'edit' %}</a>
             {% endif %}
+            <strong>{{ comment.author.first_name }}&nbsp;{{ comment.author.last_name }} {{ comment.created_date|date:"d.m.Y H:i" }}</strong>
             <br>{{ comment.body|replace_url_to_link|linebreaks }}
         </div>
         {% endfor %}

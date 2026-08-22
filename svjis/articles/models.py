@@ -840,19 +840,6 @@ class ProjectAsset(models.Model):
         ordering = ['id']
 
 
-class ProjectChecklistItem(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='checklist_items')
-    text = models.CharField(_("Text"), max_length=200)
-    is_checked = models.BooleanField(_("Checked"), default=False)
-    created_date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"ProjectChecklistItem: {self.project} - {self.text}"
-
-    class Meta:
-        ordering = ['id']
-
-
 class ProjectComment(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name=_("Project"))
     author = models.ForeignKey(User, on_delete=models.CASCADE)

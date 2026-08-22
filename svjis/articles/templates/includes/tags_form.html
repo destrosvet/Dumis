@@ -1,13 +1,113 @@
-{% load i18n %}
-{% if all_tags %}
-<div class="tag-checklist">
-    {% for t in all_tags %}
-    <label class="checkbox-line">
-        <input type="checkbox" name="tags" value="{{ t.pk }}" {% if t.pk in selected_tag_ids %}checked{% endif %} {% if form_attr %}form="{{ form_attr }}"{% endif %}>
-        <span class="badge badge--{{ t.color }}">{{ t.name }}</span>
-    </label>
-    {% endfor %}
-</div>
-{% else %}
-<span class="form-hint">{% translate 'No tags defined yet.' %}</span>
+{% load article_filters i18n %}
+<details class="dropdown-select">
+    <summary class="dropdown-select__summary"><span id="tag-select-label" class="dropdown-select__badges">{% translate 'Select tags' %}</span></summary>
+    <div class="dropdown-select__panel">
+        {% for t in all_tags %}
+        <label class="dropdown-select__option">
+            <input type="checkbox" {% if form_attr %}form="{{ form_attr }}"{% endif %} name="tags" value="{{ t.pk }}" {% if t.pk in selected_tag_ids %}checked{% endif %}>
+            <span class="badge badge--{{ t.color }}">{{ t.name }}</span>
+        </label>
+        {% endfor %}
+    </div>
+</details>
+{% if not all_tags %}
+<p class="tag-list__empty form-hint">{% translate 'No tags defined yet.' %}</p>
 {% endif %}
+
+<button type="button" class="inline-add-trigger tag-add__trigger">{% icon 'plus' %} {% translate 'Add tag' %}</button>
+<div class="tag-add__form" hidden>
+    <input type="text" class="common-input tag-add__name" placeholder="{% translate 'Tag name' %}" maxlength="30">
+    <button type="button" class="btn--secondary tag-add__submit">{% translate 'OK' %}</button>
+    <span class="tag-add__error"></span>
+</div>
+
+<script>
+(function () {
+    var details = document.querySelector('.dropdown-select');
+    var label = document.getElementById('tag-select-label');
+    var placeholder = '{% translate "Select tags" %}';
+
+    function refreshLabel() {
+        var checked = details.querySelectorAll('input[type="checkbox"]:checked');
+        label.innerHTML = '';
+        if (checked.length === 0) {
+            label.textContent = placeholder;
+            return;
+        }
+        checked.forEach(function (c) {
+            var badge = c.closest('label').querySelector('.badge');
+            var span = document.createElement('span');
+            span.className = badge.className;
+            span.textContent = badge.textContent;
+            label.appendChild(span);
+        });
+    }
+    details.addEventListener('change', refreshLabel);
+    refreshLabel();
+
+    var trigger = document.querySelector('.tag-add__trigger');
+    var form = document.querySelector('.tag-add__form');
+    var nameInput = document.querySelector('.tag-add__name');
+    var errorEl = document.querySelector('.tag-add__error');
+    var panel = details.querySelector('.dropdown-select__panel');
+    var emptyHint = document.querySelector('.tag-list__empty');
+
+    function getCookie(name) {
+        var value = null;
+        document.cookie.split(';').forEach(function (part) {
+            part = part.trim();
+            if (part.indexOf(name + '=') === 0) value = decodeURIComponent(part.slice(name.length + 1));
+        });
+        return value;
+    }
+
+    trigger.addEventListener('click', function () {
+        trigger.hidden = true;
+        form.hidden = false;
+        nameInput.focus();
+    });
+
+    document.querySelector('.tag-add__submit').addEventListener('click', function () {
+        var name = nameInput.value.trim();
+        errorEl.textContent = '';
+        if (!name) return;
+        fetch('{% url "project_tag_create" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': getCookie('csrftoken'),
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: 'name=' + encodeURIComponent(name)
+        }).then(function (resp) {
+            return resp.json().then(function (data) { return {ok: resp.ok, data: data}; });
+        }).then(function (result) {
+            if (!result.ok) {
+                errorEl.textContent = result.data.error || '{% translate "Could not add tag." %}';
+                return;
+            }
+            if (emptyHint) emptyHint.hidden = true;
+            var option = document.createElement('label');
+            option.className = 'dropdown-select__option';
+            var checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'tags';
+            checkbox.value = result.data.id;
+            checkbox.checked = true;
+            {% if form_attr %}checkbox.setAttribute('form', '{{ form_attr }}');{% endif %}
+            var badge = document.createElement('span');
+            badge.className = 'badge badge--' + result.data.color;
+            badge.textContent = result.data.name;
+            option.appendChild(checkbox);
+            option.appendChild(badge);
+            panel.appendChild(option);
+            refreshLabel();
+            nameInput.value = '';
+            form.hidden = true;
+            trigger.hidden = false;
+        }).catch(function () {
+            errorEl.textContent = '{% translate "Could not add tag." %}';
+        });
+    });
+})();
+</script>

@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/static/css/styles_v3.css?v={% static_version 'css/styles_v3.css' %}" />
+    <link rel="stylesheet" href="/static/3rd/select2/select2.min.css?v={% static_version '3rd/select2/select2.min.css' %}" />
     <title>{{ web_title|default:"SVJIS2" }}</title>
 </head>
 
@@ -33,6 +34,8 @@
     <div id="lightbox" class="lightbox" hidden>
         <img id="lightbox-img" src="" alt="">
     </div>
+    <script src="/static/3rd/jquery/jquery.min.js?v={% static_version '3rd/jquery/jquery.min.js' %}"></script>
+    <script src="/static/3rd/select2/select2.min.js?v={% static_version '3rd/select2/select2.min.js' %}"></script>
     <script>
         var menuToggle = document.querySelector(".menu-toggle");
         var trayNavWrapper = document.querySelector(".tray-nav-wrapper");

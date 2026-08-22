@@ -164,7 +164,11 @@ def get_tags_context(model_cls, instance):
         selected_ids = set(
             models.TaggedItem.objects.filter(content_type=ct, object_id=instance.pk).values_list('tag_id', flat=True)
         )
-    return {'all_tags': models.Tag.objects.all(), 'selected_tag_ids': selected_ids}
+    return {
+        'all_tags': models.Tag.objects.all(),
+        'selected_tag_ids': selected_ids,
+        'color_choices': models.BADGE_COLOR_CHOICES,
+    }
 
 
 def save_tags(request, instance):
@@ -224,7 +228,7 @@ def get_side_menu(active_item, user):
         },
         {
             'perms': svjis_edit_admin_preferences,
-            'description': _("Preferences"),
+            'description': _("E-Mail templates"),
             'link': reverse(admin_preferences_view),
             'active': True if active_item == 'preferences' else False,
         },

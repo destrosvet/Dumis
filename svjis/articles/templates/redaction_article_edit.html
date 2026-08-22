@@ -75,11 +75,11 @@
                 {% if group_list %}
                 <p>
                     <label class="common-label">{% translate 'Groups' %}</label>
-                    <details class="group-select">
-                        <summary class="group-select__summary"><span id="group-select-label">{% translate 'Select groups' %}</span></summary>
-                        <div class="group-select__panel">
+                    <details class="dropdown-select">
+                        <summary class="dropdown-select__summary"><span id="group-select-label">{% translate 'Select groups' %}</span></summary>
+                        <div class="dropdown-select__panel">
                             {% for obj in group_list %}
-                            <label class="group-select__option">
+                            <label class="dropdown-select__option">
                                 <input type="checkbox" form="article-edit-form" name="visible_for_groups" value="{{ obj.name }}" {% if obj.checked %}checked{% endif %}>
                                 {{ obj.name }}
                             </label>
@@ -171,7 +171,7 @@ window.articleImagesUploadHandler = function (blobInfo, progress) {
 };
 
 (function () {
-    var details = document.querySelector('.group-select');
+    var details = document.querySelector('.dropdown-select');
     if (!details) return;
     var label = details.querySelector('#group-select-label');
     function refresh() {
