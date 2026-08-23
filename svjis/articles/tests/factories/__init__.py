@@ -14,6 +14,11 @@ from .project import ProjectFactory
 from .project_asset import ProjectAssetFactory
 from .project_comment import ProjectCommentFactory
 from .tag import TagFactory
+from .news import NewsFactory
+from .useful_link import UsefulLinkFactory
+from .survey import SurveyFactory
+from .survey_option import SurveyOptionFactory
+from .survey_answer_log import SurveyAnswerLogFactory
 
 __all__ = [
     "ContentTypeFactory",
@@ -33,4 +38,9 @@ __all__ = [
     "ProjectAssetFactory",
     "ProjectCommentFactory",
     "TagFactory",
+    "NewsFactory",
+    "UsefulLinkFactory",
+    "SurveyFactory",
+    "SurveyOptionFactory",
+    "SurveyAnswerLogFactory",
 ]

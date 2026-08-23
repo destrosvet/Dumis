@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'rest_framework',
     'articles',
     'django.contrib.sitemaps',
 ]
@@ -171,6 +172,19 @@ SVJIS_PROJECTS_PAGE_SIZE: int = 10
 SVJIS_COMMENT_IS_EDITABLE_MINUTES: int = 15
 SVJIS_ANALYTICS_SPOOFING_USER_AGENTS: list[str] = []
 SVJIS_FORK_VERSION: str = "3.1"
+
+# REST Framework (Homepage API pilot)
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication'],
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.AllowAny'],
+    'DEFAULT_PAGINATION_CLASS': None,
+    'DEFAULT_RENDERER_CLASSES': (
+        ['rest_framework.renderers.JSONRenderer', 'rest_framework.renderers.BrowsableAPIRenderer']
+        if DEBUG
+        else ['rest_framework.renderers.JSONRenderer']
+    ),
+}
 
 # Load local settings if exists
 try:

@@ -25,6 +25,7 @@ sitemaps = {'static': StaticViewSitemap, 'article': ArticleSitemap}
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include('django.contrib.auth.urls')),
+    path('api/v1/', include('articles.api.urls')),
     path('', include('articles.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
 ]
