@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django.template.defaultfilters import slugify
 from django.utils import timezone
-from django.utils.translation import gettext as gt, ngettext
+from django.utils.translation import gettext, ngettext
 from PIL import Image, ImageOps
 
 
@@ -159,7 +159,7 @@ def relative_time_display(timestamp) -> str:
     delta = timezone.now() - timestamp
     seconds = delta.total_seconds()
     if seconds < 60:
-        return gt("just now")
+        return gettext("just now")
     if seconds < 3600:
         minutes = int(seconds // 60)
         return ngettext("%(count)d minute ago", "%(count)d minutes ago", minutes) % {'count': minutes}
