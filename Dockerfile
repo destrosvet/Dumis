@@ -1,3 +1,12 @@
+# Build the frontend (Vite + React) assets.
+FROM node:22-slim AS frontend-build
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY vite.config.js ./
+COPY svjis/articles/static_src ./svjis/articles/static_src
+RUN npm run build
+
 # Use an official Debian 13 "trixie" as a base image.
 FROM debian:trixie-slim
 
@@ -50,6 +59,9 @@ COPY --chown=svjisuser:svjisuser --chmod=755 ./svjis ./svjis
 COPY --chown=svjisuser:svjisuser --chmod=755 ./docker-entrypoint.sh /docker-entrypoint.sh
 COPY --chown=root:root --chmod=755 ./pyproject.toml .
 COPY --chown=root:root --chmod=755 ./uv.lock .
+
+# Bring in the frontend assets built in the "frontend-build" stage.
+COPY --from=frontend-build --chown=svjisuser:svjisuser /app/svjis/articles/static/dist ./svjis/articles/static/dist
 
 # Use user "svjisuser" to run the build commands below and the server itself.
 USER svjisuser

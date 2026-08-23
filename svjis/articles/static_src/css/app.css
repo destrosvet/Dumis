@@ -66,18 +66,64 @@
 }
 
 /* ==========================================================================
+   Base utility classes
+   Declared with @utility (not @layer components) because Tailwind v4 only
+   lets @apply reference registered utilities, and the component classes
+   below apply these as their base.
+   ========================================================================== */
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium
+         transition-all duration-200 focus:outline-none focus-visible:ring-2
+         focus-visible:ring-brand-500 focus-visible:ring-offset-2
+         disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+@utility card {
+  @apply rounded-xl border border-slate-200 bg-white shadow-sm;
+}
+
+@utility card-hover {
+  @apply card transition-all duration-200 hover:shadow-md hover:border-slate-300;
+}
+
+@utility badge {
+  @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+}
+
+@utility alert {
+  @apply flex items-start gap-3 rounded-lg border p-4 text-sm;
+}
+
+@utility nav-link {
+  @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600
+         transition-colors hover:bg-slate-100 hover:text-slate-900;
+}
+
+@utility nav-sublink {
+  @apply flex items-center gap-2 rounded-lg py-1.5 pl-9 pr-3 text-sm text-slate-500
+         transition-colors hover:bg-slate-100 hover:text-slate-800;
+}
+
+@utility pagination-link {
+  @apply inline-flex items-center justify-center min-w-[2.5rem] rounded-lg border border-slate-300
+         bg-white px-3 py-2 text-sm font-medium text-slate-700
+         transition-colors hover:bg-slate-50 hover:border-slate-400;
+}
+
+@utility form-input {
+  @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800
+         shadow-sm transition-colors
+         placeholder:text-slate-400
+         focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20;
+}
+
+/* ==========================================================================
    Component classes
    ========================================================================== */
 
 @layer components {
   /* Buttons */
-  .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium
-           transition-all duration-200 focus:outline-none focus-visible:ring-2
-           focus-visible:ring-brand-500 focus-visible:ring-offset-2
-           disabled:cursor-not-allowed disabled:opacity-50;
-  }
-
   .btn-primary {
     @apply btn bg-brand-600 text-white shadow-sm hover:bg-brand-700 hover:shadow;
   }
@@ -104,14 +150,6 @@
   }
 
   /* Cards */
-  .card {
-    @apply rounded-xl border border-slate-200 bg-white shadow-sm;
-  }
-
-  .card-hover {
-    @apply card transition-all duration-200 hover:shadow-md hover:border-slate-300;
-  }
-
   .card-header {
     @apply border-b border-slate-200 px-5 py-4;
   }
@@ -123,13 +161,6 @@
   /* Forms */
   .form-label {
     @apply mb-1.5 block text-sm font-medium text-slate-700;
-  }
-
-  .form-input {
-    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-800
-           shadow-sm transition-colors
-           placeholder:text-slate-400
-           focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20;
   }
 
   .form-input-error {
@@ -182,10 +213,6 @@
   }
 
   /* Badges */
-  .badge {
-    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
-  }
-
   .badge-brand {
     @apply badge bg-brand-100 text-brand-800;
   }
@@ -207,10 +234,6 @@
   }
 
   /* Alerts */
-  .alert {
-    @apply flex items-start gap-3 rounded-lg border p-4 text-sm;
-  }
-
   .alert-error {
     @apply alert border-red-200 bg-red-50 text-red-800;
   }
@@ -228,18 +251,8 @@
   }
 
   /* Sidebar nav */
-  .nav-link {
-    @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600
-           transition-colors hover:bg-slate-100 hover:text-slate-900;
-  }
-
   .nav-link-active {
     @apply nav-link bg-brand-50 text-brand-700 hover:bg-brand-100 hover:text-brand-800;
-  }
-
-  .nav-sublink {
-    @apply flex items-center gap-2 rounded-lg py-1.5 pl-9 pr-3 text-sm text-slate-500
-           transition-colors hover:bg-slate-100 hover:text-slate-800;
   }
 
   .nav-sublink-active {
@@ -260,12 +273,6 @@
   }
 
   /* Pagination */
-  .pagination-link {
-    @apply inline-flex items-center justify-center min-w-[2.5rem] rounded-lg border border-slate-300
-           bg-white px-3 py-2 text-sm font-medium text-slate-700
-           transition-colors hover:bg-slate-50 hover:border-slate-400;
-  }
-
   .pagination-link-active {
     @apply pagination-link border-brand-600 bg-brand-600 text-white hover:bg-brand-700 hover:border-brand-700;
   }

@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 
 export default defineConfig({
-  plugins: [tailwindcss()],
+  plugins: [tailwindcss(), react()],
   root: resolve(__dirname, 'svjis/articles/static_src'),
   base: '/static/',
   build: {
@@ -14,6 +15,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'svjis/articles/static_src/js/main.js'),
         css: resolve(__dirname, 'svjis/articles/static_src/css/app.css'),
+        homepage: resolve(__dirname, 'svjis/articles/static_src/js/homepage/index.jsx'),
       },
     },
   },
