@@ -160,7 +160,7 @@ def send_message_queue():
 
 
 def get_template(template_key):
-    template = models.Preferences.objects.get(key=template_key)
+    template = models.Preferences.objects.filter(key=template_key).first()
     if template is None:
         logger.error(f"Error: Missing template {template_key}")
     return template
