@@ -22,7 +22,7 @@ msgstr ""
 #: .\articles\forms.py:240 .\articles\models.py:729
 #: .\articles\views_admin.py:1265
 msgid "Entity type"
-msgstr ""
+msgstr "Typ entity"
 
 #: .\articles\forms.py:374 .\articles\models.py:398 .\articles\models.py:463
 #: .\articles\models.py:706 .\articles\templates\admin_building_unit.html:36
@@ -46,10 +46,8 @@ msgid "Header"
 msgstr "Nadpis"
 
 #: .\articles\models.py:38
-#, fuzzy
-#| msgid "Published"
 msgid "Publish date"
-msgstr "Zverejniť"
+msgstr "Dátum zverejnenia"
 
 #: .\articles\models.py:39 .\articles\models.py:163 .\articles\models.py:178
 #: .\articles\models.py:193 .\articles\models.py:630
@@ -70,7 +68,7 @@ msgstr "Telo"
 
 #: .\articles\models.py:42 .\articles\models.py:625
 msgid "Cover image"
-msgstr ""
+msgstr "Titulný obrázok"
 
 #: .\articles\models.py:44
 msgid "Allow comments"
@@ -329,14 +327,12 @@ msgid "Denominator"
 msgstr "Menovateľ"
 
 #: .\articles\models.py:429
-#, fuzzy
-#| msgid "Owners"
 msgid "Owner"
-msgstr "Vlastníci"
+msgstr "Vlastník"
 
 #: .\articles\models.py:430
 msgid "Tenant"
-msgstr ""
+msgstr "Nájomník"
 
 #: .\articles\models.py:434 .\articles\models.py:703
 #: .\articles\templates\admin_building_unit_edit.html:7
@@ -346,7 +342,7 @@ msgstr "Jednotka"
 
 #: .\articles\models.py:437 .\articles\templates\personal_my_units.html:12
 msgid "Role"
-msgstr ""
+msgstr "Rola"
 
 #: .\articles\models.py:461 .\articles\models.py:584
 #: .\articles\templates\fault.html:20
@@ -410,50 +406,40 @@ msgid "User"
 msgstr "Používateľ"
 
 #: .\articles\models.py:705
-#, fuzzy
-#| msgid "Add new member"
 msgid "Board member"
-msgstr "Pridať nového člena"
+msgstr "Člen výboru"
 
 #: .\articles\models.py:722
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 #: .\articles\models.py:723
-#, fuzzy
-#| msgid "Member"
 msgid "Number"
-msgstr "Člen"
+msgstr "Číslo"
 
 #: .\articles\models.py:724
-#, fuzzy
-#| msgid "Phonelist"
 msgid "Choice list"
-msgstr "Zoznam kontaktov"
+msgstr "Zoznam možností"
 
 #: .\articles\models.py:725
-#, fuzzy
-#| msgid "Date"
 msgid "Date/time"
-msgstr "Dátum"
+msgstr "Dátum/čas"
 
 #: .\articles\models.py:726
 msgid "Yes/No"
-msgstr ""
+msgstr "Áno/Nie"
 
 #: .\articles\models.py:733
 msgid "Options (comma-separated)"
-msgstr ""
+msgstr "Možnosti (oddelené čiarkou)"
 
 #: .\articles\models.py:736
 msgid "Only used when Type is 'Choice list', e.g.: malý,střední,velký"
-msgstr ""
+msgstr "Používa sa iba ak je Typ „Zoznam možností“, napr.: malý,stredný,veľký"
 
 #: .\articles\models.py:748
-#, fuzzy
-#| msgid "Can edit Users"
 msgid "Can edit Custom fields"
-msgstr "Môže upraviť Používateľov"
+msgstr "Môže upraviť Vlastné polia"
 
 #: .\articles\templates\admin_about.html:7
 #: .\articles\tests_playwright\commands.py:375 .\articles\views_admin.py:196
@@ -462,33 +448,31 @@ msgstr "O aplikácii"
 
 #: .\articles\templates\admin_about.html:16
 msgid "Deployment version"
-msgstr ""
+msgstr "Verzia nasadenia"
 
 #: .\articles\templates\admin_about.html:29
-#, fuzzy
-#| msgid "Created"
 msgid "Created by"
-msgstr "Vytvorené"
+msgstr "Vytvoril"
 
 #: .\articles\templates\admin_about.html:34
 msgid "Project URLs"
-msgstr ""
+msgstr "URL adresy projektu"
 
 #: .\articles\templates\admin_about.html:38
 msgid "Homepage"
-msgstr ""
+msgstr "Domovská stránka"
 
 #: .\articles\templates\admin_about.html:42
 msgid "Source code"
-msgstr ""
+msgstr "Zdrojový kód"
 
 #: .\articles\templates\admin_about.html:46
 msgid "Issues"
-msgstr ""
+msgstr "Nahlásené problémy"
 
 #: .\articles\templates\admin_about.html:50
 msgid "Translations"
-msgstr ""
+msgstr "Preklady"
 
 #: .\articles\templates\admin_board.html:7
 #: .\articles\templates\admin_board_edit.html:7
@@ -537,7 +521,7 @@ msgstr "Uložiť"
 #: .\articles\templates\advert_edit.html:67
 #: .\articles\templates\faults_edit.html:73 .\articles\views_admin.py:184
 msgid "Custom fields"
-msgstr ""
+msgstr "Vlastné polia"
 
 #: .\articles\templates\admin_building_unit.html:7
 #: .\articles\templates\admin_user_detail.html:114
@@ -557,10 +541,8 @@ msgid "Export to Excel"
 msgstr "Export do Excelu"
 
 #: .\articles\templates\admin_building_unit_owners_edit.html:12
-#, fuzzy
-#| msgid "My units"
 msgid "Edit unit"
-msgstr "Moje jednotky"
+msgstr "Upraviť jednotku"
 
 #: .\articles\templates\admin_building_unit_owners_edit.html:19
 #: .\articles\templates\admin_user_ownes_edit.html:19
@@ -611,7 +593,7 @@ msgstr "Chcete odstrániť"
 #: .\articles\templates\admin_building_unit_owners_edit.html:35
 #: .\articles\templates\admin_user_ownes_edit.html:34
 msgid "No owner assigned yet."
-msgstr ""
+msgstr "Zatiaľ nie je priradený žiadny vlastník."
 
 #: .\articles\templates\admin_building_unit_owners_edit.html:49
 #: .\articles\templates\admin_building_unit_owners_edit.html:87
@@ -623,12 +605,12 @@ msgstr "Pridať"
 #: .\articles\templates\admin_building_unit_owners_edit.html:57
 #: .\articles\templates\admin_user_ownes_edit.html:56
 msgid "Tenants"
-msgstr ""
+msgstr "Nájomníci"
 
 #: .\articles\templates\admin_building_unit_owners_edit.html:73
 #: .\articles\templates\admin_user_ownes_edit.html:71
 msgid "No tenant assigned yet."
-msgstr ""
+msgstr "Zatiaľ nie je priradený žiadny nájomník."
 
 #: .\articles\templates\admin_company_edit.html:53
 msgid "Company header"
@@ -695,7 +677,7 @@ msgstr "Nastavenia"
 
 #: .\articles\templates\admin_preferences_edit.html:27
 msgid "Available variables"
-msgstr ""
+msgstr "Dostupné premenné"
 
 #: .\articles\templates\admin_user.html:13
 #: .\articles\tests_playwright\commands.py:304
@@ -755,21 +737,17 @@ msgstr "Je členom"
 
 #: .\articles\templates\admin_user_detail.html:109
 #: .\articles\templates\admin_user_ownes_edit.html:12
-#, fuzzy
-#| msgid "Modify"
 msgid "Modify user"
-msgstr "Upraviť"
+msgstr "Upraviť používateľa"
 
 #: .\articles\templates\admin_user_detail.html:125
 msgid "No units assigned yet."
-msgstr ""
+msgstr "Zatiaľ nie sú priradené žiadne jednotky."
 
 #: .\articles\templates\admin_user_detail.html:127
 #: .\articles\tests_playwright\commands.py:365 .\articles\views_admin.py:883
-#, fuzzy
-#| msgid "My units"
 msgid "Modify units"
-msgstr "Moje jednotky"
+msgstr "Upraviť jednotky"
 
 #: .\articles\templates\admin_user_edit.html:76
 #: .\articles\templates\login.html:22 .\articles\templates\login_page.html:36
@@ -783,29 +761,29 @@ msgstr "Odoslať prihlasovacie údaje e-mailom"
 #: .\articles\templates\admin_user_edit.html:102
 #, python-format
 msgid "The new user will be added to unit \"%(label)s %(reg)s\" as an owner."
-msgstr ""
+msgstr "Nový používateľ bude pridaný do jednotky \"%(label)s %(reg)s\" ako vlastník."
 
 #: .\articles\templates\admin_user_edit.html:104
 #, python-format
 msgid "The new user will be added to unit \"%(label)s %(reg)s\" as a tenant."
-msgstr ""
+msgstr "Nový používateľ bude pridaný do jednotky \"%(label)s %(reg)s\" ako nájomník."
 
 #: .\articles\templates\admin_user_edit.html:115
 #: .\articles\templates\admin_user_edit.html:152
 #: .\articles\templates\redaction_article_edit.html:79
 #: .\articles\templates\redaction_article_edit.html:180
 msgid "Select groups"
-msgstr ""
+msgstr "Vybrať skupiny"
 
 #: .\articles\templates\admin_user_edit.html:126
 msgid "No groups available."
-msgstr ""
+msgstr "Nie sú k dispozícii žiadne skupiny."
 
 #: .\articles\templates\advert_detail.html:8
 #: .\articles\templates\article.html:9
 #: .\articles\templates\includes\breadcrumbs.html:3
 msgid "Breadcrumb"
-msgstr ""
+msgstr "Omrvinková navigácia"
 
 #: .\articles\templates\advert_detail.html:9
 #: .\articles\templates\advert_edit.html:7
@@ -829,7 +807,7 @@ msgstr "Autor"
 #: .\articles\templates\advert_edit.html:39 .\articles\templates\fault.html:52
 #: .\articles\templates\faults_edit.html:29
 msgid "Gallery"
-msgstr ""
+msgstr "Galéria"
 
 #: .\articles\templates\advert_detail.html:54
 #: .\articles\templates\advert_edit.html:94
@@ -851,24 +829,20 @@ msgstr "Upraviť"
 
 #: .\articles\templates\advert_detail.html:72
 #: .\articles\templates\advert_edit.html:139
-#, fuzzy
-#| msgid "Create new advert"
 msgid "Delete advert"
-msgstr "Vytvoriť nový inzerát"
+msgstr "Odstrániť inzerát"
 
 #: .\articles\templates\advert_edit.html:51
 #: .\articles\templates\faults_create.html:25
 #: .\articles\templates\faults_edit.html:41
-#, fuzzy
-#| msgid "Add option"
 msgid "Add photos"
-msgstr "Pridať možnosť"
+msgstr "Pridať fotografie"
 
 #: .\articles\templates\advert_edit.html:53
 #: .\articles\templates\faults_create.html:27
 #: .\articles\templates\faults_edit.html:43
 msgid "You can select multiple photos at once - they are added when you save."
-msgstr ""
+msgstr "Môžete vybrať viacero fotografií naraz - pridajú sa pri uložení."
 
 #: .\articles\templates\advert_edit.html:75
 #: .\articles\templates\faults_edit.html:57
@@ -880,7 +854,7 @@ msgstr "Vlastnosti"
 
 #: .\articles\templates\advert_edit.html:96
 msgid "Documents and other non-photo files for this advert."
-msgstr ""
+msgstr "Dokumenty a iné súbory (nie fotografie) k tomuto inzerátu."
 
 #: .\articles\templates\advert_edit.html:126
 #: .\articles\templates\fault.html:121
@@ -889,10 +863,8 @@ msgid "Upload"
 msgstr "Nahrať súbor"
 
 #: .\articles\templates\advert_edit.html:138
-#, fuzzy
-#| msgid "Create new advert"
 msgid "View advert"
-msgstr "Vytvoriť nový inzerát"
+msgstr "Zobraziť inzerát"
 
 #: .\articles\templates\adverts_list.html:10
 #: .\articles\tests_playwright\commands.py:802
@@ -901,7 +873,7 @@ msgstr "Vytvoriť nový inzerát"
 
 #: .\articles\templates\adverts_list.html:30
 msgid "Read more"
-msgstr ""
+msgstr "Čítať viac"
 
 #: .\articles\templates\article.html:49 .\articles\templates\fault.html:81
 msgid "Comments"
@@ -925,8 +897,6 @@ msgid "Insert comment"
 msgstr "Vložiť komentár"
 
 #: .\articles\templates\article.html:83
-#, fuzzy
-#| msgid "Top articles"
 msgid "Most read articles"
 msgstr "Najčítanejšie články"
 
@@ -978,7 +948,7 @@ msgstr "Stránka nenájdená"
 
 #: .\articles\templates\error_404.html:13
 msgid "The page you are looking for does not exist."
-msgstr ""
+msgstr "Stránka, ktorú hľadáte, neexistuje."
 
 #: .\articles\templates\error_404.html:14
 msgid "Go to homepage"
@@ -1005,10 +975,8 @@ msgid "Close ticket"
 msgstr "Uzavrieť tiket"
 
 #: .\articles\templates\fault.html:37
-#, fuzzy
-#| msgid "Close ticket"
 msgid "Reopen ticket"
-msgstr "Uzavrieť tiket"
+msgstr "Znovu otvoriť tiket"
 
 #: .\articles\templates\fault.html:39
 #: .\articles\tests_playwright\commands.py:776
@@ -1025,16 +993,14 @@ msgid "Start watching ticket"
 msgstr "Začať sledovať tiket"
 
 #: .\articles\templates\fault.html:94
-#, fuzzy
-#| msgid "Allow comments"
 msgid "Add comment"
-msgstr "Povoliť komentáre"
+msgstr "Pridať komentár"
 
 #: .\articles\templates\fault.html:108
 #: .\articles\templates\redaction_article_edit.html:96
 #: .\articles\templates\redaction_article_edit.html:130
 msgid "Attachments"
-msgstr ""
+msgstr "Prílohy"
 
 #: .\articles\templates\fault_log.html:12 .\articles\views_faults.py:548
 msgid "Log"
@@ -1056,19 +1022,15 @@ msgstr "Nahlásiť poruchu alebo požiadavku"
 
 #: .\articles\templates\footer.html:4
 msgid "Based on"
-msgstr ""
+msgstr "Založené na"
 
 #: .\articles\templates\footer.html:4
-#, fuzzy
-#| msgid "Created"
 msgid "created by"
-msgstr "Vytvorené"
+msgstr "vytvoril"
 
 #: .\articles\templates\includes\admin_list_table.html:6
-#, fuzzy
-#| msgid "Search"
 msgid "Search..."
-msgstr "Vyhľadať"
+msgstr "Vyhľadať…"
 
 #: .\articles\templates\includes\admin_list_table.html:6
 #: .\articles\templates\tray-menu.html:15
@@ -1077,18 +1039,16 @@ msgid "Search"
 msgstr "Vyhľadať"
 
 #: .\articles\templates\includes\admin_list_table.html:36
-#, fuzzy
-#| msgid "Redaction"
 msgid "More actions"
-msgstr "Redakcia"
+msgstr "Ďalšie akcie"
 
 #: .\articles\templates\includes\custom_fields_detail.html:7
 msgid "Yes"
-msgstr ""
+msgstr "Áno"
 
 #: .\articles\templates\includes\custom_fields_detail.html:7
 msgid "No"
-msgstr ""
+msgstr "Nie"
 
 #: .\articles\templates\login.html:10 .\articles\templates\tray-menu.html:33
 msgid "Logout"
@@ -1196,8 +1156,6 @@ msgid "Create new article"
 msgstr "Vytvoriť nový článok"
 
 #: .\articles\templates\redaction_article_edit.html:41
-#, fuzzy
-#| msgid "Published"
 msgid "Publish"
 msgstr "Zverejniť"
 
@@ -1205,7 +1163,7 @@ msgstr "Zverejniť"
 msgid ""
 "Controls where the article sorts in the list - set an earlier date for "
 "archived content."
-msgstr ""
+msgstr "Určuje, kde sa článok zoradí v zozname - pre archivovaný obsah nastavte skorší dátum."
 
 #: .\articles\templates\redaction_article_edit.html:69
 msgid "Visible for"
@@ -1220,13 +1178,11 @@ msgstr "Skupiny"
 msgid ""
 "Upload files (documents, spreadsheets, PDFs...) for readers to download from "
 "the article."
-msgstr ""
+msgstr "Nahrajte súbory (dokumenty, tabuľky, PDF...), ktoré si čitatelia budú môcť stiahnuť z článku."
 
 #: .\articles\templates\redaction_article_edit.html:132
-#, fuzzy
-#| msgid "Save the article first to be able to insert images."
 msgid "Save the article first to be able to attach downloadable files."
-msgstr "Najprv článok uložte, potom budete môcť vkladať obrázky."
+msgstr "Najprv článok uložte, aby ste mohli pripojiť súbory na stiahnutie."
 
 #: .\articles\templates\redaction_article_edit.html:149
 msgid "Save the article first to be able to insert images."
@@ -1391,10 +1347,8 @@ msgid "Users"
 msgstr "Používatelia"
 
 #: .\articles\tests_playwright\commands.py:328
-#, fuzzy
-#| msgid "Back to fault list"
 msgid "Back to list"
-msgstr "Späť na zoznam porúch"
+msgstr "Späť na zoznam"
 
 #: .\articles\tests_playwright\commands.py:433
 #: .\articles\tests_playwright\commands.py:467
@@ -1506,77 +1460,65 @@ msgstr "Nesprávne používateľské meno alebo heslo."
 
 #: .\articles\views_admin.py:34
 msgid "Text with the username and the new password"
-msgstr ""
+msgstr "Text s používateľským menom a novým heslom"
 
 #: .\articles\views_admin.py:37
-#, fuzzy
-#| msgid "Back to article list"
 msgid "Link to the article"
-msgstr "Späť na zoznam článkov"
+msgstr "Odkaz na článok"
 
 #: .\articles\views_admin.py:40 .\articles\views_admin.py:50
-#, fuzzy
-#| msgid "Comments"
 msgid "Comment author"
-msgstr "Komentáre"
+msgstr "Autor komentára"
 
 #: .\articles\views_admin.py:41
 msgid "Link to the commented article"
-msgstr ""
+msgstr "Odkaz na okomentovaný článok"
 
 #: .\articles\views_admin.py:42 .\articles\views_admin.py:52
-#, fuzzy
-#| msgid "Comments"
 msgid "Comment body"
-msgstr "Komentáre"
+msgstr "Text komentára"
 
 #: .\articles\views_admin.py:45
-#, fuzzy
-#| msgid "Fault report"
 msgid "Fault reporter"
-msgstr "Hlásenie poruchy"
+msgstr "Nahlasovateľ poruchy"
 
 #: .\articles\views_admin.py:46 .\articles\views_admin.py:51
 #: .\articles\views_admin.py:56 .\articles\views_admin.py:61
 #: .\articles\views_admin.py:66
-#, fuzzy
-#| msgid "Can report fault"
 msgid "Link to the fault"
-msgstr "Môže nahlásiť poruchu"
+msgstr "Odkaz na poruchu"
 
 #: .\articles\views_admin.py:47 .\articles\views_admin.py:57
 #: .\articles\views_admin.py:62 .\articles\views_admin.py:67
-#, fuzzy
-#| msgid "Description"
 msgid "Fault description"
-msgstr "Popis"
+msgstr "Popis poruchy"
 
 #: .\articles\views_admin.py:55
 msgid "User who assigned the fault to you"
-msgstr ""
+msgstr "Používateľ, ktorý vám pridelil poruchu"
 
 #: .\articles\views_admin.py:60
 msgid "User who closed the fault"
-msgstr ""
+msgstr "Používateľ, ktorý uzavrel poruchu"
 
 #: .\articles\views_admin.py:65
 msgid "User who reopened the fault"
-msgstr ""
+msgstr "Používateľ, ktorý znovu otvoril poruchu"
 
 #: .\articles\views_admin.py:114
 #, python-brace-format
 msgid "Field \"{}\" must be a number."
-msgstr ""
+msgstr "Pole „{}“ musí byť číslo."
 
 #: .\articles\views_admin.py:117
 #, python-brace-format
 msgid "Field \"{}\" has an invalid value."
-msgstr ""
+msgstr "Pole „{}“ má neplatnú hodnotu."
 
 #: .\articles\views_admin.py:120
 #, python-brace-format
 msgid "Field \"{}\" must be a valid date/time."
-msgstr ""
+msgstr "Pole „{}“ musí obsahovať platný dátum/čas."
 
 #: .\articles\views_admin.py:228 .\articles\views_admin.py:322
 #: .\articles\views_admin.py:358 .\articles\views_admin.py:440
@@ -1587,27 +1529,23 @@ msgstr ""
 #: .\articles\views_personal_settings.py:77 .\articles\views_redaction.py:189
 #: .\articles\views_redaction.py:369
 msgid "Form validation error"
-msgstr ""
+msgstr "Chyba validácie formulára"
 
 #: .\articles\views_admin.py:274
 msgid "Member"
 msgstr "Člen"
 
 #: .\articles\views_admin.py:481
-#, fuzzy
-#| msgid "Add option"
 msgid "Add owner"
-msgstr "Pridať možnosť"
+msgstr "Pridať vlastníka"
 
 #: .\articles\views_admin.py:488
-#, fuzzy
-#| msgid "Add new unit"
 msgid "Add tenant"
-msgstr "Pridať jednotku"
+msgstr "Pridať nájomníka"
 
 #: .\articles\views_admin.py:710
 msgid "Detail"
-msgstr ""
+msgstr "Detail"
 
 #: .\articles\views_admin.py:827
 msgid "Credentials has been sent by e-mail"
@@ -1621,7 +1559,7 @@ msgstr "Zoznam používateľov"
 #, python-brace-format
 msgid ""
 "Unknown placeholder \"{}\" in a mail template. Allowed placeholders: {}."
-msgstr ""
+msgstr "Neznámy zástupný symbol „{}“ v e-mailovej šablóne. Povolené zástupné symboly: {}."
 
 #: .\articles\views_adverts.py:47 .\articles\views_adverts.py:69
 #: .\articles\views_faults.py:31
@@ -1629,10 +1567,8 @@ msgid "Mine"
 msgstr "Moje"
 
 #: .\articles\views_adverts.py:167
-#, fuzzy
-#| msgid "Delete"
 msgid "Deleted"
-msgstr "Odstrániť"
+msgstr "Odstránené"
 
 #: .\articles\views_faults.py:38
 msgid "Assigned to me"
@@ -1647,10 +1583,8 @@ msgid "View"
 msgstr "Zobraziť"
 
 #: .\articles\views_faults.py:114
-#, fuzzy
-#| msgid "Do you want to delete"
 msgid "Do you want to close ticket"
-msgstr "Chcete odstrániť"
+msgstr "Chcete uzavrieť tiket"
 
 #: .\articles\views_faults.py:149
 msgid "Ticket No."
@@ -1702,10 +1636,8 @@ msgid "Level"
 msgstr "Úroveň"
 
 #: .\articles\views_redaction.py:273
-#, fuzzy
-#| msgid "Do you want to delete"
 msgid "Do you want to hide"
-msgstr "Chcete odstrániť"
+msgstr "Chcete skryť"
 
 #: .\articles\views_redaction.py:537
 msgid "Do you want to delete this news"

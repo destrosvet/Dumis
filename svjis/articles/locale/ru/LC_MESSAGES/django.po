@@ -24,7 +24,7 @@ msgstr ""
 #: .\articles\forms.py:240 .\articles\models.py:729
 #: .\articles\views_admin.py:1265
 msgid "Entity type"
-msgstr ""
+msgstr "Тип сущности"
 
 #: .\articles\forms.py:374 .\articles\models.py:398 .\articles\models.py:463
 #: .\articles\models.py:706 .\articles\templates\admin_building_unit.html:36
@@ -48,10 +48,8 @@ msgid "Header"
 msgstr "Заголовок"
 
 #: .\articles\models.py:38
-#, fuzzy
-#| msgid "Published"
 msgid "Publish date"
-msgstr "Опубликовать"
+msgstr "Дата публикации"
 
 #: .\articles\models.py:39 .\articles\models.py:163 .\articles\models.py:178
 #: .\articles\models.py:193 .\articles\models.py:630
@@ -72,7 +70,7 @@ msgstr "Тело"
 
 #: .\articles\models.py:42 .\articles\models.py:625
 msgid "Cover image"
-msgstr ""
+msgstr "Обложка"
 
 #: .\articles\models.py:44
 msgid "Allow comments"
@@ -331,14 +329,12 @@ msgid "Denominator"
 msgstr "Знаменатель"
 
 #: .\articles\models.py:429
-#, fuzzy
-#| msgid "Owners"
 msgid "Owner"
-msgstr "Владельцы"
+msgstr "Владелец"
 
 #: .\articles\models.py:430
 msgid "Tenant"
-msgstr ""
+msgstr "Арендатор"
 
 #: .\articles\models.py:434 .\articles\models.py:703
 #: .\articles\templates\admin_building_unit_edit.html:7
@@ -348,7 +344,7 @@ msgstr "Единица здания"
 
 #: .\articles\models.py:437 .\articles\templates\personal_my_units.html:12
 msgid "Role"
-msgstr ""
+msgstr "Роль"
 
 #: .\articles\models.py:461 .\articles\models.py:584
 #: .\articles\templates\fault.html:20
@@ -412,85 +408,73 @@ msgid "User"
 msgstr "Пользователь"
 
 #: .\articles\models.py:705
-#, fuzzy
-#| msgid "Add new member"
 msgid "Board member"
-msgstr "Добавить нового члена"
+msgstr "Член правления"
 
 #: .\articles\models.py:722
 msgid "Text"
-msgstr ""
+msgstr "Текст"
 
 #: .\articles\models.py:723
-#, fuzzy
-#| msgid "Member"
 msgid "Number"
-msgstr "Член"
+msgstr "Число"
 
 #: .\articles\models.py:724
-#, fuzzy
-#| msgid "Phonelist"
 msgid "Choice list"
-msgstr "Телефонный справочник"
+msgstr "Список выбора"
 
 #: .\articles\models.py:725
-#, fuzzy
-#| msgid "Date"
 msgid "Date/time"
-msgstr "Дата"
+msgstr "Дата/время"
 
 #: .\articles\models.py:726
 msgid "Yes/No"
-msgstr ""
+msgstr "Да/Нет"
 
 #: .\articles\models.py:733
 msgid "Options (comma-separated)"
-msgstr ""
+msgstr "Варианты (через запятую)"
 
 #: .\articles\models.py:736
 msgid "Only used when Type is 'Choice list', e.g.: malý,střední,velký"
-msgstr ""
+msgstr "Используется только если Тип — «Список выбора», например: маленький,средний,большой"
 
 #: .\articles\models.py:748
-#, fuzzy
-#| msgid "Can edit Users"
 msgid "Can edit Custom fields"
-msgstr "Может редактировать пользователей"
+msgstr "Может редактировать пользовательские поля"
 
 #: .\articles\templates\admin_about.html:7
 #: .\articles\tests_playwright\commands.py:375 .\articles\views_admin.py:196
 msgid "About application"
-msgstr ""
+msgstr "О приложении"
 
 #: .\articles\templates\admin_about.html:16
 msgid "Deployment version"
-msgstr ""
+msgstr "Версия развёртывания"
 
 #: .\articles\templates\admin_about.html:29
-#, fuzzy
-#| msgid "Created"
 msgid "Created by"
-msgstr "Создан"
+msgstr "Автор"
 
 #: .\articles\templates\admin_about.html:34
 msgid "Project URLs"
-msgstr ""
+msgstr "URL-адреса проекта"
 
 #: .\articles\templates\admin_about.html:38
 msgid "Homepage"
-msgstr ""
+msgstr "Домашняя страница"
 
 #: .\articles\templates\admin_about.html:42
 msgid "Source code"
-msgstr ""
+msgstr "Исходный код"
 
 #: .\articles\templates\admin_about.html:46
 msgid "Issues"
-msgstr ""
+msgstr "Задачи"
 
 #: .\articles\templates\admin_about.html:50
 msgid "Translations"
-msgstr ""
+msgstr "Переводы"
 
 #: .\articles\templates\admin_board.html:7
 #: .\articles\templates\admin_board_edit.html:7
@@ -539,7 +523,7 @@ msgstr "Сохранить"
 #: .\articles\templates\advert_edit.html:67
 #: .\articles\templates\faults_edit.html:73 .\articles\views_admin.py:184
 msgid "Custom fields"
-msgstr ""
+msgstr "Пользовательские поля"
 
 #: .\articles\templates\admin_building_unit.html:7
 #: .\articles\templates\admin_user_detail.html:114
@@ -559,10 +543,8 @@ msgid "Export to Excel"
 msgstr "Экспорт в Excel"
 
 #: .\articles\templates\admin_building_unit_owners_edit.html:12
-#, fuzzy
-#| msgid "My units"
 msgid "Edit unit"
-msgstr "Мои единицы"
+msgstr "Редактировать единицу"
 
 #: .\articles\templates\admin_building_unit_owners_edit.html:19
 #: .\articles\templates\admin_user_ownes_edit.html:19
@@ -613,7 +595,7 @@ msgstr "Вы хотите удалить"
 #: .\articles\templates\admin_building_unit_owners_edit.html:35
 #: .\articles\templates\admin_user_ownes_edit.html:34
 msgid "No owner assigned yet."
-msgstr ""
+msgstr "Владелец ещё не назначен."
 
 #: .\articles\templates\admin_building_unit_owners_edit.html:49
 #: .\articles\templates\admin_building_unit_owners_edit.html:87
@@ -625,12 +607,12 @@ msgstr "Добавить"
 #: .\articles\templates\admin_building_unit_owners_edit.html:57
 #: .\articles\templates\admin_user_ownes_edit.html:56
 msgid "Tenants"
-msgstr ""
+msgstr "Арендаторы"
 
 #: .\articles\templates\admin_building_unit_owners_edit.html:73
 #: .\articles\templates\admin_user_ownes_edit.html:71
 msgid "No tenant assigned yet."
-msgstr ""
+msgstr "Арендатор ещё не назначен."
 
 #: .\articles\templates\admin_company_edit.html:53
 msgid "Company header"
@@ -697,7 +679,7 @@ msgstr "Настройки"
 
 #: .\articles\templates\admin_preferences_edit.html:27
 msgid "Available variables"
-msgstr ""
+msgstr "Доступные переменные"
 
 #: .\articles\templates\admin_user.html:13
 #: .\articles\tests_playwright\commands.py:304
@@ -757,21 +739,17 @@ msgstr "Является членом"
 
 #: .\articles\templates\admin_user_detail.html:109
 #: .\articles\templates\admin_user_ownes_edit.html:12
-#, fuzzy
-#| msgid "Modified"
 msgid "Modify user"
-msgstr "Изменён"
+msgstr "Редактировать пользователя"
 
 #: .\articles\templates\admin_user_detail.html:125
 msgid "No units assigned yet."
-msgstr ""
+msgstr "Единицы ещё не назначены."
 
 #: .\articles\templates\admin_user_detail.html:127
 #: .\articles\tests_playwright\commands.py:365 .\articles\views_admin.py:883
-#, fuzzy
-#| msgid "My units"
 msgid "Modify units"
-msgstr "Мои единицы"
+msgstr "Редактировать единицы"
 
 #: .\articles\templates\admin_user_edit.html:76
 #: .\articles\templates\login.html:22 .\articles\templates\login_page.html:36
@@ -785,29 +763,29 @@ msgstr "Отправить учетные данные по электронно
 #: .\articles\templates\admin_user_edit.html:102
 #, python-format
 msgid "The new user will be added to unit \"%(label)s %(reg)s\" as an owner."
-msgstr ""
+msgstr "Новый пользователь будет добавлен в единицу \"%(label)s %(reg)s\" как владелец."
 
 #: .\articles\templates\admin_user_edit.html:104
 #, python-format
 msgid "The new user will be added to unit \"%(label)s %(reg)s\" as a tenant."
-msgstr ""
+msgstr "Новый пользователь будет добавлен в единицу \"%(label)s %(reg)s\" как арендатор."
 
 #: .\articles\templates\admin_user_edit.html:115
 #: .\articles\templates\admin_user_edit.html:152
 #: .\articles\templates\redaction_article_edit.html:79
 #: .\articles\templates\redaction_article_edit.html:180
 msgid "Select groups"
-msgstr ""
+msgstr "Выберите группы"
 
 #: .\articles\templates\admin_user_edit.html:126
 msgid "No groups available."
-msgstr ""
+msgstr "Нет доступных групп."
 
 #: .\articles\templates\advert_detail.html:8
 #: .\articles\templates\article.html:9
 #: .\articles\templates\includes\breadcrumbs.html:3
 msgid "Breadcrumb"
-msgstr ""
+msgstr "Хлебные крошки"
 
 #: .\articles\templates\advert_detail.html:9
 #: .\articles\templates\advert_edit.html:7
@@ -831,7 +809,7 @@ msgstr "Автор"
 #: .\articles\templates\advert_edit.html:39 .\articles\templates\fault.html:52
 #: .\articles\templates\faults_edit.html:29
 msgid "Gallery"
-msgstr ""
+msgstr "Галерея"
 
 #: .\articles\templates\advert_detail.html:54
 #: .\articles\templates\advert_edit.html:94
@@ -853,24 +831,20 @@ msgstr "Редактировать"
 
 #: .\articles\templates\advert_detail.html:72
 #: .\articles\templates\advert_edit.html:139
-#, fuzzy
-#| msgid "Create new advert"
 msgid "Delete advert"
-msgstr "Создать новое объявление"
+msgstr "Удалить объявление"
 
 #: .\articles\templates\advert_edit.html:51
 #: .\articles\templates\faults_create.html:25
 #: .\articles\templates\faults_edit.html:41
-#, fuzzy
-#| msgid "Add option"
 msgid "Add photos"
-msgstr "Добавить опцию"
+msgstr "Добавить фотографии"
 
 #: .\articles\templates\advert_edit.html:53
 #: .\articles\templates\faults_create.html:27
 #: .\articles\templates\faults_edit.html:43
 msgid "You can select multiple photos at once - they are added when you save."
-msgstr ""
+msgstr "Вы можете выбрать несколько фотографий сразу - они будут добавлены при сохранении."
 
 #: .\articles\templates\advert_edit.html:75
 #: .\articles\templates\faults_edit.html:57
@@ -882,7 +856,7 @@ msgstr "Свойства"
 
 #: .\articles\templates\advert_edit.html:96
 msgid "Documents and other non-photo files for this advert."
-msgstr ""
+msgstr "Документы и другие файлы (не фотографии) для этого объявления."
 
 #: .\articles\templates\advert_edit.html:126
 #: .\articles\templates\fault.html:121
@@ -891,10 +865,8 @@ msgid "Upload"
 msgstr "Загрузить файл"
 
 #: .\articles\templates\advert_edit.html:138
-#, fuzzy
-#| msgid "Create new advert"
 msgid "View advert"
-msgstr "Создать новое объявление"
+msgstr "Просмотреть объявление"
 
 #: .\articles\templates\adverts_list.html:10
 #: .\articles\tests_playwright\commands.py:802
@@ -903,7 +875,7 @@ msgstr "Создать новое объявление"
 
 #: .\articles\templates\adverts_list.html:30
 msgid "Read more"
-msgstr ""
+msgstr "Читать далее"
 
 #: .\articles\templates\article.html:49 .\articles\templates\fault.html:81
 msgid "Comments"
@@ -911,7 +883,7 @@ msgstr "Комментарии"
 
 #: .\articles\templates\article.html:53 .\articles\templates\fault.html:86
 msgid "Modify"
-msgstr ""
+msgstr "Редактировать"
 
 #: .\articles\templates\article.html:64
 #: .\articles\tests_playwright\commands.py:469
@@ -927,15 +899,13 @@ msgid "Insert comment"
 msgstr "Добавить комментарий"
 
 #: .\articles\templates\article.html:83
-#, fuzzy
-#| msgid "Top articles"
 msgid "Most read articles"
-msgstr "Популярные статьи"
+msgstr "Самые читаемые статьи"
 
 #: .\articles\templates\article_comment_edit.html:7
 #: .\articles\templates\fault_comment_edit.html:7
 msgid "Modify comment"
-msgstr ""
+msgstr "Редактировать комментарий"
 
 #: .\articles\templates\box-news.html:7
 #: .\articles\templates\redaction_news_edit.html:7
@@ -980,7 +950,7 @@ msgstr "Страница не найдена"
 
 #: .\articles\templates\error_404.html:13
 msgid "The page you are looking for does not exist."
-msgstr ""
+msgstr "Страница, которую вы ищете, не существует."
 
 #: .\articles\templates\error_404.html:14
 msgid "Go to homepage"
@@ -1007,10 +977,8 @@ msgid "Close ticket"
 msgstr "Закрыть тикет"
 
 #: .\articles\templates\fault.html:37
-#, fuzzy
-#| msgid "Close ticket"
 msgid "Reopen ticket"
-msgstr "Закрыть тикет"
+msgstr "Повторно открыть тикет"
 
 #: .\articles\templates\fault.html:39
 #: .\articles\tests_playwright\commands.py:776
@@ -1027,16 +995,14 @@ msgid "Start watching ticket"
 msgstr "Начать отслеживание тикета"
 
 #: .\articles\templates\fault.html:94
-#, fuzzy
-#| msgid "Allow comments"
 msgid "Add comment"
-msgstr "Разрешить комментарии"
+msgstr "Добавить комментарий"
 
 #: .\articles\templates\fault.html:108
 #: .\articles\templates\redaction_article_edit.html:96
 #: .\articles\templates\redaction_article_edit.html:130
 msgid "Attachments"
-msgstr ""
+msgstr "Вложения"
 
 #: .\articles\templates\fault_log.html:12 .\articles\views_faults.py:548
 msgid "Log"
@@ -1058,19 +1024,15 @@ msgstr "Сообщить о проблеме или запросе"
 
 #: .\articles\templates\footer.html:4
 msgid "Based on"
-msgstr ""
+msgstr "На основе"
 
 #: .\articles\templates\footer.html:4
-#, fuzzy
-#| msgid "Created"
 msgid "created by"
-msgstr "Создан"
+msgstr "автор"
 
 #: .\articles\templates\includes\admin_list_table.html:6
-#, fuzzy
-#| msgid "Search"
 msgid "Search..."
-msgstr "Поиск"
+msgstr "Поиск…"
 
 #: .\articles\templates\includes\admin_list_table.html:6
 #: .\articles\templates\tray-menu.html:15
@@ -1079,18 +1041,16 @@ msgid "Search"
 msgstr "Поиск"
 
 #: .\articles\templates\includes\admin_list_table.html:36
-#, fuzzy
-#| msgid "Redaction"
 msgid "More actions"
-msgstr "Редакция"
+msgstr "Дополнительные действия"
 
 #: .\articles\templates\includes\custom_fields_detail.html:7
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: .\articles\templates\includes\custom_fields_detail.html:7
 msgid "No"
-msgstr ""
+msgstr "Нет"
 
 #: .\articles\templates\login.html:10 .\articles\templates\tray-menu.html:33
 msgid "Logout"
@@ -1150,11 +1110,11 @@ msgstr "Новый пароль еще раз"
 
 #: .\articles\templates\redaction_analytics.html:11
 msgid "Show all users"
-msgstr ""
+msgstr "Показать всех пользователей"
 
 #: .\articles\templates\redaction_analytics.html:11
 msgid "Show logged users only"
-msgstr ""
+msgstr "Показать только вошедших пользователей"
 
 #: .\articles\templates\redaction_analytics.html:38
 msgid "Platform"
@@ -1198,8 +1158,6 @@ msgid "Create new article"
 msgstr "Создать новую статью"
 
 #: .\articles\templates\redaction_article_edit.html:41
-#, fuzzy
-#| msgid "Published"
 msgid "Publish"
 msgstr "Опубликовать"
 
@@ -1207,7 +1165,7 @@ msgstr "Опубликовать"
 msgid ""
 "Controls where the article sorts in the list - set an earlier date for "
 "archived content."
-msgstr ""
+msgstr "Определяет положение статьи в списке - установите более раннюю дату для архивного контента."
 
 #: .\articles\templates\redaction_article_edit.html:69
 msgid "Visible for"
@@ -1222,13 +1180,11 @@ msgstr "Группы"
 msgid ""
 "Upload files (documents, spreadsheets, PDFs...) for readers to download from "
 "the article."
-msgstr ""
+msgstr "Загрузите файлы (документы, таблицы, PDF...), которые читатели смогут скачать из статьи."
 
 #: .\articles\templates\redaction_article_edit.html:132
-#, fuzzy
-#| msgid "Save the article first to be able to insert images."
 msgid "Save the article first to be able to attach downloadable files."
-msgstr "Сначала сохраните статью, чтобы можно было вставлять изображения."
+msgstr "Сначала сохраните статью, чтобы можно было прикреплять файлы для скачивания."
 
 #: .\articles\templates\redaction_article_edit.html:149
 msgid "Save the article first to be able to insert images."
@@ -1393,10 +1349,8 @@ msgid "Users"
 msgstr "Пользователи"
 
 #: .\articles\tests_playwright\commands.py:328
-#, fuzzy
-#| msgid "Back to fault list"
 msgid "Back to list"
-msgstr "Вернуться к списку проблем"
+msgstr "Вернуться к списку"
 
 #: .\articles\tests_playwright\commands.py:433
 #: .\articles\tests_playwright\commands.py:467
@@ -1501,7 +1455,7 @@ msgstr "Пожалуйста, выберите вариант."
 #: .\articles\views.py:286 .\articles\views.py:303
 #: .\articles\views_faults.py:424 .\articles\views_faults.py:441
 msgid "Comment cannot be modified anymore"
-msgstr ""
+msgstr "Комментарий больше нельзя редактировать"
 
 #: .\articles\views.py:406
 msgid "Wrong username or password"
@@ -1509,77 +1463,65 @@ msgstr "Неправильное имя пользователя или паро
 
 #: .\articles\views_admin.py:34
 msgid "Text with the username and the new password"
-msgstr ""
+msgstr "Текст с именем пользователя и новым паролем"
 
 #: .\articles\views_admin.py:37
-#, fuzzy
-#| msgid "Back to article list"
 msgid "Link to the article"
-msgstr "Вернуться к списку статей"
+msgstr "Ссылка на статью"
 
 #: .\articles\views_admin.py:40 .\articles\views_admin.py:50
-#, fuzzy
-#| msgid "Comments"
 msgid "Comment author"
-msgstr "Комментарии"
+msgstr "Автор комментария"
 
 #: .\articles\views_admin.py:41
 msgid "Link to the commented article"
-msgstr ""
+msgstr "Ссылка на статью с комментарием"
 
 #: .\articles\views_admin.py:42 .\articles\views_admin.py:52
-#, fuzzy
-#| msgid "Comments"
 msgid "Comment body"
-msgstr "Комментарии"
+msgstr "Текст комментария"
 
 #: .\articles\views_admin.py:45
-#, fuzzy
-#| msgid "Fault report"
 msgid "Fault reporter"
-msgstr "Отчет о неисправности"
+msgstr "Заявитель неисправности"
 
 #: .\articles\views_admin.py:46 .\articles\views_admin.py:51
 #: .\articles\views_admin.py:56 .\articles\views_admin.py:61
 #: .\articles\views_admin.py:66
-#, fuzzy
-#| msgid "Can report fault"
 msgid "Link to the fault"
-msgstr "Может сообщать об ошибках"
+msgstr "Ссылка на неисправность"
 
 #: .\articles\views_admin.py:47 .\articles\views_admin.py:57
 #: .\articles\views_admin.py:62 .\articles\views_admin.py:67
-#, fuzzy
-#| msgid "Description"
 msgid "Fault description"
-msgstr "Описание"
+msgstr "Описание неисправности"
 
 #: .\articles\views_admin.py:55
 msgid "User who assigned the fault to you"
-msgstr ""
+msgstr "Пользователь, который назначил вам неисправность"
 
 #: .\articles\views_admin.py:60
 msgid "User who closed the fault"
-msgstr ""
+msgstr "Пользователь, который закрыл неисправность"
 
 #: .\articles\views_admin.py:65
 msgid "User who reopened the fault"
-msgstr ""
+msgstr "Пользователь, который повторно открыл неисправность"
 
 #: .\articles\views_admin.py:114
 #, python-brace-format
 msgid "Field \"{}\" must be a number."
-msgstr ""
+msgstr "Поле «{}» должно быть числом."
 
 #: .\articles\views_admin.py:117
 #, python-brace-format
 msgid "Field \"{}\" has an invalid value."
-msgstr ""
+msgstr "Поле «{}» имеет недопустимое значение."
 
 #: .\articles\views_admin.py:120
 #, python-brace-format
 msgid "Field \"{}\" must be a valid date/time."
-msgstr ""
+msgstr "Поле «{}» должно содержать корректную дату/время."
 
 #: .\articles\views_admin.py:228 .\articles\views_admin.py:322
 #: .\articles\views_admin.py:358 .\articles\views_admin.py:440
@@ -1590,27 +1532,23 @@ msgstr ""
 #: .\articles\views_personal_settings.py:77 .\articles\views_redaction.py:189
 #: .\articles\views_redaction.py:369
 msgid "Form validation error"
-msgstr ""
+msgstr "Ошибка валидации формы"
 
 #: .\articles\views_admin.py:274
 msgid "Member"
 msgstr "Член"
 
 #: .\articles\views_admin.py:481
-#, fuzzy
-#| msgid "Add option"
 msgid "Add owner"
-msgstr "Добавить опцию"
+msgstr "Добавить владельца"
 
 #: .\articles\views_admin.py:488
-#, fuzzy
-#| msgid "Add new unit"
 msgid "Add tenant"
-msgstr "Добавить новую единицу"
+msgstr "Добавить арендатора"
 
 #: .\articles\views_admin.py:710
 msgid "Detail"
-msgstr ""
+msgstr "Подробнее"
 
 #: .\articles\views_admin.py:827
 msgid "Credentials has been sent by e-mail"
@@ -1624,7 +1562,7 @@ msgstr "Список пользователей"
 #, python-brace-format
 msgid ""
 "Unknown placeholder \"{}\" in a mail template. Allowed placeholders: {}."
-msgstr ""
+msgstr "Неизвестный плейсхолдер «{}» в шаблоне письма. Допустимые плейсхолдеры: {}."
 
 #: .\articles\views_adverts.py:47 .\articles\views_adverts.py:69
 #: .\articles\views_faults.py:31
@@ -1632,10 +1570,8 @@ msgid "Mine"
 msgstr "Мои"
 
 #: .\articles\views_adverts.py:167
-#, fuzzy
-#| msgid "Delete"
 msgid "Deleted"
-msgstr "Удалить"
+msgstr "Удалено"
 
 #: .\articles\views_faults.py:38
 msgid "Assigned to me"
@@ -1650,10 +1586,8 @@ msgid "View"
 msgstr "Просмотреть"
 
 #: .\articles\views_faults.py:114
-#, fuzzy
-#| msgid "Do you want to delete"
 msgid "Do you want to close ticket"
-msgstr "Вы хотите удалить"
+msgstr "Вы хотите закрыть тикет"
 
 #: .\articles\views_faults.py:149
 msgid "Ticket No."
@@ -1705,10 +1639,8 @@ msgid "Level"
 msgstr "Уровень"
 
 #: .\articles\views_redaction.py:273
-#, fuzzy
-#| msgid "Do you want to delete"
 msgid "Do you want to hide"
-msgstr "Вы хотите удалить"
+msgstr "Вы хотите скрыть"
 
 #: .\articles\views_redaction.py:537
 msgid "Do you want to delete this news"
@@ -1741,7 +1673,7 @@ msgstr "Вы хотите удалить этот опрос"
 #: .\articles\views_redaction.py:948
 #, python-brace-format
 msgid "Data for last {} days."
-msgstr ""
+msgstr "Данные за последние {} дней."
 
 #, fuzzy
 #~| msgid "Back to fault list"

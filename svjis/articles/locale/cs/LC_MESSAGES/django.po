@@ -785,7 +785,7 @@ msgstr "Žádné skupiny nejsou k dispozici."
 #: .\articles\templates\article.html:9
 #: .\articles\templates\includes\breadcrumbs.html:3
 msgid "Breadcrumb"
-msgstr ""
+msgstr "Drobečková navigace"
 
 #: .\articles\templates\advert_detail.html:9
 #: .\articles\templates\advert_edit.html:7
@@ -950,7 +950,7 @@ msgstr "Stránka nenalezena"
 
 #: .\articles\templates\error_404.html:13
 msgid "The page you are looking for does not exist."
-msgstr ""
+msgstr "Stránka, kterou hledáte, neexistuje."
 
 #: .\articles\templates\error_404.html:14
 msgid "Go to homepage"
@@ -977,10 +977,8 @@ msgid "Close ticket"
 msgstr "Uzavřít tiket"
 
 #: .\articles\templates\fault.html:37
-#, fuzzy
-#| msgid "Close ticket"
 msgid "Reopen ticket"
-msgstr "Uzavřít tiket"
+msgstr "Znovu otevřít tiket"
 
 #: .\articles\templates\fault.html:39
 #: .\articles\tests_playwright\commands.py:776
@@ -997,10 +995,8 @@ msgid "Start watching ticket"
 msgstr "Začít sledovat tiket"
 
 #: .\articles\templates\fault.html:94
-#, fuzzy
-#| msgid "Allow comments"
 msgid "Add comment"
-msgstr "Povolit komentáře"
+msgstr "Přidat komentář"
 
 #: .\articles\templates\fault.html:108
 #: .\articles\templates\redaction_article_edit.html:96
@@ -1035,10 +1031,8 @@ msgid "created by"
 msgstr "vytvořil"
 
 #: .\articles\templates\includes\admin_list_table.html:6
-#, fuzzy
-#| msgid "Search"
 msgid "Search..."
-msgstr "Vyhledat"
+msgstr "Vyhledat…"
 
 #: .\articles\templates\includes\admin_list_table.html:6
 #: .\articles\templates\tray-menu.html:15
@@ -1164,8 +1158,6 @@ msgid "Create new article"
 msgstr "Vytvořit nový článek"
 
 #: .\articles\templates\redaction_article_edit.html:41
-#, fuzzy
-#| msgid "Published"
 msgid "Publish"
 msgstr "Zveřejnit"
 
@@ -1543,7 +1535,7 @@ msgstr "Pole \"{}\" musí být platné datum a čas."
 #: .\articles\views_personal_settings.py:77 .\articles\views_redaction.py:189
 #: .\articles\views_redaction.py:369
 msgid "Form validation error"
-msgstr ""
+msgstr "Chyba validace formuláře"
 
 #: .\articles\views_admin.py:274
 msgid "Member"
