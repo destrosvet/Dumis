@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 09:10+0200\n"
+"POT-Creation-Date: 2026-08-23 09:27+0200\n"
 "PO-Revision-Date: 2026-01-30 14:25+0000\n"
 "Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
 "Language-Team: Hungarian <https://translate.codeberg.org/projects/svjis/"
@@ -1197,7 +1197,7 @@ msgstr "Mellékletek"
 
 #: .\articles\templates\fault_log.html:12
 #: .\articles\templates\project_log.html:12 .\articles\views_faults.py:548
-#: .\articles\views_projects.py:594
+#: .\articles\views_projects.py:597
 msgid "Log"
 msgstr "Napló"
 
@@ -1377,7 +1377,10 @@ msgstr "Fájlok hozzáadása"
 msgid ""
 "You can select multiple files at once - they are added when you save. Photos "
 "appear in the gallery, other files in the documents section."
-msgstr "Egyszerre több fájlt is kiválaszthat - ezek mentéskor kerülnek hozzáadásra. A fényképek a galériában, az egyéb fájlok a dokumentumok részben jelennek meg."
+msgstr ""
+"Egyszerre több fájlt is kiválaszthat - ezek mentéskor kerülnek hozzáadásra. "
+"A fényképek a galériában, az egyéb fájlok a dokumentumok részben jelennek "
+"meg."
 
 #: .\articles\templates\projects_create.html:33
 msgid "Create"
@@ -1387,8 +1390,8 @@ msgstr "Létrehozás"
 #: .\articles\views_projects.py:96 .\articles\views_projects.py:140
 #: .\articles\views_projects.py:200 .\articles\views_projects.py:218
 #: .\articles\views_projects.py:232 .\articles\views_projects.py:249
-#: .\articles\views_projects.py:272 .\articles\views_projects.py:527
-#: .\articles\views_projects.py:586 .\articles\views_projects.py:592
+#: .\articles\views_projects.py:272 .\articles\views_projects.py:530
+#: .\articles\views_projects.py:589 .\articles\views_projects.py:595
 msgid "Projects"
 msgstr "Projektek"
 
@@ -1655,7 +1658,7 @@ msgstr "Adminisztráció"
 #: .\articles\views_admin.py:1565 .\articles\views_adverts.py:152
 #: .\articles\views_adverts.py:211 .\articles\views_faults.py:271
 #: .\articles\views_faults.py:348 .\articles\views_personal_settings.py:72
-#: .\articles\views_projects.py:336 .\articles\views_projects.py:413
+#: .\articles\views_projects.py:339 .\articles\views_projects.py:416
 #: .\articles\views_redaction.py:186 .\articles\views_redaction.py:366
 #: .\articles\views_redaction.py:592 .\articles\views_redaction.py:704
 #: .\articles\views_redaction.py:849
@@ -1773,7 +1776,7 @@ msgstr "Kérjük válasszon egy lehetőséget."
 
 #: .\articles\views.py:286 .\articles\views.py:303
 #: .\articles\views_faults.py:424 .\articles\views_faults.py:441
-#: .\articles\views_projects.py:533 .\articles\views_projects.py:552
+#: .\articles\views_projects.py:536 .\articles\views_projects.py:555
 msgid "Comment cannot be modified anymore"
 msgstr "A hozzászólás már nem szerkeszthető"
 
@@ -1987,7 +1990,12 @@ msgstr "A bejelentkezési adatok elküldve az Ön e-mail címére"
 msgid "No."
 msgstr "Sz."
 
-#: .\articles\views_projects.py:455
+#: .\articles\views_projects.py:306
+msgid ""
+"No project statuses are configured yet. Ask an administrator to create one."
+msgstr "Még nincs beállítva projekt állapot. Kérje meg az adminisztrátort, hogy hozzon létre egyet."
+
+#: .\articles\views_projects.py:458
 msgid "Tag name is required."
 msgstr "A címke neve kötelező."
 

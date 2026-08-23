@@ -302,6 +302,9 @@ def projects_project_create_save_view(request):
             obj.status = models.ProjectStatus.objects.order_by('order').first()
         elif obj.status_id is None:
             obj.status = models.ProjectStatus.objects.order_by('order').first()
+        if obj.status_id is None:
+            messages.error(request, _("No project statuses are configured yet. Ask an administrator to create one."))
+            return redirect(reverse(projects_list_view) + '?scope=active')
         obj.save()
         for f in request.FILES.getlist('gallery'):
             try:

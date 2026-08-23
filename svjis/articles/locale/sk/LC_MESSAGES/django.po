@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: SVJIS2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 09:10+0200\n"
+"POT-Creation-Date: 2026-08-23 09:27+0200\n"
 "PO-Revision-Date: 2026-01-30 14:25+0000\n"
 "Last-Translator: berk76 <berk76@noreply.codeberg.org>\n"
 "Language-Team: Slovak <https://translate.codeberg.org/projects/svjis/svjis2/"
@@ -1195,7 +1195,7 @@ msgstr "Prílohy"
 
 #: .\articles\templates\fault_log.html:12
 #: .\articles\templates\project_log.html:12 .\articles\views_faults.py:548
-#: .\articles\views_projects.py:594
+#: .\articles\views_projects.py:597
 msgid "Log"
 msgstr "Protokol"
 
@@ -1375,7 +1375,9 @@ msgstr "Pridať súbory"
 msgid ""
 "You can select multiple files at once - they are added when you save. Photos "
 "appear in the gallery, other files in the documents section."
-msgstr "Môžete vybrať viacero súborov naraz - pridajú sa pri uložení. Fotografie sa zobrazia v galérii, ostatné súbory v sekcii dokumentov."
+msgstr ""
+"Môžete vybrať viacero súborov naraz - pridajú sa pri uložení. Fotografie sa "
+"zobrazia v galérii, ostatné súbory v sekcii dokumentov."
 
 #: .\articles\templates\projects_create.html:33
 msgid "Create"
@@ -1385,8 +1387,8 @@ msgstr "Vytvoriť"
 #: .\articles\views_projects.py:96 .\articles\views_projects.py:140
 #: .\articles\views_projects.py:200 .\articles\views_projects.py:218
 #: .\articles\views_projects.py:232 .\articles\views_projects.py:249
-#: .\articles\views_projects.py:272 .\articles\views_projects.py:527
-#: .\articles\views_projects.py:586 .\articles\views_projects.py:592
+#: .\articles\views_projects.py:272 .\articles\views_projects.py:530
+#: .\articles\views_projects.py:589 .\articles\views_projects.py:595
 msgid "Projects"
 msgstr "Projekty"
 
@@ -1653,7 +1655,7 @@ msgstr "Administrácia"
 #: .\articles\views_admin.py:1565 .\articles\views_adverts.py:152
 #: .\articles\views_adverts.py:211 .\articles\views_faults.py:271
 #: .\articles\views_faults.py:348 .\articles\views_personal_settings.py:72
-#: .\articles\views_projects.py:336 .\articles\views_projects.py:413
+#: .\articles\views_projects.py:339 .\articles\views_projects.py:416
 #: .\articles\views_redaction.py:186 .\articles\views_redaction.py:366
 #: .\articles\views_redaction.py:592 .\articles\views_redaction.py:704
 #: .\articles\views_redaction.py:849
@@ -1771,7 +1773,7 @@ msgstr "Prosím, vyberte jednu možnosť."
 
 #: .\articles\views.py:286 .\articles\views.py:303
 #: .\articles\views_faults.py:424 .\articles\views_faults.py:441
-#: .\articles\views_projects.py:533 .\articles\views_projects.py:552
+#: .\articles\views_projects.py:536 .\articles\views_projects.py:555
 msgid "Comment cannot be modified anymore"
 msgstr "Komentár už nie je možné upravovať"
 
@@ -1919,7 +1921,9 @@ msgstr ""
 #: .\articles\views_admin.py:1489
 #, python-brace-format
 msgid "Cannot delete \"{}\" - it is still used by one or more projects."
-msgstr "Nie je možné odstrániť \"{}\" - stále sa používa v jednom alebo viacerých projektoch."
+msgstr ""
+"Nie je možné odstrániť \"{}\" - stále sa používa v jednom alebo viacerých "
+"projektoch."
 
 #: .\articles\views_adverts.py:47 .\articles\views_adverts.py:69
 #: .\articles\views_faults.py:31 .\articles\views_projects.py:36
@@ -1987,7 +1991,12 @@ msgstr "Prihlasovacie údaje boli odoslané na váš e-mail"
 msgid "No."
 msgstr "Č."
 
-#: .\articles\views_projects.py:455
+#: .\articles\views_projects.py:306
+msgid ""
+"No project statuses are configured yet. Ask an administrator to create one."
+msgstr "Zatiaľ nie sú nastavené žiadne stavy projektov. Požiadajte administrátora, aby nejaký vytvoril."
+
+#: .\articles\views_projects.py:458
 msgid "Tag name is required."
 msgstr "Názov štítku je povinný."
 

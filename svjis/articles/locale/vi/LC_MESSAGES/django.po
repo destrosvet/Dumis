@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 09:10+0200\n"
+"POT-Creation-Date: 2026-08-23 09:27+0200\n"
 "PO-Revision-Date: 2026-01-30 14:25+0000\n"
 "Last-Translator: Anonymous <anonymous@noreply.codeberg.org>\n"
 "Language-Team: Vietnamese <https://translate.codeberg.org/projects/svjis/"
@@ -1192,7 +1192,7 @@ msgstr "Tệp đính kèm"
 
 #: .\articles\templates\fault_log.html:12
 #: .\articles\templates\project_log.html:12 .\articles\views_faults.py:548
-#: .\articles\views_projects.py:594
+#: .\articles\views_projects.py:597
 msgid "Log"
 msgstr "Nhật ký"
 
@@ -1372,7 +1372,9 @@ msgstr "Thêm tệp"
 msgid ""
 "You can select multiple files at once - they are added when you save. Photos "
 "appear in the gallery, other files in the documents section."
-msgstr "Bạn có thể chọn nhiều tệp cùng lúc - chúng sẽ được thêm vào khi bạn lưu. Ảnh sẽ xuất hiện trong thư viện ảnh, các tệp khác trong phần tài liệu."
+msgstr ""
+"Bạn có thể chọn nhiều tệp cùng lúc - chúng sẽ được thêm vào khi bạn lưu. Ảnh "
+"sẽ xuất hiện trong thư viện ảnh, các tệp khác trong phần tài liệu."
 
 #: .\articles\templates\projects_create.html:33
 msgid "Create"
@@ -1382,8 +1384,8 @@ msgstr "Tạo"
 #: .\articles\views_projects.py:96 .\articles\views_projects.py:140
 #: .\articles\views_projects.py:200 .\articles\views_projects.py:218
 #: .\articles\views_projects.py:232 .\articles\views_projects.py:249
-#: .\articles\views_projects.py:272 .\articles\views_projects.py:527
-#: .\articles\views_projects.py:586 .\articles\views_projects.py:592
+#: .\articles\views_projects.py:272 .\articles\views_projects.py:530
+#: .\articles\views_projects.py:589 .\articles\views_projects.py:595
 msgid "Projects"
 msgstr "Dự án"
 
@@ -1650,7 +1652,7 @@ msgstr "Quản trị"
 #: .\articles\views_admin.py:1565 .\articles\views_adverts.py:152
 #: .\articles\views_adverts.py:211 .\articles\views_faults.py:271
 #: .\articles\views_faults.py:348 .\articles\views_personal_settings.py:72
-#: .\articles\views_projects.py:336 .\articles\views_projects.py:413
+#: .\articles\views_projects.py:339 .\articles\views_projects.py:416
 #: .\articles\views_redaction.py:186 .\articles\views_redaction.py:366
 #: .\articles\views_redaction.py:592 .\articles\views_redaction.py:704
 #: .\articles\views_redaction.py:849
@@ -1768,7 +1770,7 @@ msgstr "Vui lòng chọn một tùy chọn."
 
 #: .\articles\views.py:286 .\articles\views.py:303
 #: .\articles\views_faults.py:424 .\articles\views_faults.py:441
-#: .\articles\views_projects.py:533 .\articles\views_projects.py:552
+#: .\articles\views_projects.py:536 .\articles\views_projects.py:555
 msgid "Comment cannot be modified anymore"
 msgstr "Bình luận không thể chỉnh sửa được nữa"
 
@@ -1984,7 +1986,12 @@ msgstr "Thông tin đăng nhập đã được gửi đến email của bạn"
 msgid "No."
 msgstr "STT"
 
-#: .\articles\views_projects.py:455
+#: .\articles\views_projects.py:306
+msgid ""
+"No project statuses are configured yet. Ask an administrator to create one."
+msgstr "Chưa có trạng thái dự án nào được cấu hình. Hãy nhờ quản trị viên tạo một trạng thái."
+
+#: .\articles\views_projects.py:458
 msgid "Tag name is required."
 msgstr "Tên nhãn là bắt buộc."
 
