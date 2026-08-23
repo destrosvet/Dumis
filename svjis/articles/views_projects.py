@@ -20,7 +20,7 @@ from .permissions import (
     svjis_manage_projects,
     svjis_add_project_comment,
 )
-from .templatetags.article_filters import highlight, highlight_exact
+from .templatetags.article_filters import highlight
 
 
 def get_side_menu(active_item, user):
@@ -122,7 +122,6 @@ def projects_list_view(request):
                 'url': detail_url,
                 'row_class': 'closed-ticket' if obj.status.is_closed else '',
                 'cells': {
-                    'id': highlight_exact(str(obj.pk), search),
                     'subject': highlight(obj.subject, search),
                     'status': obj.status.name,
                     'assignee': (
@@ -152,7 +151,6 @@ def projects_list_view(request):
     ctx['selected_status'] = status_id
     ctx['selected_tag'] = tag_id
     ctx['columns'] = [
-        {'key': 'id', 'label': _('No.')},
         {'key': 'subject', 'label': _('Subject')},
         {'key': 'status', 'label': _('Status')},
         {'key': 'assignee', 'label': _('Assigned to'), 'hide_on_mobile': True},
