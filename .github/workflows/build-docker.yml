@@ -28,7 +28,7 @@ jobs:
 
       - name: Build docker image
         run: |
-          docker build -t destrosvet/svjis3:latest .
+          docker build -t destrosvet/dumis:latest .
 
       - name: Create directories and files
         run: |
@@ -70,9 +70,9 @@ jobs:
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
           docker login --username "$DOCKERHUB_USERNAME" --password "$DOCKERHUB_TOKEN"
-          docker push destrosvet/svjis3:latest
+          docker push destrosvet/dumis:latest
           if [ "${{ github.ref_type }}" = "tag" ] && [[ "${{ github.ref_name }}" == v* ]]; then
             TAG="${{ github.ref_name }}"
-            docker tag destrosvet/svjis3:latest destrosvet/svjis3:$TAG
-            docker push destrosvet/svjis3:$TAG
+            docker tag destrosvet/dumis:latest destrosvet/dumis:$TAG
+            docker push destrosvet/dumis:$TAG
           fi

@@ -1,5 +1,5 @@
 [project]
-name = "svjis2"
+name = "dumis"
 version = "2.30.0"
 description = "Information system for homeowners' associations (SVJ)"
 readme = "README.md"
@@ -20,10 +20,10 @@ dependencies = [
   "pillow>=12.3.0",
   "psycopg>=3.3.4",
 ]
-urls.Homepage = "https://svjis.github.io/"
-urls.Issues = "https://github.com/svjis/svjis2/issues"
-urls.Repository = "https://github.com/svjis/svjis2"
-urls.Translations = "https://translate.codeberg.org/engage/svjis/"
+urls.Homepage = "https://dumis.cz"
+urls.Issues = "https://github.com/destrosvet/dumis/issues"
+urls.Repository = "https://github.com/destrosvet/dumis"
+urls."Based on" = "https://svjis.github.io/"
 
 [dependency-groups]
 dev = [

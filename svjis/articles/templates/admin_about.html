@@ -8,8 +8,12 @@
 
 <table class="detail full-width fixed-on-mobile" aria-describedby="about">
     <tr>
-        <th scope="row">SVJIS</th>
-        <td >{{ svjis_version }}</td>
+        <th scope="row">Dumis</th>
+        <td>{{ svjis_version }}</td>
+    </tr>
+    <tr>
+        <th scope="row">{% translate 'Based on' %}</th>
+        <td><a href="{{ svjis_based_on }}" target="_blank">SVJIS</a></td>
     </tr>
     {% if fork_version %}
     <tr>
@@ -46,11 +50,6 @@
         <th scope="row">{% translate 'Issues' %}</th>
         <td><a href="{{ svjis_issues }}" target="_blank">{{ svjis_issues }}</a></td>
     </tr>
-    <tr>
-        <th scope="row">{% translate 'Translations' %}</th>
-        <td><a href="{{ svjis_translations }}" target="_blank">{{ svjis_translations }}</a></td>
-    </tr>
-
 </table>
 
 {% endblock content %}

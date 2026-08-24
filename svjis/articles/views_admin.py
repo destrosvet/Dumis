@@ -28,7 +28,7 @@ from .permissions import (
     svjis_edit_admin_project_statuses,
     svjis_edit_admin_tags,
 )
-from svjis import __homepage_url__, __repository_url__, __issues_url__, __translations_url__
+from svjis import __homepage_url__, __repository_url__, __issues_url__, __based_on_url__
 
 
 # Variables available in the mail template preferences. The order matters only
@@ -1761,5 +1761,5 @@ def admin_about_view(request):
     ctx['svjis_homepage'] = __homepage_url__
     ctx['svjis_repository'] = __repository_url__
     ctx['svjis_issues'] = __issues_url__
-    ctx['svjis_translations'] = __translations_url__
+    ctx['svjis_based_on'] = __based_on_url__
     return render(request, "admin_about.html", ctx)

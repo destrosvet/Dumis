@@ -1,17 +1,24 @@
-# SVJIS2
+# Dumis
 
-[![UnitTests](https://github.com/svjis/svjis2/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/svjis/svjis2/actions/workflows/unit-tests.yml) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=svjis_svjis-py&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=svjis_svjis-py) [![Translation Status](https://translate.codeberg.org/widget/svjis/svjis2/svg-badge.svg)](https://translate.codeberg.org/engage/svjis/)
+[![UnitTests](https://github.com/destrosvet/dumis/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/destrosvet/dumis/actions/workflows/unit-tests.yml)
 
 Information system for homeowners' associations (SVJ). :house_with_garden:
 
 > [!IMPORTANT]
-> **This is a fork.** This repository is [Uhlíř's](https://uhlir.me) fork of the upstream [SVJIS](https://github.com/svjis/svjis2) project, and it is not a light customization: the visual design and a good part of the functional base have been reworked. Highlights include a redesigned admin UI built around a shared sortable/dropdown list component, a generic custom fields system for attaching arbitrary data to users, units, adverts, board members, entrances and fault reports, server-side resizing of uploaded images so pages stay responsive instead of shipping full-resolution originals, and a number of smaller UX fixes throughout.
+> **Dumis is based on [SVJIS](https://github.com/svjis/svjis2)**, and is not a light customization: the visual design and a good part of the functional base have been reworked and extended. On top of everything SVJIS already provides, Dumis adds:
+> - a **cadastre extract (PDF) importer** that reads a "Výpis z katastru nemovitostí", proposes building units and owners for review, and checks that each unit's ownership shares add up to 1/1 before anything is created
+> - a small **admin REST API** for creating units, owners and unit/owner assignments, the first step of an API-first admin
+> - a **React-based homepage**, served from the same REST API, replacing the old server-rendered boxes
+> - a redesigned admin UI built around a shared sortable/dropdown list component
+> - a generic **custom fields** system for attaching arbitrary data to users, units, adverts, board members, entrances and fault reports
+> - server-side resizing of uploaded images so pages stay responsive instead of shipping full-resolution originals
+> - a number of smaller UX fixes throughout
 >
-> This fork's own deployment version is tracked separately from the upstream SVJIS package version and is shown in the application's footer and About page. If you're looking for the original, unmodified project, see [svjis/svjis2](https://github.com/svjis/svjis2).
+> If you're looking for the original, unmodified project, see [svjis/svjis2](https://github.com/svjis/svjis2).
 
 ## Project Description
 
-SVJIS is a CMS for Homeowners' Associations. The system provides a content management system :memo:, discussions under articles, polls :bar_chart:, reporting and tracking of issues, advertisements, and a database of owners :family_man_woman_boy: including records of units and shares. More on the [project website](https://svjis.github.io/Vlastnosti/).
+Dumis is a CMS for Homeowners' Associations. The system provides a content management system :memo:, discussions under articles, polls :bar_chart:, reporting and tracking of issues, advertisements, and a database of owners :family_man_woman_boy: including records of units and shares - with the option to populate that database straight from a cadastre extract PDF instead of entering every unit and owner by hand.
 
 ## 1 Installation
 
@@ -24,8 +31,8 @@ If not, install it from: https://docs.astral.sh/uv/getting-started/installation/
 
 Clone the project
 ```
-git clone https://github.com/svjis/svjis2.git
-cd svjis2
+git clone https://github.com/destrosvet/dumis.git
+cd dumis
 ```
 
 Install the dependencies
@@ -58,9 +65,7 @@ python manage.py runserver
 
 The application runs at the address http://127.0.0.1:8000/ with the user `admin` and the password is the one you entered earlier.
 
-The method of starting mentioned is suitable for quickly testing the application on your computer or for developers. If you want to deploy SVJIS on a production server, please read the [Django documentation](https://docs.djangoproject.com/en/5.0/howto/deployment/).
-
-On the project pages, you will find a step-by-step [example of installation on a server (Debian or Raspberry Pi)](https://svjis.github.io/Instalace/).
+The method of starting mentioned is suitable for quickly testing the application on your computer or for developers. If you want to deploy Dumis on a production server, please read the [Django documentation](https://docs.djangoproject.com/en/5.0/howto/deployment/).
 
 ## 3 Parameterization
 
@@ -70,7 +75,7 @@ The settings for SVJ data can be found in the application under the `Administrat
 
 ### 3.2 Email Sending Settings
 
-The SVJIS system uses email sending for various events, so the correct configuration of the email interface is essential for the application's functionality.
+Dumis uses email sending for various events, so the correct configuration of the email interface is essential for the application's functionality.
 
 Create a new file `svjis/svjis/local_settings.py` and add the following configuration:
 
@@ -97,7 +102,7 @@ During application testing, you can run it manually. In a production setup, you 
 
 ## 4 Docker
 
-You can also use `docker compose` to run svjis application. Here is an example of SVJIS with Postgres.
+You can also use `docker compose` to run the Dumis application. Here is an example with Postgres.
 
 Create following directories and files:
 
@@ -129,15 +134,13 @@ If you want to use different database or setup any other parameters modify local
 
 ## 5 Troubleshooting
 
-If you encounter any issues, do not hesitate to ask a question in the [project discussions](https://github.com/orgs/svjis/discussions).
+If you encounter any issues, feel free to open an [issue](https://github.com/destrosvet/dumis/issues).
 
 ## 6 Collaboration
 
-Any form of collaboration is welcome. :octocat:  
+Any form of collaboration is welcome. :octocat:
 More information can be found in [CONTRIBUTING.md](CONTRIBUTING.md).
 
-### 6.1 Translation status
+## 7 Credits
 
-Help us with translations.
-
-[![Translation status](https://translate.codeberg.org/widget/svjis/multi-auto.svg)](https://translate.codeberg.org/engage/svjis/)
+Dumis is built on top of [SVJIS](https://github.com/svjis/svjis2) by [Uhlíř](https://uhlir.me) - a huge thank you to the original project and its contributors. Please consider supporting the upstream project too.
