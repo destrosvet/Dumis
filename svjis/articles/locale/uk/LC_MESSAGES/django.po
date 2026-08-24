@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-23 09:27+0200\n"
+"POT-Creation-Date: 2026-08-24 14:36+0200\n"
 "PO-Revision-Date: 2026-04-01 11:47+0000\n"
 "Last-Translator: SomeTr <sometr@noreply.codeberg.org>\n"
 "Language-Team: Ukrainian <https://translate.codeberg.org/projects/svjis/"
@@ -22,15 +22,49 @@ msgstr ""
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.16.2\n"
 
-#: .\articles\forms.py:250 .\articles\models.py:965
-#: .\articles\views_admin.py:1341
+#: .\articles\api\permissions.py:8
+msgid "You do not have permission to perform this action."
+msgstr "У вас немає прав для виконання цієї дії."
+
+#: .\articles\api\serializers.py:116
+msgid "This option does not belong to the given survey."
+msgstr "Цей варіант не належить до цього опитування."
+
+#: .\articles\api\views.py:37
+msgid "Search keyword must be between 3 and 100 characters."
+msgstr "Ключове слово пошуку має містити від 3 до 100 символів."
+
+#: .\articles\api\views.py:83
+msgid "Voting for this survey is currently closed."
+msgstr "Голосування в цьому опитуванні наразі закрито."
+
+#: .\articles\api\views.py:92
+msgid "You have already voted in this survey."
+msgstr "Ви вже проголосували в цьому опитуванні."
+
+#: .\articles\cadastre_import.py:176
+msgid "The PDF has no pages."
+msgstr "PDF не містить сторінок."
+
+#: .\articles\cadastre_import.py:188
+msgid "Could not find a unit table (section B1 - Jednotky) in this PDF."
+msgstr ""
+"У цьому PDF не вдалося знайти таблицю приміщень (розділ B1 - Jednotky)."
+
+#: .\articles\cadastre_import.py:283
+#: .\articles\templates\admin_building_unit_import_preview.html:16
+msgid "No units were recognized in this PDF."
+msgstr "У цьому PDF не розпізнано жодних приміщень."
+
+#: .\articles\forms.py:250 .\articles\models.py:970
+#: .\articles\views_admin.py:1502
 msgid "Entity type"
 msgstr "Тип сутності"
 
-#: .\articles\forms.py:411 .\articles\models.py:424 .\articles\models.py:489
-#: .\articles\models.py:941 .\articles\templates\admin_building_unit.html:36
+#: .\articles\forms.py:411 .\articles\models.py:424 .\articles\models.py:494
+#: .\articles\models.py:946 .\articles\templates\admin_building_unit.html:36
 #: .\articles\templates\admin_entrance_edit.html:16
-#: .\articles\views_admin.py:591 .\articles\views_faults.py:152
+#: .\articles\views_admin.py:598 .\articles\views_faults.py:152
 msgid "Entrance"
 msgstr "Вхід"
 
@@ -44,12 +78,12 @@ msgid "On Behalf Of"
 msgstr "Від імені користувача"
 
 #: .\articles\forms.py:470 .\articles\templates\project.html:24
-#: .\articles\views_projects.py:158
+#: .\articles\views_projects.py:156
 msgid "Assigned to"
 msgstr "Призначено"
 
-#: .\articles\forms.py:484 .\articles\models.py:752
-#: .\articles\templates\project.html:104 .\articles\views_projects.py:157
+#: .\articles\forms.py:484 .\articles\models.py:757
+#: .\articles\templates\project.html:104 .\articles\views_projects.py:155
 msgid "Status"
 msgstr "Статус"
 
@@ -128,7 +162,7 @@ msgstr "Зелений"
 msgid "Cyan"
 msgstr "Блакитний"
 
-#: .\articles\models.py:60 .\articles\models.py:201 .\articles\models.py:649
+#: .\articles\models.py:60 .\articles\models.py:201 .\articles\models.py:654
 #: .\articles\views_redaction.py:625
 msgid "Header"
 msgstr "Заголовок"
@@ -138,7 +172,7 @@ msgid "Publish date"
 msgstr "Дата публікації"
 
 #: .\articles\models.py:65 .\articles\models.py:189 .\articles\models.py:204
-#: .\articles\models.py:219 .\articles\models.py:656
+#: .\articles\models.py:219 .\articles\models.py:661
 #: .\articles\views_redaction.py:241 .\articles\views_redaction.py:516
 #: .\articles\views_redaction.py:627 .\articles\views_redaction.py:741
 msgid "Published"
@@ -149,12 +183,12 @@ msgid "Perex"
 msgstr "Вріз"
 
 #: .\articles\models.py:67 .\articles\models.py:151 .\articles\models.py:190
-#: .\articles\models.py:319 .\articles\models.py:582 .\articles\models.py:650
-#: .\articles\models.py:847 .\articles\views_redaction.py:517
+#: .\articles\models.py:319 .\articles\models.py:587 .\articles\models.py:655
+#: .\articles\models.py:852 .\articles\views_redaction.py:517
 msgid "Body"
 msgstr "Тіло"
 
-#: .\articles\models.py:68 .\articles\models.py:651
+#: .\articles\models.py:68 .\articles\models.py:656
 msgid "Cover image"
 msgstr "Обкладинка"
 
@@ -180,18 +214,22 @@ msgstr "User Agent"
 
 #: .\articles\models.py:122 .\articles\models.py:170 .\articles\models.py:216
 #: .\articles\models.py:250 .\articles\models.py:396 .\articles\models.py:407
-#: .\articles\models.py:427 .\articles\models.py:480 .\articles\models.py:548
-#: .\articles\models.py:632 .\articles\models.py:693 .\articles\models.py:744
-#: .\articles\models.py:813 .\articles\templates\advert_edit.html:101
+#: .\articles\models.py:427 .\articles\models.py:485 .\articles\models.py:553
+#: .\articles\models.py:637 .\articles\models.py:698 .\articles\models.py:749
+#: .\articles\models.py:818
+#: .\articles\templates\admin_building_unit_import_preview.html:44
+#: .\articles\templates\advert_edit.html:101
 #: .\articles\templates\personal_my_units.html:15
 #: .\articles\templates\redaction_survey_results.html:16
-#: .\articles\views_admin.py:457 .\articles\views_admin.py:593
+#: .\articles\views_admin.py:464 .\articles\views_admin.py:600
 #: .\articles\views_redaction.py:737
 msgid "Description"
 msgstr "Опис"
 
-#: .\articles\models.py:123 .\articles\models.py:549 .\articles\models.py:694
-#: .\articles\models.py:814 .\articles\templates\advert_detail.html:58
+#: .\articles\models.py:123 .\articles\models.py:554 .\articles\models.py:699
+#: .\articles\models.py:819
+#: .\articles\templates\admin_building_unit_import.html:17
+#: .\articles\templates\advert_detail.html:58
 #: .\articles\templates\advert_edit.html:102
 #: .\articles\templates\article.html:34 .\articles\templates\fault.html:68
 #: .\articles\templates\project.html:60
@@ -226,8 +264,8 @@ msgstr "Може редагувати новини"
 msgid "Link"
 msgstr "Посилання"
 
-#: .\articles\models.py:203 .\articles\models.py:381 .\articles\models.py:729
-#: .\articles\views_admin.py:1433 .\articles\views_redaction.py:626
+#: .\articles\models.py:203 .\articles\models.py:381 .\articles\models.py:734
+#: .\articles\views_admin.py:1594 .\articles\views_redaction.py:626
 msgid "Order"
 msgstr "Порядок"
 
@@ -257,7 +295,7 @@ msgstr "Привітання"
 
 #: .\articles\models.py:295 .\articles\models.py:345 .\articles\models.py:367
 #: .\articles\models.py:397 .\articles\templates\admin_user_detail.html:45
-#: .\articles\templates\contact_company.html:14 .\articles\views_admin.py:458
+#: .\articles\templates\contact_company.html:14 .\articles\views_admin.py:465
 msgid "Address"
 msgstr "Адреса"
 
@@ -277,7 +315,7 @@ msgstr "Поштовий індекс"
 msgid "Country"
 msgstr "Країна"
 
-#: .\articles\models.py:299 .\articles\models.py:348 .\articles\models.py:653
+#: .\articles\models.py:299 .\articles\models.py:348 .\articles\models.py:658
 #: .\articles\templates\admin_user_detail.html:61
 #: .\articles\templates\advert_detail.html:30
 #: .\articles\templates\contact_company.html:32
@@ -313,28 +351,28 @@ msgstr "Може переглядати меню особистих налашт
 msgid "Can view Phonelist"
 msgstr "Може переглядати список телефонів"
 
-#: .\articles\models.py:317 .\articles\models.py:349 .\articles\models.py:654
+#: .\articles\models.py:317 .\articles\models.py:349 .\articles\models.py:659
 #: .\articles\templates\admin_user_detail.html:65
 #: .\articles\templates\advert_detail.html:32
 #: .\articles\templates\contact_company.html:38
 #: .\articles\templates\contact_phonelist.html:14
 #: .\articles\templates\redaction_article_notifications.html:19
-#: .\articles\views_admin.py:791
+#: .\articles\views_admin.py:952
 msgid "E-Mail"
 msgstr "Електронна пошта"
 
-#: .\articles\models.py:318 .\articles\models.py:478 .\articles\models.py:742
+#: .\articles\models.py:318 .\articles\models.py:483 .\articles\models.py:747
 #: .\articles\templates\admin_messages.html:13 .\articles\views_faults.py:151
-#: .\articles\views_projects.py:156
+#: .\articles\views_projects.py:154
 msgid "Subject"
 msgstr "Тема"
 
-#: .\articles\models.py:329 .\articles\views_admin.py:1226
+#: .\articles\models.py:329 .\articles\views_admin.py:1387
 msgid "Key"
 msgstr "Ключ"
 
-#: .\articles\models.py:330 .\articles\models.py:992
-#: .\articles\views_admin.py:1227
+#: .\articles\models.py:330 .\articles\models.py:997
+#: .\articles\views_admin.py:1388
 msgid "Value"
 msgstr "Значення"
 
@@ -342,10 +380,10 @@ msgstr "Значення"
 msgid "Can edit Preferences"
 msgstr "Може редагувати налаштування"
 
-#: .\articles\models.py:344 .\articles\models.py:728 .\articles\models.py:899
-#: .\articles\models.py:966 .\articles\templates\contact_phonelist.html:12
-#: .\articles\views_admin.py:1070 .\articles\views_admin.py:1342
-#: .\articles\views_admin.py:1432 .\articles\views_admin.py:1523
+#: .\articles\models.py:344 .\articles\models.py:733 .\articles\models.py:904
+#: .\articles\models.py:971 .\articles\templates\contact_phonelist.html:12
+#: .\articles\views_admin.py:1231 .\articles\views_admin.py:1503
+#: .\articles\views_admin.py:1593 .\articles\views_admin.py:1684
 #: .\articles\views_redaction.py:105
 msgid "Name"
 msgstr "Ім'я"
@@ -380,41 +418,47 @@ msgstr "Може редагувати будівлю"
 
 #: .\articles\models.py:380 .\articles\templates\admin_company_edit.html:7
 #: .\articles\templates\admin_company_edit.html:11
-#: .\articles\tests_playwright\commands.py:86 .\articles\views_admin.py:189
+#: .\articles\tests_playwright\commands.py:86 .\articles\views_admin.py:190
 msgid "Company"
 msgstr "Компанія"
 
-#: .\articles\models.py:383 .\articles\views_admin.py:340
+#: .\articles\models.py:383 .\articles\views_admin.py:347
 msgid "Position"
 msgstr "Посада"
 
 #: .\articles\models.py:394 .\articles\models.py:418
 #: .\articles\templates\admin_building_edit.html:7
 #: .\articles\templates\admin_building_edit.html:11
-#: .\articles\tests_playwright\commands.py:104 .\articles\views_admin.py:201
+#: .\articles\templates\admin_building_unit_import_preview.html:12
+#: .\articles\tests_playwright\commands.py:104 .\articles\views_admin.py:202
 msgid "Building"
 msgstr "Будівля"
 
-#: .\articles\models.py:421 .\articles\models.py:618 .\articles\models.py:648
-#: .\articles\models.py:885 .\articles\models.py:967
+#: .\articles\models.py:421 .\articles\models.py:623 .\articles\models.py:653
+#: .\articles\models.py:890 .\articles\models.py:972
 #: .\articles\templates\admin_building_unit.html:19
 #: .\articles\templates\advert_detail.html:21
 #: .\articles\templates\adverts_list.html:24
-#: .\articles\templates\personal_my_units.html:13 .\articles\views_admin.py:590
-#: .\articles\views_admin.py:1343
+#: .\articles\templates\personal_my_units.html:13 .\articles\views_admin.py:597
+#: .\articles\views_admin.py:1504
 msgid "Type"
 msgstr "Тип"
 
-#: .\articles\models.py:426 .\articles\templates\personal_my_units.html:14
-#: .\articles\views_admin.py:592
+#: .\articles\models.py:426
+#: .\articles\templates\admin_building_unit_import_preview.html:42
+#: .\articles\templates\personal_my_units.html:14 .\articles\views_admin.py:599
 msgid "Registration Id"
 msgstr "ID реєстрації"
 
-#: .\articles\models.py:428 .\articles\views_admin.py:594
+#: .\articles\models.py:428
+#: .\articles\templates\admin_building_unit_import_preview.html:46
+#: .\articles\views_admin.py:601
 msgid "Numerator"
 msgstr "Чисельник"
 
-#: .\articles\models.py:429 .\articles\views_admin.py:595
+#: .\articles\models.py:429
+#: .\articles\templates\admin_building_unit_import_preview.html:48
+#: .\articles\views_admin.py:602
 msgid "Denominator"
 msgstr "Знаменник"
 
@@ -426,7 +470,7 @@ msgstr "Власник"
 msgid "Tenant"
 msgstr "Орендар"
 
-#: .\articles\models.py:460 .\articles\models.py:938
+#: .\articles\models.py:460 .\articles\models.py:943
 #: .\articles\templates\admin_building_unit_edit.html:7
 #: .\articles\templates\admin_building_unit_edit.html:16
 msgid "Building unit"
@@ -436,107 +480,115 @@ msgstr "Помешкання"
 msgid "Role"
 msgstr "Роль"
 
-#: .\articles\models.py:487 .\articles\models.py:610
+#: .\articles\models.py:467
+msgid "Share numerator"
+msgstr "Чисельник"
+
+#: .\articles\models.py:468
+msgid "Share denominator"
+msgstr "Знаменник"
+
+#: .\articles\models.py:492 .\articles\models.py:615
 #: .\articles\templates\fault.html:20
 msgid "Closed"
 msgstr "Вирішені"
 
-#: .\articles\models.py:514
+#: .\articles\models.py:519
 msgid "Can view Faults menu"
 msgstr "Може переглядати меню несправностей"
 
-#: .\articles\models.py:515
+#: .\articles\models.py:520
 msgid "Can report fault"
 msgstr "Може повідомляти про несправність"
 
-#: .\articles\models.py:516
+#: .\articles\models.py:521
 msgid "Can resolve fault"
 msgstr "Може вирішувати несправність"
 
-#: .\articles\models.py:550 .\articles\models.py:579 .\articles\models.py:942
+#: .\articles\models.py:555 .\articles\models.py:584 .\articles\models.py:947
 #: .\articles\templates\faults_create.html:7
 msgid "Fault report"
 msgstr "Звіт про несправність"
 
-#: .\articles\models.py:597
+#: .\articles\models.py:602
 msgid "Can add Fault comment"
 msgstr "Може додавати коментар до несправності"
 
-#: .\articles\models.py:608 .\articles\models.py:872
+#: .\articles\models.py:613 .\articles\models.py:877
 msgid "Modified"
 msgstr "Змінено"
 
-#: .\articles\models.py:609 .\articles\models.py:873
+#: .\articles\models.py:614 .\articles\models.py:878
 msgid "Assigned"
 msgstr "Призначено"
 
-#: .\articles\models.py:611
+#: .\articles\models.py:616
 msgid "Reopened"
 msgstr "Повторно відкрито"
 
-#: .\articles\models.py:612 .\articles\models.py:875
+#: .\articles\models.py:617 .\articles\models.py:880
 msgid "Created"
 msgstr "Створено"
 
-#: .\articles\models.py:683
+#: .\articles\models.py:688
 msgid "Can view Adverts menu"
 msgstr "Може переглядати меню оголошень"
 
-#: .\articles\models.py:684
+#: .\articles\models.py:689
 msgid "Can add Advert"
 msgstr "Може додавати оголошення"
 
-#: .\articles\models.py:695 .\articles\models.py:939
+#: .\articles\models.py:700 .\articles\models.py:944
 msgid "Advert"
 msgstr "Оголошення"
 
-#: .\articles\models.py:730 .\articles\views_admin.py:1434
+#: .\articles\models.py:735 .\articles\views_admin.py:1595
 msgid "Closed state"
 msgstr "Закритий стан"
 
-#: .\articles\models.py:731 .\articles\models.py:900
+#: .\articles\models.py:736 .\articles\models.py:905
 msgid "Color"
 msgstr "Колір"
 
-#: .\articles\models.py:738
+#: .\articles\models.py:743
 msgid "Can edit Project statuses"
 msgstr "Може редагувати статуси проєктів"
 
-#: .\articles\models.py:753 .\articles\templates\project.html:27
-#: .\articles\views_projects.py:159
+#: .\articles\models.py:758 .\articles\templates\project.html:27
+#: .\articles\views_projects.py:157
 msgid "Deadline"
 msgstr "Термін"
 
-#: .\articles\models.py:777
+#: .\articles\models.py:782
 msgid "Can view Projects menu"
 msgstr "Може переглядати меню проєктів"
 
-#: .\articles\models.py:778
+#: .\articles\models.py:783
 msgid "Can add Project"
 msgstr "Може додавати проєкти"
 
-#: .\articles\models.py:779
+#: .\articles\models.py:784
 msgid "Can manage all Projects"
 msgstr "Може керувати всіма проєктами"
 
-#: .\articles\models.py:815 .\articles\models.py:844 .\articles\models.py:911
-#: .\articles\models.py:943
+#: .\articles\models.py:820 .\articles\models.py:849 .\articles\models.py:916
+#: .\articles\models.py:948
 msgid "Project"
 msgstr "Проєкт"
 
-#: .\articles\models.py:862
+#: .\articles\models.py:867
 msgid "Can add Project comment"
 msgstr "Може додавати коментар до проєкту"
 
-#: .\articles\models.py:874
+#: .\articles\models.py:879
 msgid "Status changed"
 msgstr "Статус змінено"
 
-#: .\articles\models.py:907
+#: .\articles\models.py:912
 msgid "Can edit Tags"
 msgstr "Може редагувати теги"
 
-#: .\articles\models.py:937 .\articles\templates\admin_user.html:7
+#: .\articles\models.py:942 .\articles\templates\admin_user.html:7
 #: .\articles\templates\admin_user_edit.html:7
 #: .\articles\templates\fault_log.html:15 .\articles\templates\login.html:5
 #: .\articles\templates\project_log.html:15
@@ -544,46 +596,46 @@ msgstr "Може редагувати теги"
 msgid "User"
 msgstr "Користувач"
 
-#: .\articles\models.py:940
+#: .\articles\models.py:945
 msgid "Board member"
 msgstr "Член правління"
 
-#: .\articles\models.py:958
+#: .\articles\models.py:963
 msgid "Text"
 msgstr "Текст"
 
-#: .\articles\models.py:959
+#: .\articles\models.py:964
 msgid "Number"
 msgstr "Число"
 
-#: .\articles\models.py:960
+#: .\articles\models.py:965
 msgid "Choice list"
 msgstr "Список вибору"
 
-#: .\articles\models.py:961
+#: .\articles\models.py:966
 msgid "Date/time"
 msgstr "Дата/час"
 
-#: .\articles\models.py:962
+#: .\articles\models.py:967
 msgid "Yes/No"
 msgstr "Так/Ні"
 
-#: .\articles\models.py:969
+#: .\articles\models.py:974
 msgid "Options (comma-separated)"
 msgstr "Варіанти (через кому)"
 
-#: .\articles\models.py:972
+#: .\articles\models.py:977
 msgid "Only used when Type is 'Choice list', e.g.: malý,střední,velký"
 msgstr ""
 "Використовується лише якщо Тип — «Список вибору», наприклад: "
 "малий,середній,великий"
 
-#: .\articles\models.py:984
+#: .\articles\models.py:989
 msgid "Can edit Custom fields"
 msgstr "Може редагувати користувацькі поля"
 
 #: .\articles\templates\admin_about.html:7
-#: .\articles\tests_playwright\commands.py:375 .\articles\views_admin.py:261
+#: .\articles\tests_playwright\commands.py:375 .\articles\views_admin.py:268
 msgid "About application"
 msgstr "Про застосунок"
 
@@ -620,7 +672,7 @@ msgstr "Переклад"
 #: .\articles\templates\admin_board_edit.html:7
 #: .\articles\templates\admin_board_edit.html:16
 #: .\articles\templates\contact_company.html:65
-#: .\articles\tests_playwright\commands.py:338 .\articles\views_admin.py:195
+#: .\articles\tests_playwright\commands.py:338 .\articles\views_admin.py:196
 msgid "Board"
 msgstr "Правління"
 
@@ -657,7 +709,7 @@ msgid "Save"
 msgstr "Зберегти"
 
 #: .\articles\templates\admin_board_edit.html:42
-#: .\articles\templates\admin_building_unit_edit.html:54
+#: .\articles\templates\admin_building_unit_edit.html:96
 #: .\articles\templates\admin_custom_field.html:7
 #: .\articles\templates\admin_custom_field_edit.html:7
 #: .\articles\templates\admin_custom_field_edit.html:14
@@ -667,14 +719,14 @@ msgstr "Зберегти"
 #: .\articles\templates\advert_edit.html:67
 #: .\articles\templates\faults_edit.html:73
 #: .\articles\templates\project.html:127
-#: .\articles\templates\projects_edit.html:90 .\articles\views_admin.py:237
+#: .\articles\templates\projects_edit.html:90 .\articles\views_admin.py:244
 msgid "Custom fields"
 msgstr "Користувацькі поля"
 
 #: .\articles\templates\admin_building_unit.html:7
 #: .\articles\templates\admin_user_detail.html:114
-#: .\articles\tests_playwright\commands.py:180 .\articles\views_admin.py:213
-#: .\articles\views_admin.py:677
+#: .\articles\tests_playwright\commands.py:180 .\articles\views_admin.py:214
+#: .\articles\views_admin.py:687
 msgid "Building units"
 msgstr "Помешкання"
 
@@ -688,15 +740,130 @@ msgstr "Додати нове помешкання"
 msgid "Export to Excel"
 msgstr "Експорт в Excel"
 
+#: .\articles\templates\admin_building_unit_edit.html:55
+#: .\articles\templates\admin_building_unit_owners_edit.html:19
+#: .\articles\templates\admin_user_ownes_edit.html:19
+#: .\articles\views_admin.py:546
+msgid "Owners"
+msgstr "Власники"
+
+#: .\articles\templates\admin_building_unit_edit.html:67
+#: .\articles\templates\admin_building_unit_owners_edit.html:35
+#: .\articles\templates\admin_user_ownes_edit.html:34
+msgid "No owner assigned yet."
+msgstr "Власника ще не призначено."
+
+#: .\articles\templates\admin_building_unit_edit.html:69
+msgid "Modify owners"
+msgstr "Редагувати власників"
+
+#: .\articles\templates\admin_building_unit_edit.html:75
+#: .\articles\templates\admin_building_unit_owners_edit.html:57
+#: .\articles\templates\admin_user_ownes_edit.html:56
+msgid "Tenants"
+msgstr "Орендарі"
+
+#: .\articles\templates\admin_building_unit_edit.html:87
+#: .\articles\templates\admin_building_unit_owners_edit.html:73
+#: .\articles\templates\admin_user_ownes_edit.html:71
+msgid "No tenant assigned yet."
+msgstr "Орендаря ще не призначено."
+
+#: .\articles\templates\admin_building_unit_edit.html:89
+msgid "Modify tenants"
+msgstr "Редагувати орендарів"
+
+#: .\articles\templates\admin_building_unit_import.html:7
+#: .\articles\templates\admin_building_unit_import_preview.html:7
+#: .\articles\views_admin.py:220
+msgid "Import from cadastre"
+msgstr "Імпорт з кадастру"
+
+#: .\articles\templates\admin_building_unit_import.html:15
+msgid "Cadastre extract (PDF)"
+msgstr "Витяг з кадастру (PDF)"
+
+#: .\articles\templates\admin_building_unit_import.html:20
+msgid ""
+"Upload a \"Výpis z katastru nemovitostí\" PDF for the building. The parsed "
+"units and owners will be shown for review - nothing is created until you "
+"confirm."
+msgstr ""
+"Завантажте PDF \"Výpis z katastru nemovitostí\" для будинку. Розпізнані "
+"приміщення та власники будуть показані для перевірки - нічого не буде "
+"створено, доки ви не підтвердите."
+
+#: .\articles\templates\admin_building_unit_import.html:27
+msgid "Parse PDF"
+msgstr "Обробити PDF"
+
+#: .\articles\templates\admin_building_unit_import_preview.html:7
+#: .\articles\templates\admin_project_status_edit.html:29
+#: .\articles\templates\admin_project_status_edit.html:50
+#: .\articles\templates\admin_tag_edit.html:24
+#: .\articles\templates\admin_tag_edit.html:40
+msgid "Preview"
+msgstr "Попередній перегляд"
+
+#: .\articles\templates\admin_building_unit_import_preview.html:10
+msgid "List vlastnictví"
+msgstr "List vlastnictví"
+
+#: .\articles\templates\admin_building_unit_import_preview.html:11
+msgid "Cadastral area"
+msgstr "Кадастрова територія"
+
+#: .\articles\templates\admin_building_unit_import_preview.html:25
+msgid "Send login credentials to newly created users"
+msgstr "Надіслати облікові дані новоствореним користувачам"
+
+#: .\articles\templates\admin_building_unit_import_preview.html:37
+msgid "Owner shares do not add up to 1/1 - review before including"
+msgstr "Частки власників не складають у сумі 1/1 - перевірте перед включенням"
+
+#: .\articles\templates\admin_building_unit_import_preview.html:50
+msgid "LV of the unit"
+msgstr "LV приміщення"
+
+#: .\articles\templates\admin_building_unit_import_preview.html:57
+#: .\articles\templates\admin_user_detail.html:24
+#: .\articles\templates\redaction_article_notifications.html:18
+#: .\articles\views_admin.py:951
+msgid "First name"
+msgstr "Ім'я"
+
+#: .\articles\templates\admin_building_unit_import_preview.html:58
+#: .\articles\templates\admin_user_detail.html:28
+#: .\articles\templates\redaction_article_notifications.html:17
+#: .\articles\views_admin.py:950
+msgid "Last name"
+msgstr "Прізвище"
+
+#: .\articles\templates\admin_building_unit_import_preview.html:59
+msgid "Share on unit"
+msgstr "Частка в приміщенні"
+
+#: .\articles\templates\admin_building_unit_import_preview.html:60
+msgid "Link to existing user"
+msgstr "Пов'язати з наявним користувачем"
+
+#: .\articles\templates\admin_building_unit_import_preview.html:71
+#: .\articles\templates\admin_user.html:13
+#: .\articles\tests_playwright\commands.py:304
+msgid "Create new user"
+msgstr "Новий користувач"
+
+#: .\articles\templates\admin_building_unit_import_preview.html:82
+msgid "No owners were recognized for this unit."
+msgstr "Для цього приміщення не розпізнано жодних власників."
+
+#: .\articles\templates\admin_building_unit_import_preview.html:90
+msgid "Confirm import"
+msgstr "Підтвердити імпорт"
+
 #: .\articles\templates\admin_building_unit_owners_edit.html:12
 msgid "Edit unit"
 msgstr "Редагувати одиницю"
-
-#: .\articles\templates\admin_building_unit_owners_edit.html:19
-#: .\articles\templates\admin_user_ownes_edit.html:19
-#: .\articles\views_admin.py:539
-msgid "Owners"
-msgstr "Власники"
 
 #: .\articles\templates\admin_building_unit_owners_edit.html:28
 #: .\articles\templates\admin_building_unit_owners_edit.html:66
@@ -713,10 +880,10 @@ msgstr "Одиниці"
 #: .\articles\templates\projects_edit.html:30
 #: .\articles\templates\redaction_article_edit.html:105
 #: .\articles\templates\redaction_survey_edit.html:28
-#: .\articles\views_admin.py:326 .\articles\views_admin.py:443
-#: .\articles\views_admin.py:560 .\articles\views_admin.py:1057
-#: .\articles\views_admin.py:1212 .\articles\views_admin.py:1327
-#: .\articles\views_admin.py:1418 .\articles\views_admin.py:1510
+#: .\articles\views_admin.py:333 .\articles\views_admin.py:450
+#: .\articles\views_admin.py:567 .\articles\views_admin.py:1218
+#: .\articles\views_admin.py:1373 .\articles\views_admin.py:1488
+#: .\articles\views_admin.py:1579 .\articles\views_admin.py:1671
 #: .\articles\views_redaction.py:121 .\articles\views_redaction.py:278
 #: .\articles\views_redaction.py:535 .\articles\views_redaction.py:650
 #: .\articles\views_redaction.py:774
@@ -734,18 +901,13 @@ msgstr "Видалити"
 #: .\articles\templates\faults_edit.html:34
 #: .\articles\templates\projects_edit.html:30
 #: .\articles\templates\redaction_article_edit.html:105
-#: .\articles\views_admin.py:328 .\articles\views_admin.py:445
-#: .\articles\views_admin.py:562 .\articles\views_admin.py:1059
-#: .\articles\views_admin.py:1214 .\articles\views_admin.py:1329
-#: .\articles\views_admin.py:1420 .\articles\views_admin.py:1512
+#: .\articles\views_admin.py:335 .\articles\views_admin.py:452
+#: .\articles\views_admin.py:569 .\articles\views_admin.py:1220
+#: .\articles\views_admin.py:1375 .\articles\views_admin.py:1490
+#: .\articles\views_admin.py:1581 .\articles\views_admin.py:1673
 #: .\articles\views_redaction.py:123 .\articles\views_redaction.py:280
 msgid "Do you want to delete"
 msgstr "Ви хочете видалити"
-
-#: .\articles\templates\admin_building_unit_owners_edit.html:35
-#: .\articles\templates\admin_user_ownes_edit.html:34
-msgid "No owner assigned yet."
-msgstr "Власника ще не призначено."
 
 #: .\articles\templates\admin_building_unit_owners_edit.html:49
 #: .\articles\templates\admin_building_unit_owners_edit.html:87
@@ -753,16 +915,6 @@ msgstr "Власника ще не призначено."
 #: .\articles\templates\admin_user_ownes_edit.html:85
 msgid "Add"
 msgstr "Додати"
-
-#: .\articles\templates\admin_building_unit_owners_edit.html:57
-#: .\articles\templates\admin_user_ownes_edit.html:56
-msgid "Tenants"
-msgstr "Орендарі"
-
-#: .\articles\templates\admin_building_unit_owners_edit.html:73
-#: .\articles\templates\admin_user_ownes_edit.html:71
-msgid "No tenant assigned yet."
-msgstr "Орендаря ще не призначено."
 
 #: .\articles\templates\admin_company_edit.html:53
 msgid "Company header"
@@ -785,7 +937,7 @@ msgstr "Створити новий запис"
 
 #: .\articles\templates\admin_entrance.html:7
 #: .\articles\templates\admin_entrance_edit.html:7
-#: .\articles\tests_playwright\commands.py:117 .\articles\views_admin.py:207
+#: .\articles\tests_playwright\commands.py:117 .\articles\views_admin.py:208
 msgid "Entrances"
 msgstr "Список входів"
 
@@ -810,7 +962,7 @@ msgstr "Створити нову групу"
 msgid "Permissions"
 msgstr "Права доступу"
 
-#: .\articles\templates\admin_messages.html:7 .\articles\views_admin.py:255
+#: .\articles\templates\admin_messages.html:7 .\articles\views_admin.py:262
 msgid "Waiting messages"
 msgstr "Повідомлення в черзі"
 
@@ -824,7 +976,7 @@ msgstr "Час створення"
 
 #: .\articles\templates\admin_preferences.html:7
 #: .\articles\templates\admin_preferences_edit.html:7
-#: .\articles\views_admin.py:231
+#: .\articles\views_admin.py:238
 msgid "E-Mail templates"
 msgstr "Шаблони листів"
 
@@ -837,7 +989,7 @@ msgid "Available variables"
 msgstr "Доступні змінні"
 
 #: .\articles\templates\admin_project_status.html:7
-#: .\articles\views_admin.py:243
+#: .\articles\views_admin.py:250
 msgid "Project statuses"
 msgstr "Статуси проєктів"
 
@@ -846,16 +998,9 @@ msgstr "Статуси проєктів"
 msgid "Project status"
 msgstr "Статус проєкту"
 
-#: .\articles\templates\admin_project_status_edit.html:29
-#: .\articles\templates\admin_project_status_edit.html:50
-#: .\articles\templates\admin_tag_edit.html:24
-#: .\articles\templates\admin_tag_edit.html:40
-msgid "Preview"
-msgstr "Попередній перегляд"
-
 #: .\articles\templates\admin_tag.html:7
 #: .\articles\templates\projects_create.html:62
-#: .\articles\templates\projects_edit.html:82 .\articles\views_admin.py:249
+#: .\articles\templates\projects_edit.html:82 .\articles\views_admin.py:256
 msgid "Tags"
 msgstr "Теги"
 
@@ -863,11 +1008,6 @@ msgstr "Теги"
 #: .\articles\templates\admin_tag_edit.html:14
 msgid "Tag"
 msgstr "Тег"
-
-#: .\articles\templates\admin_user.html:13
-#: .\articles\tests_playwright\commands.py:304
-msgid "Create new user"
-msgstr "Новий користувач"
 
 #: .\articles\templates\admin_user.html:19
 msgid "Deactivated users"
@@ -878,18 +1018,6 @@ msgstr "Деактивовані користувачі"
 #: .\articles\templates\personal_settings_edit.html:12
 msgid "Person"
 msgstr "Особа"
-
-#: .\articles\templates\admin_user_detail.html:24
-#: .\articles\templates\redaction_article_notifications.html:18
-#: .\articles\views_admin.py:790
-msgid "First name"
-msgstr "Ім'я"
-
-#: .\articles\templates\admin_user_detail.html:28
-#: .\articles\templates\redaction_article_notifications.html:17
-#: .\articles\views_admin.py:789
-msgid "Last name"
-msgstr "Прізвище"
 
 #: .\articles\templates\admin_user_detail.html:39
 #: .\articles\templates\admin_user_edit.html:39
@@ -912,7 +1040,7 @@ msgstr "Користувач"
 msgid "Active"
 msgstr "Активний"
 
-#: .\articles\templates\admin_user_detail.html:86 .\articles\views_admin.py:792
+#: .\articles\templates\admin_user_detail.html:86 .\articles\views_admin.py:953
 msgid "Last login"
 msgstr "Останній вхід"
 
@@ -931,7 +1059,7 @@ msgid "No units assigned yet."
 msgstr "Одиниці ще не призначено."
 
 #: .\articles\templates\admin_user_detail.html:127
-#: .\articles\tests_playwright\commands.py:365 .\articles\views_admin.py:948
+#: .\articles\tests_playwright\commands.py:365 .\articles\views_admin.py:1109
 msgid "Modify units"
 msgstr "Змінити одиниці"
 
@@ -985,9 +1113,8 @@ msgstr "Оголошення"
 #: .\articles\templates\advert_detail.html:22
 #: .\articles\templates\adverts_list.html:25
 #: .\articles\templates\article.html:21 .\articles\templates\fault.html:15
-#: .\articles\templates\main.html:39 .\articles\views_faults.py:153
-#: .\articles\views_redaction.py:239 .\articles\views_redaction.py:515
-#: .\articles\views_redaction.py:740
+#: .\articles\views_faults.py:153 .\articles\views_redaction.py:239
+#: .\articles\views_redaction.py:515 .\articles\views_redaction.py:740
 msgid "Author"
 msgstr "Автор"
 
@@ -1007,11 +1134,11 @@ msgstr "Вкладення"
 
 #: .\articles\templates\advert_detail.html:71
 #: .\articles\templates\adverts_list.html:32 .\articles\templates\fault.html:28
-#: .\articles\templates\project.html:36 .\articles\views_admin.py:322
-#: .\articles\views_admin.py:439 .\articles\views_admin.py:538
-#: .\articles\views_admin.py:774 .\articles\views_admin.py:1048
-#: .\articles\views_admin.py:1208 .\articles\views_admin.py:1323
-#: .\articles\views_admin.py:1414 .\articles\views_admin.py:1506
+#: .\articles\templates\project.html:36 .\articles\views_admin.py:329
+#: .\articles\views_admin.py:446 .\articles\views_admin.py:545
+#: .\articles\views_admin.py:935 .\articles\views_admin.py:1209
+#: .\articles\views_admin.py:1369 .\articles\views_admin.py:1484
+#: .\articles\views_admin.py:1575 .\articles\views_admin.py:1667
 #: .\articles\views_faults.py:106 .\articles\views_projects.py:117
 #: .\articles\views_redaction.py:114 .\articles\views_redaction.py:262
 #: .\articles\views_redaction.py:531 .\articles\views_redaction.py:645
@@ -1106,37 +1233,6 @@ msgstr "Найбільш читані статті"
 msgid "Modify comment"
 msgstr "Змінити коментар"
 
-#: .\articles\templates\box-news.html:7
-#: .\articles\templates\redaction_news_edit.html:7
-#: .\articles\tests_playwright\commands.py:509 .\articles\views_redaction.py:46
-#: .\articles\views_redaction.py:501
-msgid "News"
-msgstr "Актуальне"
-
-#: .\articles\templates\box-survey.html:8
-#: .\articles\templates\redaction_survey_edit.html:7
-#: .\articles\views_redaction.py:876
-msgid "Survey"
-msgstr "Опитування"
-
-#: .\articles\templates\box-survey.html:29
-msgid "Vote"
-msgstr "Голосувати"
-
-#: .\articles\templates\box-survey.html:42
-msgid "Number of votes"
-msgstr "Кількість голосів"
-
-#: .\articles\templates\box-top-articles.html:7
-msgid "Top articles"
-msgstr "Найпопулярніші статті"
-
-#: .\articles\templates\box-useful-links.html:7
-#: .\articles\tests_playwright\commands.py:571 .\articles\views_redaction.py:52
-#: .\articles\views_redaction.py:612
-msgid "Useful Links"
-msgstr "Корисні посилання"
-
 #: .\articles\templates\contact_phonelist.html:7
 #: .\articles\tests_playwright\commands.py:677 .\articles\views_contact.py:22
 msgid "Phonelist"
@@ -1205,7 +1301,7 @@ msgstr "Вкладення"
 
 #: .\articles\templates\fault_log.html:12
 #: .\articles\templates\project_log.html:12 .\articles\views_faults.py:548
-#: .\articles\views_projects.py:597
+#: .\articles\views_projects.py:595
 msgid "Log"
 msgstr "Журнал"
 
@@ -1248,12 +1344,12 @@ msgid "More actions"
 msgstr "Більше дій"
 
 #: .\articles\templates\includes\custom_fields_detail.html:7
-#: .\articles\views_admin.py:1411
+#: .\articles\views_admin.py:1572
 msgid "Yes"
 msgstr "Так"
 
 #: .\articles\templates\includes\custom_fields_detail.html:7
-#: .\articles\views_admin.py:1411
+#: .\articles\views_admin.py:1572
 msgid "No"
 msgstr "Ні"
 
@@ -1395,11 +1491,11 @@ msgid "Create"
 msgstr "Створити"
 
 #: .\articles\templates\projects_kanban.html:7 .\articles\utils.py:88
-#: .\articles\views_projects.py:96 .\articles\views_projects.py:140
-#: .\articles\views_projects.py:200 .\articles\views_projects.py:218
-#: .\articles\views_projects.py:232 .\articles\views_projects.py:249
-#: .\articles\views_projects.py:272 .\articles\views_projects.py:530
-#: .\articles\views_projects.py:589 .\articles\views_projects.py:595
+#: .\articles\views_projects.py:96 .\articles\views_projects.py:139
+#: .\articles\views_projects.py:198 .\articles\views_projects.py:216
+#: .\articles\views_projects.py:230 .\articles\views_projects.py:247
+#: .\articles\views_projects.py:270 .\articles\views_projects.py:528
+#: .\articles\views_projects.py:587 .\articles\views_projects.py:593
 msgid "Projects"
 msgstr "Проєкти"
 
@@ -1497,7 +1593,7 @@ msgid "Visible for"
 msgstr "Видимий для"
 
 #: .\articles\templates\redaction_article_edit.html:77
-#: .\articles\views_admin.py:225
+#: .\articles\views_admin.py:232
 msgid "Groups"
 msgstr "Групи"
 
@@ -1561,10 +1657,21 @@ msgstr "Пункт меню"
 msgid "Create new news"
 msgstr "Створити новину"
 
+#: .\articles\templates\redaction_news_edit.html:7
+#: .\articles\tests_playwright\commands.py:509 .\articles\views_redaction.py:46
+#: .\articles\views_redaction.py:501
+msgid "News"
+msgstr "Актуальне"
+
 #: .\articles\templates\redaction_survey.html:8
 #: .\articles\tests_playwright\commands.py:532
 msgid "Create new survey"
 msgstr "Створити нове опитування"
+
+#: .\articles\templates\redaction_survey_edit.html:7
+#: .\articles\views_redaction.py:876
+msgid "Survey"
+msgstr "Опитування"
 
 #: .\articles\templates\redaction_survey_edit.html:16
 msgid "Options"
@@ -1628,21 +1735,22 @@ msgstr "Ваша електронна адреса"
 #: .\articles\tests_playwright\commands.py:338
 #: .\articles\tests_playwright\commands.py:363
 #: .\articles\tests_playwright\commands.py:375 .\articles\utils.py:94
-#: .\articles\views_admin.py:276 .\articles\views_admin.py:334
-#: .\articles\views_admin.py:360 .\articles\views_admin.py:406
-#: .\articles\views_admin.py:452 .\articles\views_admin.py:478
-#: .\articles\views_admin.py:581 .\articles\views_admin.py:615
-#: .\articles\views_admin.py:665 .\articles\views_admin.py:676
-#: .\articles\views_admin.py:781 .\articles\views_admin.py:809
-#: .\articles\views_admin.py:817 .\articles\views_admin.py:852
-#: .\articles\views_admin.py:935 .\articles\views_admin.py:945
-#: .\articles\views_admin.py:1066 .\articles\views_admin.py:1149
-#: .\articles\views_admin.py:1221 .\articles\views_admin.py:1247
-#: .\articles\views_admin.py:1285 .\articles\views_admin.py:1336
-#: .\articles\views_admin.py:1362 .\articles\views_admin.py:1427
-#: .\articles\views_admin.py:1453 .\articles\views_admin.py:1519
-#: .\articles\views_admin.py:1541 .\articles\views_admin.py:1583
-#: .\articles\views_admin.py:1595
+#: .\articles\views_admin.py:283 .\articles\views_admin.py:341
+#: .\articles\views_admin.py:367 .\articles\views_admin.py:413
+#: .\articles\views_admin.py:459 .\articles\views_admin.py:485
+#: .\articles\views_admin.py:588 .\articles\views_admin.py:622
+#: .\articles\views_admin.py:675 .\articles\views_admin.py:686
+#: .\articles\views_admin.py:766 .\articles\views_admin.py:832
+#: .\articles\views_admin.py:942 .\articles\views_admin.py:970
+#: .\articles\views_admin.py:978 .\articles\views_admin.py:1013
+#: .\articles\views_admin.py:1096 .\articles\views_admin.py:1106
+#: .\articles\views_admin.py:1227 .\articles\views_admin.py:1310
+#: .\articles\views_admin.py:1382 .\articles\views_admin.py:1408
+#: .\articles\views_admin.py:1446 .\articles\views_admin.py:1497
+#: .\articles\views_admin.py:1523 .\articles\views_admin.py:1588
+#: .\articles\views_admin.py:1614 .\articles\views_admin.py:1680
+#: .\articles\views_admin.py:1702 .\articles\views_admin.py:1744
+#: .\articles\views_admin.py:1756
 msgid "Administration"
 msgstr "Адміністрування"
 
@@ -1658,16 +1766,16 @@ msgstr "Адміністрування"
 #: .\articles\tests_playwright\commands.py:582
 #: .\articles\tests_playwright\commands.py:691
 #: .\articles\tests_playwright\commands.py:733
-#: .\articles\tests_playwright\commands.py:811 .\articles\views_admin.py:290
-#: .\articles\views_admin.py:303 .\articles\views_admin.py:384
-#: .\articles\views_admin.py:420 .\articles\views_admin.py:502
-#: .\articles\views_admin.py:639 .\articles\views_admin.py:918
-#: .\articles\views_admin.py:1180 .\articles\views_admin.py:1294
-#: .\articles\views_admin.py:1386 .\articles\views_admin.py:1477
-#: .\articles\views_admin.py:1565 .\articles\views_adverts.py:152
+#: .\articles\tests_playwright\commands.py:811 .\articles\views_admin.py:297
+#: .\articles\views_admin.py:310 .\articles\views_admin.py:391
+#: .\articles\views_admin.py:427 .\articles\views_admin.py:509
+#: .\articles\views_admin.py:649 .\articles\views_admin.py:1079
+#: .\articles\views_admin.py:1341 .\articles\views_admin.py:1455
+#: .\articles\views_admin.py:1547 .\articles\views_admin.py:1638
+#: .\articles\views_admin.py:1726 .\articles\views_adverts.py:152
 #: .\articles\views_adverts.py:211 .\articles\views_faults.py:271
 #: .\articles\views_faults.py:348 .\articles\views_personal_settings.py:72
-#: .\articles\views_projects.py:339 .\articles\views_projects.py:416
+#: .\articles\views_projects.py:337 .\articles\views_projects.py:414
 #: .\articles\views_redaction.py:186 .\articles\views_redaction.py:366
 #: .\articles\views_redaction.py:592 .\articles\views_redaction.py:704
 #: .\articles\views_redaction.py:849
@@ -1675,8 +1783,8 @@ msgid "Saved"
 msgstr "Збережено"
 
 #: .\articles\tests_playwright\commands.py:301
-#: .\articles\tests_playwright\commands.py:363 .\articles\views_admin.py:219
-#: .\articles\views_admin.py:818 .\articles\views_admin.py:946
+#: .\articles\tests_playwright\commands.py:363 .\articles\views_admin.py:226
+#: .\articles\views_admin.py:979 .\articles\views_admin.py:1107
 msgid "Users"
 msgstr "Користувачі"
 
@@ -1707,7 +1815,7 @@ msgstr "Редакція"
 #: .\articles\tests_playwright\commands.py:596
 #: .\articles\tests_playwright\commands.py:615
 #: .\articles\tests_playwright\commands.py:641 .\articles\utils.py:52
-#: .\articles\views.py:153 .\articles\views.py:241 .\articles\views.py:280
+#: .\articles\views.py:108 .\articles\views.py:163 .\articles\views.py:202
 #: .\articles\views_redaction.py:40 .\articles\views_redaction.py:109
 msgid "Articles"
 msgstr "Статті"
@@ -1718,11 +1826,16 @@ msgstr "Статті"
 msgid "Surveys"
 msgstr "Опитування"
 
+#: .\articles\tests_playwright\commands.py:571 .\articles\views_redaction.py:52
+#: .\articles\views_redaction.py:612
+msgid "Useful Links"
+msgstr "Корисні посилання"
+
 #: .\articles\tests_playwright\commands.py:596
 #: .\articles\tests_playwright\commands.py:615
 #: .\articles\tests_playwright\commands.py:641
 #: .\articles\tests_playwright\test_desktop.py:106 .\articles\views.py:27
-#: .\articles\views.py:29 .\articles\views.py:105 .\articles\views.py:235
+#: .\articles\views.py:29 .\articles\views.py:102 .\articles\views.py:157
 msgid "All articles"
 msgstr "Усі статті"
 
@@ -1763,173 +1876,173 @@ msgstr "Звітування про несправності"
 msgid "All"
 msgstr "Усі"
 
-#: .\articles\views.py:114 .\articles\views_faults.py:71
-#: .\articles\views_projects.py:83 .\articles\views_redaction.py:211
-#, python-brace-format
-msgid "Search: Keyword '{}' is too short. Type at least 3 characters."
-msgstr ""
-"Пошук: ключове слово «{}» занадто коротке. Введіть принаймні 3 символи."
-
-#: .\articles\views.py:117 .\articles\views_faults.py:74
-#: .\articles\views_projects.py:86 .\articles\views_redaction.py:214
-msgid "Search: Keyword is too long. Type maximum of 100 characters."
-msgstr "Пошук: ключове слово занадто довге. Введіть максимум 100 символів."
-
-#: .\articles\views.py:122 .\articles\views_faults.py:81
-#: .\articles\views_projects.py:93 .\articles\views_redaction.py:220
-msgid "Search results"
-msgstr "Результати пошуку"
-
-#: .\articles\views.py:178
-msgid "Please choose an option."
-msgstr "Будь ласка, оберіть одну з опцій."
-
-#: .\articles\views.py:286 .\articles\views.py:303
+#: .\articles\views.py:208 .\articles\views.py:225
 #: .\articles\views_faults.py:424 .\articles\views_faults.py:441
-#: .\articles\views_projects.py:536 .\articles\views_projects.py:555
+#: .\articles\views_projects.py:534 .\articles\views_projects.py:553
 msgid "Comment cannot be modified anymore"
 msgstr "Коментар більше не можна редагувати"
 
-#: .\articles\views.py:406
+#: .\articles\views.py:328
 msgid "Wrong username or password"
 msgstr "Неправильне ім'я користувача або пароль"
 
-#: .\articles\views_admin.py:37
+#: .\articles\views_admin.py:38
 msgid "Text with the username and the new password"
 msgstr "Текст з іменем користувача та новим паролем"
 
-#: .\articles\views_admin.py:40
+#: .\articles\views_admin.py:41
 msgid "Link to the article"
 msgstr "Посилання на статтю"
 
-#: .\articles\views_admin.py:43 .\articles\views_admin.py:53
-#: .\articles\views_admin.py:78
+#: .\articles\views_admin.py:44 .\articles\views_admin.py:54
+#: .\articles\views_admin.py:79
 msgid "Comment author"
 msgstr "Автор коментаря"
 
-#: .\articles\views_admin.py:44
+#: .\articles\views_admin.py:45
 msgid "Link to the commented article"
 msgstr "Посилання на статтю з коментарем"
 
-#: .\articles\views_admin.py:45 .\articles\views_admin.py:55
-#: .\articles\views_admin.py:80
+#: .\articles\views_admin.py:46 .\articles\views_admin.py:56
+#: .\articles\views_admin.py:81
 msgid "Comment body"
 msgstr "Текст коментаря"
 
-#: .\articles\views_admin.py:48
+#: .\articles\views_admin.py:49
 msgid "Fault reporter"
 msgstr "Заявник несправності"
 
-#: .\articles\views_admin.py:49 .\articles\views_admin.py:54
-#: .\articles\views_admin.py:59 .\articles\views_admin.py:64
-#: .\articles\views_admin.py:69
+#: .\articles\views_admin.py:50 .\articles\views_admin.py:55
+#: .\articles\views_admin.py:60 .\articles\views_admin.py:65
+#: .\articles\views_admin.py:70
 msgid "Link to the fault"
 msgstr "Посилання на несправність"
 
-#: .\articles\views_admin.py:50 .\articles\views_admin.py:60
-#: .\articles\views_admin.py:65 .\articles\views_admin.py:70
+#: .\articles\views_admin.py:51 .\articles\views_admin.py:61
+#: .\articles\views_admin.py:66 .\articles\views_admin.py:71
 msgid "Fault description"
 msgstr "Опис несправності"
 
-#: .\articles\views_admin.py:58
+#: .\articles\views_admin.py:59
 msgid "User who assigned the fault to you"
 msgstr "Користувач, який призначив вам несправність"
 
-#: .\articles\views_admin.py:63
+#: .\articles\views_admin.py:64
 msgid "User who closed the fault"
 msgstr "Користувач, який закрив несправність"
 
-#: .\articles\views_admin.py:68
+#: .\articles\views_admin.py:69
 msgid "User who reopened the fault"
 msgstr "Користувач, який повторно відкрив несправність"
 
-#: .\articles\views_admin.py:73
+#: .\articles\views_admin.py:74
 msgid "Project creator"
 msgstr "Автор проєкту"
 
-#: .\articles\views_admin.py:74 .\articles\views_admin.py:79
-#: .\articles\views_admin.py:84 .\articles\views_admin.py:89
+#: .\articles\views_admin.py:75 .\articles\views_admin.py:80
+#: .\articles\views_admin.py:85 .\articles\views_admin.py:90
 msgid "Link to the project"
 msgstr "Посилання на проєкт"
 
-#: .\articles\views_admin.py:75 .\articles\views_admin.py:85
+#: .\articles\views_admin.py:76 .\articles\views_admin.py:86
 msgid "Project description"
 msgstr "Опис проєкту"
 
-#: .\articles\views_admin.py:83
+#: .\articles\views_admin.py:84
 msgid "User who assigned the project to you"
 msgstr "Користувач, який призначив вам проєкт"
 
-#: .\articles\views_admin.py:88
+#: .\articles\views_admin.py:89
 msgid "User who changed the status"
 msgstr "Користувач, який змінив статус"
 
-#: .\articles\views_admin.py:90
+#: .\articles\views_admin.py:91
 msgid "Previous status"
 msgstr "Попередній статус"
 
-#: .\articles\views_admin.py:91
+#: .\articles\views_admin.py:92
 msgid "New status"
 msgstr "Новий статус"
 
-#: .\articles\views_admin.py:138
+#: .\articles\views_admin.py:139
 #, python-brace-format
 msgid "Field \"{}\" must be a number."
 msgstr "Поле «{}» має бути числом."
 
-#: .\articles\views_admin.py:141
+#: .\articles\views_admin.py:142
 #, python-brace-format
 msgid "Field \"{}\" has an invalid value."
 msgstr "Поле «{}» має недійсне значення."
 
-#: .\articles\views_admin.py:144
+#: .\articles\views_admin.py:145
 #, python-brace-format
 msgid "Field \"{}\" must be a valid date/time."
 msgstr "Поле «{}» має містити дійсну дату/час."
 
-#: .\articles\views_admin.py:293 .\articles\views_admin.py:387
-#: .\articles\views_admin.py:423 .\articles\views_admin.py:505
-#: .\articles\views_admin.py:642 .\articles\views_admin.py:913
-#: .\articles\views_admin.py:915 .\articles\views_admin.py:1183
-#: .\articles\views_admin.py:1268 .\articles\views_admin.py:1382
-#: .\articles\views_admin.py:1473 .\articles\views_admin.py:1561
+#: .\articles\views_admin.py:300 .\articles\views_admin.py:394
+#: .\articles\views_admin.py:430 .\articles\views_admin.py:512
+#: .\articles\views_admin.py:652 .\articles\views_admin.py:1074
+#: .\articles\views_admin.py:1076 .\articles\views_admin.py:1344
+#: .\articles\views_admin.py:1429 .\articles\views_admin.py:1543
+#: .\articles\views_admin.py:1634 .\articles\views_admin.py:1722
 #: .\articles\views_personal_settings.py:75
 #: .\articles\views_personal_settings.py:77 .\articles\views_redaction.py:189
 #: .\articles\views_redaction.py:369
 msgid "Form validation error"
 msgstr "Помилка валідації форми"
 
-#: .\articles\views_admin.py:339
+#: .\articles\views_admin.py:346
 msgid "Member"
 msgstr "Член"
 
-#: .\articles\views_admin.py:546
+#: .\articles\views_admin.py:553
 msgid "Add owner"
 msgstr "Додати власника"
 
-#: .\articles\views_admin.py:553
+#: .\articles\views_admin.py:560
 msgid "Add tenant"
 msgstr "Додати орендаря"
 
-#: .\articles\views_admin.py:775
+#: .\articles\views_admin.py:773
+msgid "Please choose a PDF file."
+msgstr "Будь ласка, виберіть файл PDF."
+
+#: .\articles\views_admin.py:847
+msgid "The import session has expired, please upload the file again."
+msgstr "Сесія імпорту закінчилася, будь ласка, завантажте файл знову."
+
+#: .\articles\views_admin.py:869
+msgid "Unit"
+msgstr "Приміщення"
+
+#: .\articles\views_admin.py:901
+#, python-brace-format
+msgid ""
+"Import finished: {units} unit(s) created/updated, {users} new user(s), "
+"{skipped} unit(s) skipped."
+msgstr ""
+"Імпорт завершено: {units} приміщень створено/оновлено, {users} нових "
+"користувачів, {skipped} приміщень пропущено."
+
+#: .\articles\views_admin.py:936
 msgid "Detail"
 msgstr "Подробиці"
 
-#: .\articles\views_admin.py:892
+#: .\articles\views_admin.py:1053
 msgid "Credentials has been sent by e-mail"
 msgstr "Дані для входу надіслано на вашу електронну адресу"
 
-#: .\articles\views_admin.py:1052
+#: .\articles\views_admin.py:1213
 msgid "List of users"
 msgstr "Список користувачів"
 
-#: .\articles\views_admin.py:1280
+#: .\articles\views_admin.py:1441
 #, python-brace-format
 msgid ""
 "Unknown placeholder \"{}\" in a mail template. Allowed placeholders: {}."
 msgstr "Невідомий заповнювач «{}» у шаблоні листа. Дозволені заповнювачі: {}."
 
-#: .\articles\views_admin.py:1489
+#: .\articles\views_admin.py:1650
 #, python-brace-format
 msgid "Cannot delete \"{}\" - it is still used by one or more projects."
 msgstr ""
@@ -1952,6 +2065,23 @@ msgstr "Призначені мені"
 #: .\articles\views_faults.py:45
 msgid "Resolved"
 msgstr "Вирішено"
+
+#: .\articles\views_faults.py:71 .\articles\views_projects.py:83
+#: .\articles\views_redaction.py:211
+#, python-brace-format
+msgid "Search: Keyword '{}' is too short. Type at least 3 characters."
+msgstr ""
+"Пошук: ключове слово «{}» занадто коротке. Введіть принаймні 3 символи."
+
+#: .\articles\views_faults.py:74 .\articles\views_projects.py:86
+#: .\articles\views_redaction.py:214
+msgid "Search: Keyword is too long. Type maximum of 100 characters."
+msgstr "Пошук: ключове слово занадто довге. Введіть максимум 100 символів."
+
+#: .\articles\views_faults.py:81 .\articles\views_projects.py:93
+#: .\articles\views_redaction.py:220
+msgid "Search results"
+msgstr "Результати пошуку"
 
 #: .\articles\views_faults.py:107 .\articles\views_projects.py:119
 msgid "View"
@@ -1998,16 +2128,14 @@ msgstr "Неправильна електронна адреса"
 msgid "Credentials have been sent to your e-mail"
 msgstr "Дані для входу надіслано на вашу електронну адресу"
 
-#: .\articles\views_projects.py:155
-msgid "No."
-msgstr "№"
-
-#: .\articles\views_projects.py:306
+#: .\articles\views_projects.py:304
 msgid ""
 "No project statuses are configured yet. Ask an administrator to create one."
-msgstr "Статуси проєктів ще не налаштовано. Попросіть адміністратора створити хоча б один."
+msgstr ""
+"Статуси проєктів ще не налаштовано. Попросіть адміністратора створити хоча б "
+"один."
 
-#: .\articles\views_projects.py:458
+#: .\articles\views_projects.py:456
 msgid "Tag name is required."
 msgstr "Назва тегу є обов'язковою."
 
@@ -2059,6 +2187,18 @@ msgstr "Ви хочете видалити це опитування"
 #, python-brace-format
 msgid "Data for last {} days."
 msgstr "Дані за останні {} днів."
+
+#~ msgid "Vote"
+#~ msgstr "Голосувати"
+
+#~ msgid "Number of votes"
+#~ msgstr "Кількість голосів"
+
+#~ msgid "Top articles"
+#~ msgstr "Найпопулярніші статті"
+
+#~ msgid "No."
+#~ msgstr "№"
 
 #~ msgid "Preferences"
 #~ msgstr "Налаштування"
