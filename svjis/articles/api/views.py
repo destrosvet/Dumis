@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .. import models
-from ..permissions import svjis_answer_survey
+from ..permissions import svjis_answer_survey, svjis_edit_admin_building, svjis_edit_admin_users
 from ..views import get_article_filter, get_top_articles
 from . import serializers
 from .pagination import ArticlePagination
@@ -99,6 +99,40 @@ class SurveyVoteAPIView(APIView):
 
         response_serializer = serializers.SurveySerializer(survey, context={'request': request})
         return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+
+
+# Administration
+#####################
+
+
+class AdminBuildingUnitCreateAPIView(generics.CreateAPIView):
+    serializer_class = serializers.AdminBuildingUnitSerializer
+    permission_classes = [HasPermission]
+    required_permission = svjis_edit_admin_building
+
+    def perform_create(self, serializer):
+        building, _created = models.Building.objects.get_or_create(pk=1)
+        serializer.save(building=building)
+
+
+class AdminUserCreateAPIView(generics.CreateAPIView):
+    serializer_class = serializers.AdminUserSerializer
+    permission_classes = [HasPermission]
+    required_permission = svjis_edit_admin_users
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        models.UserProfile.objects.get_or_create(user=user)
+
+
+class AdminBuildingUnitOwnerCreateAPIView(generics.CreateAPIView):
+    serializer_class = serializers.AdminBuildingUnitUserSerializer
+    permission_classes = [HasPermission]
+    required_permission = svjis_edit_admin_building
+
+    def perform_create(self, serializer):
+        building_unit = get_object_or_404(models.BuildingUnit, pk=self.kwargs['pk'])
+        serializer.save(building_unit=building_unit)
 
 
 class ArticleMenuTreeAPIView(APIView):

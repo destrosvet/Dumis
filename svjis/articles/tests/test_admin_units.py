@@ -32,6 +32,35 @@ class BuildingUnitDataMixin(UserDataMixin):
         )
 
 
+class BuildingUnitEditAdminTest(BuildingUnitDataMixin, TestCase):
+    def setUp(self):
+        self.client.login(username="jarda", password=self.u_jarda_password)
+
+    def test_edit_view_shows_owners_and_tenants_in_sidebar(self):
+        BuildingUnitUser.objects.create(building_unit=self.unit, user=self.u_peter, role=BuildingUnitUser.ROLE_OWNER)
+        BuildingUnitUser.objects.create(building_unit=self.unit, user=self.u_jiri, role=BuildingUnitUser.ROLE_TENANT)
+
+        response = self.client.get(reverse("admin_building_unit_edit", kwargs={"pk": self.unit.pk}))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(list(response.context["owner_list"]), [self.u_peter])
+        self.assertEqual(list(response.context["tenant_list"]), [self.u_jiri])
+        content = response.content.decode()
+        self.assertIn(self.u_peter.first_name, content)
+        self.assertIn(self.u_jiri.first_name, content)
+        self.assertIn(f"/admin_building_unit_owners/{self.unit.pk}/", content)
+
+    def test_edit_view_shows_empty_state_without_owners(self):
+        response = self.client.get(reverse("admin_building_unit_edit", kwargs={"pk": self.unit.pk}))
+        self.assertContains(response, "No owner assigned yet.")
+        self.assertContains(response, "No tenant assigned yet.")
+
+    def test_new_unit_form_has_no_owners_sidebar(self):
+        response = self.client.get(reverse("admin_building_unit_edit", kwargs={"pk": 0}))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "No owner assigned yet.")
+
+
 class BuildingUnitOwnersAdminTest(BuildingUnitDataMixin, TestCase):
     def setUp(self):
         self.client.login(username="jarda", password=self.u_jarda_password)

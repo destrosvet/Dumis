@@ -461,6 +461,11 @@ class BuildingUnitUser(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='unit_memberships')
     role = models.CharField(_("Role"), max_length=10, choices=ROLE_CHOICES, default=ROLE_OWNER)
+    # Owner's share of this specific unit (as opposed to BuildingUnit.numerator/denominator,
+    # which is the unit's share of the common parts of the building). Null means the sole
+    # owner/owner-group, implicitly 1/1.
+    share_numerator = models.IntegerField(_("Share numerator"), null=True, blank=True)
+    share_denominator = models.IntegerField(_("Share denominator"), null=True, blank=True)
 
     def __str__(self):
         return f"BuildingUnitUser: {self.user} ({self.role})"

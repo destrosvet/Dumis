@@ -1,4 +1,5 @@
-from . import utils, forms, models
+from . import utils, forms, models, cadastre_import
+from .services import building_units as building_units_service
 from django import __version__ as django_version
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import permission_required
@@ -13,7 +14,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext as gt
 from django.utils.safestring import mark_safe
 from django.urls import reverse
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_GET, require_POST, require_http_methods
 from openpyxl import Workbook
 import sys
 from .permissions import (
@@ -213,6 +214,12 @@ def get_side_menu(active_item, user):
             'description': _("Building units") + f' ({models.BuildingUnit.objects.count()})',
             'link': reverse(admin_building_unit_view),
             'active': True if active_item == 'units' else False,
+        },
+        {
+            'perms': svjis_edit_admin_building,
+            'description': _("Import from cadastre"),
+            'link': reverse(admin_building_unit_import_view),
+            'active': True if active_item == 'unit_import' else False,
         },
         {
             'perms': svjis_edit_admin_users,
@@ -615,6 +622,9 @@ def admin_building_unit_edit_view(request, pk):
     ctx['aside_menu_name'] = _("Administration")
     ctx['form'] = form
     ctx['pk'] = pk
+    ctx['bu'] = i
+    ctx['owner_list'] = i.owners if i else None
+    ctx['tenant_list'] = i.tenants if i else None
     ctx['custom_fields'] = get_custom_fields_context(models.BuildingUnit, i)
     ctx['aside_menu_items'] = get_side_menu('units', request.user)
     ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
@@ -742,6 +752,157 @@ def admin_building_unit_export_to_excel_view(request):
     # Save the workbook to the HttpResponse
     wb.save(response)
     return response
+
+
+# Administration - BuildingUnit import from cadastre PDF
+CADASTRE_IMPORT_SESSION_KEY = 'cadastre_import_pending'
+
+
+@permission_required(svjis_edit_admin_building)
+@require_http_methods(["GET", "POST"])
+def admin_building_unit_import_view(request):
+    if request.method == 'GET':
+        ctx = utils.get_context()
+        ctx['aside_menu_name'] = _("Administration")
+        ctx['aside_menu_items'] = get_side_menu('unit_import', request.user)
+        ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
+        return render(request, "admin_building_unit_import.html", ctx)
+
+    pdf_file = request.FILES.get('pdf_file')
+    if pdf_file is None:
+        messages.error(request, _('Please choose a PDF file.'))
+        return redirect(admin_building_unit_import_view)
+
+    parsed = cadastre_import.parse_cadastre_pdf(pdf_file)
+    for warning in parsed.warnings:
+        messages.warning(request, warning)
+
+    preview_units = []
+    session_units = []
+    for i, unit in enumerate(parsed.units):
+        owners_preview = []
+        owners_session = []
+        for j, owner in enumerate(unit.owners):
+            candidates = list(
+                building_units_service.find_matching_users(owner.raw_name).values('id', 'first_name', 'last_name')[:5]
+            )
+            owners_preview.append(
+                {
+                    'index': j,
+                    'identifier_hint': owner.identifier,
+                    'raw_name': owner.raw_name,
+                    'first_name': owner.guessed_first_name,
+                    'last_name': owner.guessed_last_name,
+                    'share_display': (
+                        f'{owner.share_numerator}/{owner.share_denominator}'
+                        if owner.share_numerator is not None
+                        else '—'
+                    ),
+                    'candidates': candidates,
+                }
+            )
+            owners_session.append(
+                {'share_numerator': owner.share_numerator, 'share_denominator': owner.share_denominator}
+            )
+        preview_units.append(
+            {
+                'index': i,
+                'unit_no': unit.unit_no,
+                'usage': unit.usage,
+                'unit_lv': unit.unit_lv,
+                'building_share_numerator': unit.building_share_numerator,
+                'building_share_denominator': unit.building_share_denominator,
+                'share_sum_ok': unit.share_sum_ok,
+                'owners': owners_preview,
+            }
+        )
+        session_units.append(
+            {
+                'unit_no': unit.unit_no,
+                'usage': unit.usage,
+                'building_share_numerator': unit.building_share_numerator,
+                'building_share_denominator': unit.building_share_denominator,
+                'owners': owners_session,
+            }
+        )
+
+    request.session[CADASTRE_IMPORT_SESSION_KEY] = {'units': session_units}
+
+    ctx = utils.get_context()
+    ctx['aside_menu_name'] = _("Administration")
+    ctx['aside_menu_items'] = get_side_menu('unit_import', request.user)
+    ctx['tray_menu_items'] = utils.get_tray_menu('admin', request.user)
+    ctx['lv_number'] = parsed.lv_number
+    ctx['cadastral_area'] = parsed.cadastral_area
+    ctx['building_label'] = parsed.building_label
+    ctx['preview_units'] = preview_units
+    return render(request, "admin_building_unit_import_preview.html", ctx)
+
+
+@permission_required(svjis_edit_admin_building)
+@require_POST
+def admin_building_unit_import_save_view(request):
+    pending = request.session.get(CADASTRE_IMPORT_SESSION_KEY)
+    if not pending:
+        messages.error(request, _('The import session has expired, please upload the file again.'))
+        return redirect(admin_building_unit_import_view)
+
+    building, _created = models.Building.objects.get_or_create(pk=1)
+    send_credentials = request.POST.get('send_credentials') == 'on'
+
+    created_units = 0
+    created_users = 0
+    skipped_units = 0
+
+    for i, unit_data in enumerate(pending['units']):
+        if request.POST.get(f'unit_{i}_include') != 'on':
+            skipped_units += 1
+            continue
+
+        registration_id = request.POST.get(f'unit_{i}_registration_id', unit_data['unit_no']).strip()
+        description = request.POST.get(f'unit_{i}_description', unit_data['unit_no']).strip()
+        numerator = int(request.POST.get(f'unit_{i}_numerator') or unit_data['building_share_numerator'] or 0)
+        denominator = int(request.POST.get(f'unit_{i}_denominator') or unit_data['building_share_denominator'] or 1)
+
+        bu, _bu_created = building_units_service.create_or_update_building_unit(
+            building=building,
+            type_description=unit_data['usage'] or str(_('Unit')),
+            registration_id=registration_id,
+            description=description,
+            numerator=numerator,
+            denominator=denominator,
+        )
+        created_units += 1
+
+        for j, owner_data in enumerate(unit_data['owners']):
+            existing_user_id = int(request.POST.get(f'unit_{i}_owner_{j}_existing_user', 0) or 0)
+            if existing_user_id:
+                user = get_object_or_404(User, pk=existing_user_id)
+            else:
+                first_name = request.POST.get(f'unit_{i}_owner_{j}_first_name', '').strip()
+                last_name = request.POST.get(f'unit_{i}_owner_{j}_last_name', '').strip()
+                if not last_name:
+                    continue
+                user = building_units_service.create_owner_user(first_name=first_name, last_name=last_name)
+                created_users += 1
+                if send_credentials:
+                    utils.send_new_password(user)
+
+            building_units_service.assign_owner(
+                building_unit=bu,
+                user=user,
+                share_numerator=owner_data['share_numerator'],
+                share_denominator=owner_data['share_denominator'],
+            )
+
+    del request.session[CADASTRE_IMPORT_SESSION_KEY]
+    messages.info(
+        request,
+        _('Import finished: {units} unit(s) created/updated, {users} new user(s), {skipped} unit(s) skipped.').format(
+            units=created_units, users=created_users, skipped=skipped_units
+        ),
+    )
+    return redirect(admin_building_unit_view)
 
 
 # Administration - User

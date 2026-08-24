@@ -1,0 +1,34 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+<h1 class="page-title">{% translate 'Import from cadastre' %}</h1>
+
+<div class="edit-layout">
+
+    <form id="cadastre-import-form" action="{% url 'admin_building_unit_import' %}" method="post" enctype="multipart/form-data" class="edit-main">
+        {% csrf_token %}
+
+        <fieldset>
+            <legend>{% translate 'Cadastre extract (PDF)' %}</legend>
+            <p>
+                <label class="common-label" for="id_pdf_file">{% translate 'File' %}</label>
+                <input class="common-input" type="file" name="pdf_file" id="id_pdf_file" accept="application/pdf" required>
+            </p>
+            <p class="help-text">{% translate 'Upload a "Výpis z katastru nemovitostí" PDF for the building. The parsed units and owners will be shown for review - nothing is created until you confirm.' %}</p>
+        </fieldset>
+    </form>
+
+    <div class="edit-sidebar">
+        <div class="card">
+            <div class="card__body">
+                <input class="btn--primary btn--block" id="submit" form="cadastre-import-form" type="submit" value="{% translate 'Parse PDF' %}" />
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock content %}

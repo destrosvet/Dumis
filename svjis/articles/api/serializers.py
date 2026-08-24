@@ -115,3 +115,26 @@ class SurveyVoteSerializer(serializers.Serializer):
         if attrs['option'].survey_id != survey.id:
             raise serializers.ValidationError({'option': _("This option does not belong to the given survey.")})
         return attrs
+
+
+# Administration
+#####################
+
+
+class AdminBuildingUnitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.BuildingUnit
+        fields = ['id', 'type', 'entrance', 'registration_id', 'description', 'numerator', 'denominator']
+
+
+class AdminUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'first_name', 'last_name', 'email']
+
+
+class AdminBuildingUnitUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.BuildingUnitUser
+        fields = ['id', 'building_unit', 'user', 'role', 'share_numerator', 'share_denominator']
+        read_only_fields = ['building_unit']

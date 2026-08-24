@@ -25,6 +25,10 @@ local_requirements.txt
 playwright_output/
 svjis2-data/
 
+# Real cadastre extracts contain personal data (names, addresses, birth
+# numbers) - never commit one, sample or otherwise.
+vypis-z-katastru.pdf
+
 # Frontend build artifacts
 _build_result.txt
 _diag.txt

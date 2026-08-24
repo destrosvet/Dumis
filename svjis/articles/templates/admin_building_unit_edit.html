@@ -49,6 +49,48 @@
             </div>
         </div>
 
+        {% if bu %}
+        <div class="card">
+            <div class="card__header card__header--light">
+                {% translate 'Owners' %}&nbsp;<span class="badge badge--brand">{{ owner_list|length }}</span>
+            </div>
+            <div class="card__body">
+                {% if owner_list %}
+                <ul class="member-list">
+                    {% for u in owner_list %}
+                    <li class="member-list__item">
+                        <span class="member-list__name"><a href="{% url 'admin_user_detail' pk=u.pk %}">{{ u.first_name }} {{ u.last_name }}</a></span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="empty-state">{% translate 'No owner assigned yet.' %}</p>
+                {% endif %}
+                <a class="btn--secondary btn--block" href="{% url 'admin_building_unit_owners' pk=bu.pk %}">{% translate 'Modify owners' %}</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card__header card__header--light">
+                {% translate 'Tenants' %}&nbsp;<span class="badge badge--brand">{{ tenant_list|length }}</span>
+            </div>
+            <div class="card__body">
+                {% if tenant_list %}
+                <ul class="member-list">
+                    {% for u in tenant_list %}
+                    <li class="member-list__item">
+                        <span class="member-list__name"><a href="{% url 'admin_user_detail' pk=u.pk %}">{{ u.first_name }} {{ u.last_name }}</a></span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="empty-state">{% translate 'No tenant assigned yet.' %}</p>
+                {% endif %}
+                <a class="btn--secondary btn--block" href="{% url 'admin_building_unit_owners' pk=bu.pk %}">{% translate 'Modify tenants' %}</a>
+            </div>
+        </div>
+        {% endif %}
+
         {% if custom_fields %}
         <div class="card">
             <div class="card__header card__header--light">{% translate 'Custom fields' %}</div>

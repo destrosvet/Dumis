@@ -250,6 +250,16 @@ urlpatterns = [
         views_admin.admin_building_unit_export_to_excel_view,
         name='admin_building_unit_export_to_excel',
     ),
+    path(
+        'admin_building_unit_import/',
+        views_admin.admin_building_unit_import_view,
+        name='admin_building_unit_import',
+    ),
+    path(
+        'admin_building_unit_import_save/',
+        views_admin.admin_building_unit_import_save_view,
+        name='admin_building_unit_import_save',
+    ),
     path('admin_user/', views_admin.admin_user_view, name='admin_user'),
     path('admin_user_detail/<int:pk>/', views_admin.admin_user_detail_view, name='admin_user_detail'),
     path('admin_user_edit/<int:pk>/', views_admin.admin_user_edit_view, name='admin_user_edit'),

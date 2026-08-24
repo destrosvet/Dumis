@@ -1,0 +1,97 @@
+{% extends "base-with-aside-menu-content.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+<h1 class="page-title">{% translate 'Import from cadastre' %} - {% translate 'Preview' %}</h1>
+
+<p>
+    {% translate 'List vlastnictví' %}: {{ lv_number|default:'—' }} &middot;
+    {% translate 'Cadastral area' %}: {{ cadastral_area|default:'—' }} &middot;
+    {% translate 'Building' %}: {{ building_label|default:'—' }}
+</p>
+
+{% if not preview_units %}
+<p class="empty-state">{% translate 'No units were recognized in this PDF.' %}</p>
+{% else %}
+
+<form id="cadastre-import-save-form" action="{% url 'admin_building_unit_import_save' %}" method="post">
+    {% csrf_token %}
+
+    <p>
+        <label>
+            <input type="checkbox" name="send_credentials" />
+            {% translate 'Send login credentials to newly created users' %}
+        </label>
+    </p>
+
+    {% for unit in preview_units %}
+    <div class="card">
+        <div class="card__header card__header--light">
+            <label>
+                <input type="checkbox" name="unit_{{ unit.index }}_include" {% if unit.share_sum_ok %}checked{% endif %} />
+                <strong>{{ unit.unit_no }}</strong> - {{ unit.usage }}
+            </label>
+            {% if not unit.share_sum_ok %}
+            <span class="badge badge--red">{% translate 'Owner shares do not add up to 1/1 - review before including' %}</span>
+            {% endif %}
+        </div>
+        <div class="card__body">
+            <p>
+                <label class="common-label">{% translate 'Registration Id' %}</label>
+                <input class="common-input" type="text" name="unit_{{ unit.index }}_registration_id" value="{{ unit.unit_no }}" />
+                <label class="common-label">{% translate 'Description' %}</label>
+                <input class="common-input" type="text" name="unit_{{ unit.index }}_description" value="{{ unit.unit_no }}" />
+                <label class="common-label">{% translate 'Numerator' %}</label>
+                <input class="common-input" type="number" name="unit_{{ unit.index }}_numerator" value="{{ unit.building_share_numerator|default_if_none:'' }}" />
+                <label class="common-label">{% translate 'Denominator' %}</label>
+                <input class="common-input" type="number" name="unit_{{ unit.index }}_denominator" value="{{ unit.building_share_denominator|default_if_none:'' }}" />
+                {% if unit.unit_lv %}<span class="help-text">{% translate 'LV of the unit' %}: {{ unit.unit_lv }}</span>{% endif %}
+            </p>
+
+            {% if unit.owners %}
+            <table class="list-table">
+                <thead>
+                    <tr>
+                        <th>{% translate 'First name' %}</th>
+                        <th>{% translate 'Last name' %}</th>
+                        <th>{% translate 'Share on unit' %}</th>
+                        <th>{% translate 'Link to existing user' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for owner in unit.owners %}
+                    <tr>
+                        <td><input class="common-input" type="text" name="unit_{{ unit.index }}_owner_{{ owner.index }}_first_name" value="{{ owner.first_name }}" /></td>
+                        <td><input class="common-input" type="text" name="unit_{{ unit.index }}_owner_{{ owner.index }}_last_name" value="{{ owner.last_name }}" /></td>
+                        <td>{{ owner.share_display }}</td>
+                        <td>
+                            <select class="common-input" name="unit_{{ unit.index }}_owner_{{ owner.index }}_existing_user">
+                                <option value="0">{% translate 'Create new user' %}</option>
+                                {% for c in owner.candidates %}
+                                <option value="{{ c.id }}">{{ c.last_name }} {{ c.first_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="empty-state">{% translate 'No owners were recognized for this unit.' %}</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="card">
+        <div class="card__body">
+            <input class="btn--primary" type="submit" value="{% translate 'Confirm import' %}" />
+        </div>
+    </div>
+</form>
+
+{% endif %}
+
+{% endblock content %}
