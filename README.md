@@ -5,7 +5,7 @@
 Information system for homeowners' associations (SVJ). :house_with_garden:
 
 > [!IMPORTANT]
-> **Dumis is based on [SVJIS](https://github.com/svjis/svjis2)**, and is not a light customization: the visual design and a good part of the functional base have been reworked and extended. On top of everything SVJIS already provides, Dumis adds:
+> **Dumis is based on, and licensed under the same terms as, [SVJIS](https://github.com/svjis/svjis2)** (GPL-3.0-or-later, see [LICENSE](LICENSE)). It was forked and renamed from SVJIS2 in August 2026, and is not a light customization: the visual design and a good part of the functional base have been reworked and extended since. On top of everything SVJIS already provides, Dumis adds:
 > - a **cadastre extract (PDF) importer** that reads a "Výpis z katastru nemovitostí", proposes building units and owners for review, and checks that each unit's ownership shares add up to 1/1 before anything is created
 > - a small **admin REST API** for creating units, owners and unit/owner assignments, the first step of an API-first admin
 > - a **React-based homepage**, served from the same REST API, replacing the old server-rendered boxes

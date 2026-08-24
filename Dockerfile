@@ -59,6 +59,7 @@ COPY --chown=svjisuser:svjisuser --chmod=755 ./svjis ./svjis
 COPY --chown=svjisuser:svjisuser --chmod=755 ./docker-entrypoint.sh /docker-entrypoint.sh
 COPY --chown=root:root --chmod=755 ./pyproject.toml .
 COPY --chown=root:root --chmod=755 ./uv.lock .
+COPY --chown=root:root --chmod=644 ./LICENSE ./README.md ./
 
 # Bring in the frontend assets built in the "frontend-build" stage.
 COPY --from=frontend-build --chown=svjisuser:svjisuser /app/svjis/articles/static/dist ./svjis/articles/static/dist
