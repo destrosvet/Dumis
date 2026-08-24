@@ -18,7 +18,44 @@ Information system for homeowners' associations (SVJ). :house_with_garden:
 
 ## Project Description
 
-Dumis is a CMS for Homeowners' Associations. The system provides a content management system :memo:, discussions under articles, polls :bar_chart:, reporting and tracking of issues, advertisements, and a database of owners :family_man_woman_boy: including records of units and shares - with the option to populate that database straight from a cadastre extract PDF instead of entering every unit and owner by hand.
+Dumis is a CMS for Homeowners' Associations. It gives an SVJ a single place to publish news, run polls, track building faults, list classifieds, plan projects and keep an accurate record of who owns and lives in which unit - available in 9 languages out of the box.
+
+## Features
+
+### :newspaper: Articles & News
+- Articles organized under a configurable, nestable menu, each with a cover image and file attachments
+- Threaded discussions under articles (comments are editable for a configurable grace period)
+- A separate News feed, a "top articles" ranking, and a Useful links list
+- Polls with voting, live results and an open/closed voting window
+- The public homepage is a React app fed by a REST API, assembling all of the above
+
+### :wrench: Fault reporting
+- Residents report building issues with a description, photos/attachments and comments
+- Board members/resolvers manage the queue: take, close or reopen a ticket
+- Full activity log per ticket, watch/subscribe for update notifications
+
+### :moneybag: Adverts
+- A classifieds board for residents, with a cover image and attachments per advert
+
+### :clipboard: Projects
+- Task/project tracking with both a list view and a Kanban board
+- Configurable statuses, tags, comments, file attachments and a per-project activity log
+- Watch/subscribe to a project to follow its progress
+
+### :house_with_garden: Building & Owners (Administration)
+- Building, entrances, unit types and units, each with its co-ownership share of the building (numerator/denominator)
+- Owner/tenant assignment per unit, including each owner's individual share of that unit
+- **Cadastre extract (PDF) import**: upload a "Výpis z katastru nemovitostí" and Dumis parses it into a proposed set of units and owners for review, checking that each unit's ownership shares add up to 1/1 before anything is created - no more typing units and owners in by hand
+- Board members and company/association details
+- An opt-in phonelist so residents can find each other
+- Custom fields: attach arbitrary typed fields (text, number, choice list, date, yes/no) to users, units, adverts, board members, entrances and fault reports
+- User and group management with granular, per-feature permissions
+- Configurable e-mail templates for system notifications, with a background sending queue
+- A small admin REST API for creating units, owners and unit/owner assignments
+
+### :bust_in_silhouette: Personal settings
+- Profile editing, password change, interface language switch
+- A "my units" overview so residents can see what they own or rent
 
 ## 1 Installation
 
