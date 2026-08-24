@@ -10,7 +10,7 @@ services:
     depends_on:
       svjis-db:
         condition: service_healthy
-    image: berk76/svjis2-app:latest
+    image: destrosvet/svjis3:latest
     container_name: svjis2_app
     # restart: unless-stopped
     ports:

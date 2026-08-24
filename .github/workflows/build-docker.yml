@@ -28,7 +28,7 @@ jobs:
 
       - name: Build docker image
         run: |
-          docker build -t berk76/svjis2-app:latest .
+          docker build -t destrosvet/svjis3:latest .
 
       - name: Create directories and files
         run: |
@@ -61,16 +61,18 @@ jobs:
         run: |
           docker compose down
 
-      - name: Tag version and push
-        if: |
-          github.ref_type == 'tag' &&
-          startsWith(github.ref_name, 'v')
+      - name: Push to Docker Hub
+        # Pushes :latest on every push to master, plus a version tag when a v* tag was pushed.
+        # Skipped for pull_request/workflow_dispatch runs, which only build and smoke-test.
+        if: github.event_name == 'push'
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
         run: |
-          TAG=`echo ${{ github.ref }} | sed -n 's/.*\(v.*$\)/\1/p'`
-          docker tag berk76/svjis2-app:latest berk76/svjis2-app:$TAG
           docker login --username "$DOCKERHUB_USERNAME" --password "$DOCKERHUB_TOKEN"
-          docker push berk76/svjis2-app:$TAG
-          docker push berk76/svjis2-app:latest
+          docker push destrosvet/svjis3:latest
+          if [ "${{ github.ref_type }}" = "tag" ] && [[ "${{ github.ref_name }}" == v* ]]; then
+            TAG="${{ github.ref_name }}"
+            docker tag destrosvet/svjis3:latest destrosvet/svjis3:$TAG
+            docker push destrosvet/svjis3:$TAG
+          fi
