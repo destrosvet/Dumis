@@ -1862,6 +1862,50 @@ img.led { border: 0; width: 16px; height: 16px; vertical-align: middle; }
   .list-toolbar .list-search { width: 100%; }
 }
 
+/* Selectable tables (bulk actions such as merging users) */
+table.selectable .select-col { display: none; width: 1.75rem; text-align: center; }
+table.selectable.select-mode .select-col { display: table-cell; }
+
+/* Merge dialog */
+dialog.merge-dialog {
+  border: none;
+  border-radius: var(--radius-lg, 0.75rem);
+  padding: 0;
+  margin: auto; /* the global `* { margin: 0 }` reset kills the UA centering of dialog:modal, restore it */
+  width: min(30rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.15), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+dialog.merge-dialog::backdrop { background: rgb(15 23 42 / 0.5); }
+.merge-dialog__header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--slate-200);
+  font-weight: 600;
+  color: var(--slate-900);
+}
+.merge-dialog__body { padding: 1rem 1.25rem; }
+.merge-dialog__hint { color: var(--slate-500); font-size: 0.875rem; margin: 0 0 0.75rem; }
+.merge-dialog__option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--slate-100);
+}
+.merge-dialog__option:last-child { border-bottom: none; }
+.merge-dialog__option input { flex-shrink: 0; margin-top: 0.1875rem; }
+.merge-dialog__option-text { display: flex; flex-direction: column; gap: 0.125rem; }
+.merge-dialog__option-name { color: var(--slate-900); font-weight: 500; }
+.merge-dialog__option-hint { color: var(--slate-500); font-size: 0.8125rem; }
+.merge-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--slate-200);
+}
+
 table.sortable thead th.sortable-col {
   cursor: pointer;
   user-select: none;

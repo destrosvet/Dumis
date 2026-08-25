@@ -11,6 +11,8 @@
     <div class="filter-item">
         <p>
             <a class="btn--primary" href="{% url 'admin_user_edit' pk=0 %}">{% translate 'Create new user' %}</a>&nbsp;
+            <button type="button" id="merge-toggle-btn" class="btn--secondary">{% translate 'Merge users' %}</button>&nbsp;
+            <button type="button" id="merge-open-btn" class="btn--primary" style="display:none">{% translate 'Merge' %} (<span id="merge-count">0</span>)</button>&nbsp;
             <a class="btn--secondary" href="{% url 'admin_user_export_to_excel' %}">{% translate 'Export to Excel' %}</a>&nbsp;
         </p>
     </div>
@@ -44,5 +46,110 @@
 </div>
 
 {% include 'includes/admin_list_table.html' %}
+
+<dialog class="merge-dialog" id="merge-dialog">
+    <form method="post" action="{% url 'admin_user_merge_save' %}" id="merge-form">
+        {% csrf_token %}
+        <div class="merge-dialog__header">{% translate 'Merge users' %}</div>
+        <div class="merge-dialog__body">
+            <p class="merge-dialog__hint">{% translate 'Choose which user should be kept. Everything owned by the others (units, articles, faults, projects, ...) will be moved to this user, and the others will be deleted.' %}</p>
+            <div id="merge-options"></div>
+        </div>
+        <div class="merge-dialog__footer">
+            <button type="button" class="btn--secondary" id="merge-cancel-btn">{% translate 'Cancel' %}</button>
+            <button type="submit" class="btn--danger" id="merge-confirm-btn" disabled>{% translate 'Merge' %}</button>
+        </div>
+    </form>
+</dialog>
+
+<script>
+(function () {
+    var table = document.getElementById('{{ table_id }}');
+    var toggleBtn = document.getElementById('merge-toggle-btn');
+    var openBtn = document.getElementById('merge-open-btn');
+    var countEl = document.getElementById('merge-count');
+    var dialog = document.getElementById('merge-dialog');
+    var optionsEl = document.getElementById('merge-options');
+    var confirmBtn = document.getElementById('merge-confirm-btn');
+    var cancelBtn = document.getElementById('merge-cancel-btn');
+    if (!table || !toggleBtn || !dialog) return;
+
+    var toggleLabel = toggleBtn.textContent;
+    var cancelLabel = '{% translate "Cancel selection" %}';
+
+    function selectedRows() {
+        return Array.prototype.slice.call(table.querySelectorAll('.row-select:checked'));
+    }
+
+    function refreshCount() {
+        var n = selectedRows().length;
+        countEl.textContent = n;
+        openBtn.disabled = n < 2;
+    }
+
+    toggleBtn.addEventListener('click', function () {
+        var active = table.classList.toggle('select-mode');
+        toggleBtn.textContent = active ? cancelLabel : toggleLabel;
+        openBtn.style.display = active ? '' : 'none';
+        if (!active) {
+            table.querySelectorAll('.row-select, .select-all').forEach(function (cb) { cb.checked = false; });
+        }
+        refreshCount();
+    });
+
+    table.addEventListener('selection-change', refreshCount);
+
+    openBtn.addEventListener('click', function () {
+        var rows = selectedRows().map(function (cb) { return cb.closest('tr'); });
+        optionsEl.innerHTML = '';
+        rows.forEach(function (tr) {
+            var cells = tr.querySelectorAll('td');
+            var lastName = cells[2] ? cells[2].textContent.trim() : '';
+            var firstName = cells[3] ? cells[3].textContent.trim() : '';
+            var email = cells[4] ? cells[4].textContent.trim() : '';
+            var checkbox = tr.querySelector('.row-select');
+            var pk = checkbox.value;
+            var hint = checkbox.getAttribute('data-hint') || '';
+
+            var label = document.createElement('label');
+            label.className = 'merge-dialog__option';
+            var radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'target';
+            radio.value = pk;
+            label.appendChild(radio);
+
+            var text = document.createElement('span');
+            text.className = 'merge-dialog__option-text';
+            var nameEl = document.createElement('span');
+            nameEl.className = 'merge-dialog__option-name';
+            nameEl.textContent = (lastName + ' ' + firstName).trim() + (email ? ' — ' + email : '');
+            text.appendChild(nameEl);
+            if (hint) {
+                var hintEl = document.createElement('span');
+                hintEl.className = 'merge-dialog__option-hint';
+                hintEl.textContent = hint;
+                text.appendChild(hintEl);
+            }
+            label.appendChild(text);
+            optionsEl.appendChild(label);
+
+            var hidden = document.createElement('input');
+            hidden.type = 'hidden';
+            hidden.name = 'sources';
+            hidden.value = pk;
+            optionsEl.appendChild(hidden);
+        });
+        confirmBtn.disabled = true;
+        dialog.showModal();
+    });
+
+    optionsEl.addEventListener('change', function (e) {
+        if (e.target.name === 'target') confirmBtn.disabled = false;
+    });
+
+    cancelBtn.addEventListener('click', function () { dialog.close(); });
+})();
+</script>
 
 {% endblock content %}

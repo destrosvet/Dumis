@@ -18,6 +18,8 @@ from django.utils.translation import gettext_lazy as _
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User
+from django.db import transaction
 from openpyxl.styles import NamedStyle, Font, Border, Side, PatternFill
 from .permissions import (
     svjis_view_redaction_menu,
@@ -107,6 +109,51 @@ def generate_password(len: int) -> str:
 
 def validate_email_address(email_address: str) -> bool:
     return re.search(r"^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$", email_address) is not None
+
+
+@transaction.atomic
+def merge_users(target: User, sources: list) -> None:
+    """Reassign everything owned/referenced by `sources` onto `target`, then delete `sources`.
+
+    `target` keeps its own account data (name, e-mail, login, profile); only relations
+    pointing at the source users (building units, authored content, watch lists, group
+    membership, ...) are moved over. Building unit membership is de-duplicated instead of
+    reassigned when the target already holds the same (unit, role) pair, since that is the
+    one relation with a uniqueness constraint on the user.
+    """
+    sources = [s for s in sources if s.pk != target.pk]
+    if not sources:
+        return
+
+    for source in sources:
+        target.groups.add(*source.groups.all())
+        target.user_permissions.add(*source.user_permissions.all())
+
+    target_unit_roles = set(
+        models.BuildingUnitUser.objects.filter(user=target).values_list('building_unit_id', 'role')
+    )
+    for membership in models.BuildingUnitUser.objects.filter(user__in=sources):
+        key = (membership.building_unit_id, membership.role)
+        if key in target_unit_roles:
+            membership.delete()
+        else:
+            membership.user = target
+            membership.save(update_fields=['user'])
+            target_unit_roles.add(key)
+
+    for rel in User._meta.related_objects:
+        if rel.field.model is models.BuildingUnitUser or rel.one_to_one:
+            continue
+        accessor = rel.get_accessor_name()
+        if rel.many_to_many:
+            for source in sources:
+                getattr(target, accessor).add(*getattr(source, accessor).all())
+        else:
+            field_name = rel.field.name
+            rel.field.model.objects.filter(**{f'{field_name}__in': sources}).update(**{field_name: target})
+
+    for source in sources:
+        source.delete()
 
 
 def get_worksheet_header_style():

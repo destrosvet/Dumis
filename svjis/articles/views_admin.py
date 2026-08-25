@@ -917,12 +917,45 @@ def admin_user_view(request):
         user_list = user_list.filter(groups__in=g)
     group_list = Group.objects.all()
 
+    role_labels = dict(models.BuildingUnitUser.ROLE_CHOICES)
+    memberships_by_user = {}
+    for m in models.BuildingUnitUser.objects.filter(user__in=user_list).select_related(
+        'building_unit', 'building_unit__type'
+    ):
+        memberships_by_user.setdefault(m.user_id, []).append(m)
+
     rows = []
     for u in user_list.order_by('last_name', 'first_name'):
         last_login = u.last_login.strftime('%d.%m.%Y %H:%M') if u.last_login else ''
+
+        unit_labels = [
+            f"{m.building_unit.type.description} {m.building_unit.registration_id} ({role_labels[m.role]})"
+            for m in memberships_by_user.get(u.pk, [])
+        ]
+        select_hint = (
+            f"{_('Last login')}: {last_login or _('never')} · "
+            f"{_('Units')}: {', '.join(unit_labels) if unit_labels else _('none')}"
+        )
+
+        actions = [
+            {'url': reverse('admin_user_edit', args=[u.pk]), 'icon': 'edit', 'label': _('Edit')},
+            {'url': reverse('admin_user_detail', args=[u.pk]), 'icon': 'view', 'label': _('Detail')},
+        ]
+        if u.pk != request.user.pk:
+            actions.append(
+                {
+                    'url': reverse('admin_user_delete', args=[u.pk]),
+                    'icon': 'delete',
+                    'label': _('Delete'),
+                    'danger': True,
+                    'confirm': f"{_('Do you want to delete')} {u.first_name} {u.last_name} ?",
+                }
+            )
         rows.append(
             {
+                'pk': u.pk,
                 'url': reverse('admin_user_detail', args=[u.pk]),
+                'select_hint': select_hint,
                 'cells': {
                     'last_name': u.last_name,
                     'first_name': u.first_name,
@@ -931,10 +964,7 @@ def admin_user_view(request):
                     ),
                     'last_login': last_login,
                 },
-                'actions': [
-                    {'url': reverse('admin_user_edit', args=[u.pk]), 'icon': 'edit', 'label': _('Edit')},
-                    {'url': reverse('admin_user_detail', args=[u.pk]), 'icon': 'view', 'label': _('Detail')},
-                ],
+                'actions': actions,
             }
         )
 
@@ -956,6 +986,7 @@ def admin_user_view(request):
     ctx['table_id'] = 'user-table'
     ctx['desc_id'] = 'users'
     ctx['list_search'] = True
+    ctx['selectable'] = True
     return render(request, "admin_user.html", ctx)
 
 
@@ -1080,6 +1111,40 @@ def admin_user_save_view(request):
     if unit_pk:
         return redirect(admin_building_unit_owners_view, pk=unit_pk)
     return redirect(admin_user_detail_view, pk=u.pk)
+
+
+@permission_required(svjis_edit_admin_users)
+@require_GET
+def admin_user_delete_view(request, pk):
+    obj = get_object_or_404(User, pk=pk)
+    if obj.pk == request.user.pk:
+        messages.error(request, _('You cannot delete your own account.'))
+        return redirect(admin_user_view)
+    obj.delete()
+    messages.info(request, _('Deleted'))
+    return redirect(admin_user_view)
+
+
+@permission_required(svjis_edit_admin_users)
+@require_POST
+def admin_user_merge_save_view(request):
+    target_pk = int(request.POST.get('target', 0))
+    source_pks = {int(p) for p in request.POST.getlist('sources')} - {target_pk}
+
+    if not target_pk or not source_pks:
+        messages.error(request, _('Select the users to merge and which one should be kept.'))
+        return redirect(admin_user_view)
+
+    if request.user.pk in source_pks:
+        messages.error(request, _('You cannot merge your own account into another user.'))
+        return redirect(admin_user_view)
+
+    target = get_object_or_404(User, pk=target_pk)
+    sources = list(User.objects.filter(pk__in=source_pks))
+    utils.merge_users(target, sources)
+
+    messages.info(request, _('Merged into {name}.').format(name=f'{target.first_name} {target.last_name}'))
+    return redirect(admin_user_detail_view, pk=target.pk)
 
 
 @permission_required(svjis_edit_admin_users)

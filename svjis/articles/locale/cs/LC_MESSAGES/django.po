@@ -2174,6 +2174,56 @@ msgstr "Chcete smazat tuto anketu"
 msgid "Data for last {} days."
 msgstr "Data za posledních {} dní."
 
+#: .\articles\templates\admin_user.html:14
+msgid "Merge users"
+msgstr "Sloučit uživatele"
+
+#: .\articles\templates\admin_user.html:15
+#: .\articles\templates\admin_user.html:60
+msgid "Merge"
+msgstr "Sloučit"
+
+#: .\articles\templates\admin_user.html:78
+msgid "Cancel selection"
+msgstr "Zrušit výběr"
+
+#: .\articles\templates\admin_user.html:59
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: .\articles\templates\admin_user.html:55
+msgid "Choose which user should be kept. Everything owned by the others (units, articles, faults, projects, ...) will be moved to this user, and the others will be deleted."
+msgstr "Vyberte, který uživatel má zůstat. Vše, co patří ostatním (jednotky, články, závady, projekty, ...), se přesune na tohoto uživatele a ostatní budou smazáni."
+
+#: .\articles\templates\includes\admin_list_table.html:15
+msgid "Select all"
+msgstr "Vybrat vše"
+
+#: .\articles\views_admin.py:936
+msgid "never"
+msgstr "nikdy"
+
+#: .\articles\views_admin.py:937
+msgid "none"
+msgstr "žádné"
+
+#: .\articles\views_admin.py:1121
+msgid "You cannot delete your own account."
+msgstr "Vlastní účet nemůžete smazat."
+
+#: .\articles\views_admin.py:1135
+msgid "Select the users to merge and which one should be kept."
+msgstr "Vyberte uživatele ke sloučení a toho, který má zůstat."
+
+#: .\articles\views_admin.py:1139
+msgid "You cannot merge your own account into another user."
+msgstr "Vlastní účet nemůžete sloučit do jiného uživatele."
+
+#: .\articles\views_admin.py:1146
+#, python-brace-format
+msgid "Merged into {name}."
+msgstr "Sloučeno do uživatele {name}."
+
 #~ msgid "Vote"
 #~ msgstr "Hlasovat"
 

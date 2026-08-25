@@ -8,9 +8,12 @@
 {% endif %}
 
 <div class="table-wrapper">
-<table class="list full-width fixed-on-mobile sortable" id="{{ table_id }}" aria-describedby="{{ desc_id }}">
+<table class="list full-width fixed-on-mobile sortable{% if selectable %} selectable{% endif %}" id="{{ table_id }}" aria-describedby="{{ desc_id }}">
     <thead>
         <tr>
+            {% if selectable %}
+            <th class="select-col"><input type="checkbox" class="select-all" title="{% translate 'Select all' %}" /></th>
+            {% endif %}
             <th class="hide-on-mobile">&nbsp;</th>
             {% for col in columns %}
             <th class="{% if col.hide_on_mobile %}hide-on-mobile {% endif %}sortable-col" data-sort="{{ col.key }}">{{ col.label }}</th>
@@ -21,6 +24,9 @@
     <tbody>
         {% for row in rows %}
         <tr class="row-link{% if row.row_class %} {{ row.row_class }}{% endif %}" onclick="location.href='{{ row.url }}'">
+            {% if selectable %}
+            <td class="select-col" onclick="event.stopPropagation()"><input type="checkbox" class="row-select" value="{{ row.pk }}"{% if row.select_hint %} data-hint="{{ row.select_hint }}"{% endif %} /></td>
+            {% endif %}
             <td class="hide-on-mobile row-number">{{ forloop.counter }}</td>
             {% for col in columns %}
             <td class="{% if col.hide_on_mobile %}hide-on-mobile{% endif %}">{{ row.cells|get_item:col.key }}</td>
@@ -122,6 +128,21 @@
             table.querySelectorAll("tbody tr").forEach(function (tr) {
                 tr.style.display = tr.textContent.toLowerCase().indexOf(q) !== -1 ? "" : "none";
             });
+        });
+    });
+
+    // "Select all" checkbox for selectable tables (bulk actions such as merging users).
+    document.querySelectorAll("table.selectable").forEach(function (table) {
+        var selectAll = table.querySelector(".select-all");
+        if (!selectAll) return;
+        selectAll.addEventListener("change", function () {
+            table.querySelectorAll(".row-select").forEach(function (cb) {
+                if (cb.closest("tr").style.display !== "none") cb.checked = selectAll.checked;
+            });
+            table.dispatchEvent(new Event("selection-change"));
+        });
+        table.addEventListener("change", function (e) {
+            if (e.target.classList.contains("row-select")) table.dispatchEvent(new Event("selection-change"));
         });
     });
 })();

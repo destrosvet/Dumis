@@ -264,6 +264,8 @@ urlpatterns = [
     path('admin_user_detail/<int:pk>/', views_admin.admin_user_detail_view, name='admin_user_detail'),
     path('admin_user_edit/<int:pk>/', views_admin.admin_user_edit_view, name='admin_user_edit'),
     path('admin_user_save/', views_admin.admin_user_save_view, name='admin_user_save'),
+    path('admin_user_delete/<int:pk>/', views_admin.admin_user_delete_view, name='admin_user_delete'),
+    path('admin_user_merge_save/', views_admin.admin_user_merge_save_view, name='admin_user_merge_save'),
     path('admin_user_owns/<int:pk>/', views_admin.admin_user_owns_view, name='admin_user_owns'),
     path('admin_user_owns_save', views_admin.admin_user_owns_save_view, name='admin_user_owns_save'),
     path(
